@@ -1,0 +1,86 @@
+# serbeval
+
+Serbian-language evaluation benchmark for LLMs, built on
+[lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) (pinned to `0.4.12`).
+
+Most multilingual benchmarks barely touch Serbian, and none probe the things models actually get
+wrong: case government, clitic placement, verbal aspect, paukal agreement, and Cyrillic/Latin
+script consistency. serbeval is a small, hand-verifiable benchmark targeting exactly those.
+
+## Tasks
+
+| Task | Items | What it tests | Status |
+| --- | --- | --- | --- |
+| `srb_grammar` | `data/srb_grammar/items.jsonl` | Case government, verbal aspect, agreement (incl. paukal), clitic placement, comparison, orthography, standard usage | seed set, `verified: false` |
+| `srb_idioms` | `data/srb_idioms/items.jsonl` | Meaning of Serbian idioms (lexical knowledge that doesn't transfer from English) | seed set, `verified: false` |
+| `srb_cyrillic_agreement` | `data/srb_cyrillic_agreement/items.jsonl` | Same question asked in Cyrillic and Latin — measures per-pair answer agreement plus accuracy | seed set, `verified: false` |
+
+All items are 4-way multiple choice (A/B/C/D), evaluated as `generate_until` with regex letter
+extraction — no logprobs required, so any chat API works.
+
+**⚠️ Verification status:** every item currently carries `verified: false`. Items were authored
+and adversarially cross-checked by Claude agents, and candidates can additionally pass the
+self-consistency filter (`serbeval selfcheck`), but **no results should be published before a
+human verification pass** by a native speaker.
+
+## Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+## Running the eval
+
+Run from the **repo root** (dataset paths in the task YAMLs are root-relative):
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+
+lm_eval \
+  --model anthropic-chat \
+  --model_args model=claude-haiku-4-5 \
+  --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement \
+  --include_path lm_eval_tasks \
+  --output_path results/ \
+  --log_samples
+```
+
+See [results/README.md](results/README.md) for the model matrix and exact per-model commands.
+
+## Dataset tooling
+
+```bash
+serbeval validate data/srb_grammar/items.jsonl       # schema + integrity checks
+serbeval generate --task srb_grammar --category enklitike -n 10   # author candidates via Claude
+serbeval selfcheck --task srb_grammar                # 3x self-consistency filter on candidates
+```
+
+`generate` writes to `data/<task>/candidates.jsonl`; `selfcheck` keeps only candidates whose three
+independent re-answers all agree with the gold label (rejects go to `data/<task>/discarded.jsonl`).
+Surviving candidates stay `verified: false` until a human merges them into `items.jsonl`.
+
+## Item schema
+
+```json
+{
+  "id": "srb-grammar-enklitike-0001",
+  "task": "srb_grammar",
+  "category": "enklitike",
+  "question": "…",
+  "choices": ["…", "…", "…", "…"],
+  "answer_index": 2,
+  "explanation": "…",
+  "script": "latin",
+  "pair_id": null,
+  "source": "handwritten-claude",
+  "verified": false,
+  "license": "CC-BY-4.0"
+}
+```
+
+## Project log
+
+Design decisions: [DECISIONS.md](DECISIONS.md) · Progress: [devlog.md](devlog.md) ·
+Handoff notes: [HANDOFF.md](HANDOFF.md)
