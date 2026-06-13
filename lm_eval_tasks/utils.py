@@ -5,9 +5,12 @@ ask for a single letter, and regex-extract it. The cyrillic-agreement task addit
 a per-pair answer-agreement metric (see ``process_results_pair`` / ``pair_agreement``).
 """
 
+import re
 from collections.abc import Sequence
 
 LETTERS = ("A", "B", "C", "D")
+
+_ANSWER_RE = re.compile(r"\b([ABCD])\b")
 
 
 def doc_to_text(doc: dict) -> str:
@@ -24,8 +27,14 @@ def doc_to_target(doc: dict) -> str:
     return LETTERS[doc["answer_index"]]
 
 
+def _extract_letter(raw: str) -> str | None:
+    match = _ANSWER_RE.search((raw or "").upper())
+    return match.group(1) if match else None
+
+
 def _extracted_correct(doc: dict, results: list[str]) -> float:
-    pred = (results[0] or "").strip().upper()[:1]
+    # Self-contained extraction: correct whether or not the YAML filter pipeline ran first.
+    pred = _extract_letter(results[0]) if results else None
     return 1.0 if pred == LETTERS[doc["answer_index"]] else 0.0
 
 

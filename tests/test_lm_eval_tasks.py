@@ -32,6 +32,23 @@ def test_doc_to_target_returns_letter() -> None:
     assert utils.doc_to_target({"answer_index": 2}) == "C"
 
 
+def test_process_results_pair_extracts_letter_without_filter() -> None:
+    doc = {
+        "question": "x",
+        "choices": ["a", "b", "c", "d"],
+        "answer_index": 1,
+        "pair_id": "p1",
+    }
+    # Raw, unfiltered model output (filter pipeline may be bypassed for custom process_results)
+    out = utils.process_results_pair(doc, ["Odgovor: B"])
+    assert out["exact_match"] == 1.0
+    assert out["pair_agreement"] == ("p1", 1.0)
+
+    wrong = utils.process_results_pair(doc, ["A) nije tačno"])
+    assert wrong["exact_match"] == 0.0
+    assert wrong["pair_agreement"] == ("p1", 0.0)
+
+
 def test_pair_agreement_aggregation() -> None:
     # (pair_id, correct) tuples from process_results
     results = [
