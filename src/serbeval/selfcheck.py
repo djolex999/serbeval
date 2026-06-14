@@ -5,13 +5,16 @@ run agrees with the others AND with the gold label. Survivors stay ``verified=Fa
 is an automated pre-filter, not a substitute for human verification.
 """
 
+import json
 import re
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
+from pathlib import Path
 
 import anthropic
 
+from serbeval.data import load_items, save_items
 from serbeval.schema import ANSWER_LETTERS, EvalItem
 
 DEFAULT_MODEL = "claude-opus-4-8"
@@ -79,3 +82,39 @@ def selfcheck_items(
     client: anthropic.Anthropic, model: str, items: Sequence[EvalItem], *, runs: int = 3
 ) -> list[SelfCheckResult]:
     return [selfcheck_item(client, model, item, runs=runs) for item in items]
+
+
+def run_selfcheck(
+    client: anthropic.Anthropic,
+    *,
+    task: str,
+    runs: int,
+    model: str,
+    data_dir: Path | str,
+) -> dict[str, int]:
+    """Filter data/<task>/candidates.jsonl in place.
+
+    Survivors are written back to candidates.jsonl (still verified=False); rejects are appended
+    to discarded.jsonl with the recorded answers and reason. Returns {"kept", "discarded"}.
+    """
+    task_dir = Path(data_dir) / task
+    candidates_path = task_dir / "candidates.jsonl"
+    discarded_path = task_dir / "discarded.jsonl"
+
+    candidates = load_items(candidates_path) if candidates_path.exists() else []
+    results = selfcheck_items(client, model, candidates, runs=runs)
+
+    survivors = [r.item for r in results if r.keep]
+    rejects = [r for r in results if not r.keep]
+
+    save_items(survivors, candidates_path)
+    if rejects:
+        discarded_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(discarded_path, "a", encoding="utf-8") as fh:
+            for r in rejects:
+                row = r.item.model_dump()
+                row["selfcheck_answers"] = r.answers
+                row["dropReason"] = r.reason
+                fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    return {"kept": len(survivors), "discarded": len(rejects)}

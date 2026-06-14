@@ -5,10 +5,12 @@ merged into items.jsonl only after the selfcheck filter and a human review pass.
 """
 
 from collections.abc import Iterable, Set
+from pathlib import Path
 
 import anthropic
 from pydantic import BaseModel, Field
 
+from serbeval.data import load_items, save_items
 from serbeval.schema import EvalItem
 
 DEFAULT_MODEL = "claude-opus-4-8"
@@ -135,3 +137,41 @@ def generate_candidates(
             )
         )
     return items
+
+
+def run_generate(
+    client: anthropic.Anthropic,
+    *,
+    task: str,
+    category: str,
+    n: int,
+    model: str,
+    data_dir: Path | str,
+) -> int:
+    """Generate candidates and append them to data/<task>/candidates.jsonl.
+
+    Dedups against both the curated items.jsonl and the existing candidates.jsonl. Returns the
+    number of new candidates written.
+    """
+    task_dir = Path(data_dir) / task
+    items_path = task_dir / "items.jsonl"
+    candidates_path = task_dir / "candidates.jsonl"
+
+    curated = load_items(items_path) if items_path.exists() else []
+    existing_candidates = load_items(candidates_path) if candidates_path.exists() else []
+    pool = curated + existing_candidates
+
+    existing_ids = {i.id for i in pool}
+    existing_questions = {i.question.strip() for i in pool}
+
+    new_items = generate_candidates(
+        client,
+        task=task,
+        category=category,
+        n=n,
+        model=model,
+        existing_ids=existing_ids,
+        existing_questions=existing_questions,
+    )
+    save_items(existing_candidates + new_items, candidates_path)
+    return len(new_items)
