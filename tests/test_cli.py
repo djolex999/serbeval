@@ -40,7 +40,9 @@ def test_validate_broken_file_exits_one(tmp_path: Path, capsys: pytest.CaptureFi
     assert "duplicate id" in capsys.readouterr().out
 
 
-def test_validate_schema_error_exits_one(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_validate_schema_error_exits_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     path = tmp_path / "items.jsonl"
     write_jsonl(path, [valid_row(answer_index=9)])
     assert main(["validate", str(path)]) == 1

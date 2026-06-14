@@ -70,8 +70,7 @@ def test_lm_eval_loads_all_tasks() -> None:
     for name in ("srb_grammar", "srb_idioms", "srb_cyrillic_agreement"):
         assert name in tm.all_tasks, f"{name} not registered"
 
-    task_dict = tm.load_task_or_group("srb_grammar")
-    task = task_dict["srb_grammar"]
+    task = tm.load(["srb_grammar"])["tasks"]["srb_grammar"]
     docs = list(task.test_docs())
     assert len(docs) >= 40
     rendered = task.doc_to_text(docs[0])

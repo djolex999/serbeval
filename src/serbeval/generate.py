@@ -78,7 +78,11 @@ def build_prompt(task: str, category: str, n: int, existing_questions: Iterable[
         (task, category), f"Stavke za zadatak '{task}', kategorija '{category}'."
     )
     existing = "\n".join(f"- {q}" for q in existing_questions)
-    avoid = f"\nVEĆ POSTOJE (ne ponavljaj ih niti pravi bliske varijante):\n{existing}" if existing else ""
+    avoid = (
+        f"\nVEĆ POSTOJE (ne ponavljaj ih niti pravi bliske varijante):\n{existing}"
+        if existing
+        else ""
+    )
     return f"""Ti si lingvista za srpski jezik i autor stavki za benčmark "{task}".
 Napiši tačno {n} stavki višestrukog izbora za kategoriju "{category}".
 SPEC KATEGORIJE: {brief}

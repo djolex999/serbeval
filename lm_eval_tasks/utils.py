@@ -15,7 +15,7 @@ _ANSWER_RE = re.compile(r"\b([ABCD])\b")
 
 def doc_to_text(doc: dict) -> str:
     lines = [doc["question"], ""]
-    for letter, choice in zip(LETTERS, doc["choices"]):
+    for letter, choice in zip(LETTERS, doc["choices"], strict=False):
         lines.append(f"{letter}) {choice}")
     lines.append("")
     lines.append("Odgovori samo slovom tačnog odgovora (A, B, C ili D).")

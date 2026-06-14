@@ -12,8 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from serbeval.data import save_items, validate_dataset  # noqa: E402
-from serbeval.schema import EvalItem  # noqa: E402
+from serbeval.data import save_items, validate_dataset
+from serbeval.schema import EvalItem
 
 RESULT_FILE = sys.argv[1]
 ROOT = Path(__file__).resolve().parent.parent
@@ -30,7 +30,8 @@ def slug(task: str) -> str:
 
 
 def main() -> int:
-    payload = json.load(open(RESULT_FILE, encoding="utf-8"))["result"]
+    with open(RESULT_FILE, encoding="utf-8") as fh:
+        payload = json.load(fh)["result"]
     raw_items = payload["items"]
     dropped = list(payload["dropped"])
 
