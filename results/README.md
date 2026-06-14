@@ -15,6 +15,23 @@ All commands run from the **repo root** (the task YAMLs use root-relative `data_
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
+## Pipeline validation (no API key needed)
+
+The end-to-end harness wiring has been validated against lm-eval 0.4.12 with the built-in dummy
+model — this confirms all three task configs load, prompts build, the regex filters run, and both
+metrics aggregate (including the custom `pair_agreement`). It does **not** produce meaningful scores
+(the dummy model answers `"lol"` to everything):
+
+```bash
+lm_eval --model dummy \
+  --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement \
+  --include_path lm_eval_tasks --output_path results/_smoke_dummy
+```
+
+Observed (expected) output: `exact_match = 0` on every task, and `pair_agreement = 1.0` on
+`srb_cyrillic_agreement` — both scripts are wrong identically, which is perfect agreement. Delete
+`results/_smoke_dummy/` afterward; it holds no real numbers.
+
 ## Smoke run (cheap — do this first)
 
 Validates that the whole pipeline produces real numbers, using the cheapest model:
