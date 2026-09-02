@@ -38,11 +38,29 @@ def _extracted_correct(doc: dict, results: list[str]) -> float:
     return 1.0 if pred == LETTERS[doc["answer_index"]] else 0.0
 
 
+def _unparsed(results: list[str]) -> float:
+    """1.0 when no answer letter could be read out of the response at all.
+
+    Without this a refusal, a rambling answer, or a format the regex misses all score
+    exactly like a wrong answer — so a prompting problem is indistinguishable from a
+    Serbian-competence problem. Report it separately and the results file says which.
+    """
+    return 0.0 if results and _extract_letter(results[0]) is not None else 1.0
+
+
+def process_results_mcq(doc: dict, results: list[str]) -> dict:
+    return {
+        "exact_match": _extracted_correct(doc, results),
+        "unparsed": _unparsed(results),
+    }
+
+
 def process_results_pair(doc: dict, results: list[str]) -> dict:
-    """Emit both standard accuracy and a (pair_id, correct) tuple for pair aggregation."""
+    """Emit accuracy, an unparsed flag, and a (pair_id, correct) tuple for aggregation."""
     correct = _extracted_correct(doc, results)
     return {
         "exact_match": correct,
+        "unparsed": _unparsed(results),
         "pair_agreement": (doc["pair_id"], correct),
     }
 
@@ -86,9 +104,13 @@ def doc_to_target_cloze(doc: dict) -> str:
 
 
 def process_results_cloze(doc: dict, results: list[str]) -> dict:
-    from serbeval.cloze import is_correct
+    from serbeval.cloze import extract_answer, is_correct
     from serbeval.schema import ClozeItem
 
     item = ClozeItem.model_validate(doc)
     raw = results[0] if results else ""
-    return {"exact_match": 1.0 if is_correct(raw, item) else 0.0}
+    return {
+        "exact_match": 1.0 if is_correct(raw, item) else 0.0,
+        # An empty extraction is a response we could not read, not a wrong form.
+        "unparsed": 0.0 if extract_answer(raw) else 1.0,
+    }

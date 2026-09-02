@@ -301,3 +301,27 @@ def test_synth_writes_its_own_candidates_file(
     rows = [json.loads(line) for line in written.read_text(encoding="utf-8").splitlines()]
     assert rows and all(r["source"] == "synthetic-srlex" for r in rows)
     assert "candidate" in capsys.readouterr().out
+
+
+def test_baseline_new_then_score_round_trip(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    data_dir = tmp_path / "data" / "srb_grammar"
+    data_dir.mkdir(parents=True)
+    write_jsonl(data_dir / "items.jsonl", [valid_row(id=f"g{i}") for i in range(5)])
+
+    sheet = tmp_path / "sheet.txt"
+    assert main(
+        ["baseline", "--new", "-n", "3", "--data-dir", str(tmp_path / "data"),
+         "--out", str(sheet)]
+    ) == 0
+    text = sheet.read_text(encoding="utf-8")
+    assert text.count("ODGOVOR:") == 4  # 3 items + the word in the instructions
+    # gold must never appear in a worksheet being answered
+    assert "Instrumental sredstva" not in text
+
+    # answer them all correctly (gold is A for valid_row)
+    sheet.write_text(text.replace("ODGOVOR:\n", "ODGOVOR: A\n"), encoding="utf-8")
+    assert main(["baseline", "--score", str(sheet), "--data-dir", str(tmp_path / "data")]) == 0
+    out = capsys.readouterr().out
+    assert "3/3" in out

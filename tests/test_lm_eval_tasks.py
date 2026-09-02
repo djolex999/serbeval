@@ -102,3 +102,67 @@ def test_cloze_task_runs_through_the_harness(tmp_path: Path) -> None:
     assert written, "no results file written"
     payload = json.loads(written[0].read_text(encoding="utf-8"))
     assert "exact_match,none" in payload["results"]["srb_grammar_cloze"]
+
+
+# --- unparsed responses ----------------------------------------------------
+#
+# A response we cannot read scored 0, exactly like a wrong answer. That makes a
+# formatting or refusal problem look like a Serbian-competence problem, and there was
+# no way to tell them apart from the results file.
+
+
+def test_mcq_marks_a_correct_letter_as_parsed_and_right() -> None:
+    doc = {"question": "q", "choices": ["a", "b", "c", "d"], "answer_index": 1}
+    assert utils.process_results_mcq(doc, ["B"]) == {"exact_match": 1.0, "unparsed": 0.0}
+
+
+def test_mcq_marks_a_wrong_letter_as_parsed_but_wrong() -> None:
+    doc = {"question": "q", "choices": ["a", "b", "c", "d"], "answer_index": 1}
+    assert utils.process_results_mcq(doc, ["C"]) == {"exact_match": 0.0, "unparsed": 0.0}
+
+
+def test_mcq_marks_a_response_with_no_letter_as_unparsed() -> None:
+    doc = {"question": "q", "choices": ["a", "b", "c", "d"], "answer_index": 1}
+    assert utils.process_results_mcq(doc, ["Ne mogu da odgovorim."]) == {
+        "exact_match": 0.0,
+        "unparsed": 1.0,
+    }
+
+
+def test_mcq_marks_an_empty_response_as_unparsed() -> None:
+    doc = {"question": "q", "choices": ["a", "b", "c", "d"], "answer_index": 1}
+    assert utils.process_results_mcq(doc, [""])["unparsed"] == 1.0
+
+
+def test_pair_task_also_reports_unparsed() -> None:
+    doc = {
+        "question": "q", "choices": ["a", "b", "c", "d"],
+        "answer_index": 0, "pair_id": "p1",
+    }
+    result = utils.process_results_pair(doc, ["nema slova"])
+    assert result["unparsed"] == 1.0
+    assert result["exact_match"] == 0.0
+
+
+def test_cloze_reports_unparsed_for_an_empty_response() -> None:
+    doc = {
+        "id": "c1", "task": "srb_grammar_cloze", "category": "padezi",
+        "question": "Zbog ____.", "cue": "nevreme", "answers": ["nevremena"],
+        "explanation": "e", "script": "latin", "source": "s",
+    }
+    assert utils.process_results_cloze(doc, ["   "]) == {
+        "exact_match": 0.0,
+        "unparsed": 1.0,
+    }
+
+
+def test_cloze_wrong_but_readable_answer_is_not_unparsed() -> None:
+    doc = {
+        "id": "c1", "task": "srb_grammar_cloze", "category": "padezi",
+        "question": "Zbog ____.", "cue": "nevreme", "answers": ["nevremena"],
+        "explanation": "e", "script": "latin", "source": "s",
+    }
+    assert utils.process_results_cloze(doc, ["nevremenu"]) == {
+        "exact_match": 0.0,
+        "unparsed": 0.0,
+    }

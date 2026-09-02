@@ -80,3 +80,75 @@ lm_eval --model anthropic-chat --model_args model=claude-sonnet-4-6 \
 
 Non-Anthropic models can reuse the same tasks via lm-eval's `openai-chat-completions` or
 `local-chat-completions` adapters — the task configs are model-agnostic.
+
+---
+
+## The validation run
+
+One run answers five questions. Do the three prep steps first; they cost nothing and
+without them the numbers are ambiguous.
+
+### 0. Human baseline — the control that makes everything else readable
+
+```bash
+serbeval baseline --new -n 30 --out baseline.txt   # fill in the ODGOVOR: lines
+serbeval baseline --score baseline.txt
+```
+
+A low model score has two explanations — the model is weak, or the items are broken — and
+the numbers cannot separate them. A native speaker can. **If a native speaker does not
+score near 100%, stop: fix the items before comparing any models.** Twenty minutes, and
+every item the human misses is a verification target, not a human error.
+
+### 1. Pick models with a known spread
+
+Not three similar models. A floor, a ceiling, and one outside the family:
+
+```bash
+for m in claude-haiku-4-5 claude-opus-5; do
+  lm_eval --model anthropic-chat --model_args model=$m \
+    --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth \
+    --include_path lm_eval_tasks --output_path results/$m --log_samples
+done
+```
+
+The non-Anthropic model is not a formality: a benchmark that only ranks one family is
+suspect, and the Cyrillic effect plausibly depends on the tokenizer, so an outside model
+is what turns that result from interesting into defensible.
+
+`--log_samples` is required — without it `report` cannot compute intervals or breakdowns.
+
+### 2. Read it
+
+```bash
+serbeval report --results-dir results
+```
+
+| question | where to look |
+| --- | --- |
+| Does it discriminate at all? | spread vs CI — `report` states outright when it cannot rank |
+| Is cloze harder than MCQ? | `srb_grammar` vs `srb_grammar_cloze` |
+| How large is contamination? | `srb_grammar_cloze_mined` vs `..._synth`, same phenomenon |
+| Script consistency | `pair_agreement` |
+| **Are prompts even being read?** | `unparsed` — see below |
+
+**Check `unparsed` before believing any accuracy.** A response we cannot read scores 0,
+exactly like a wrong answer. At 5% that is noise; at 20% the accuracy numbers are
+measuring your prompt, not the model's Serbian.
+
+### 3. Let the models find your broken items
+
+An item that **every** model fails is disproportionately a *broken item*, not a hard one —
+and an item where the weaker model beats the stronger one is almost always wrong gold.
+That turns the run into a verification accelerator: instead of checking 1102 items blind,
+check the ~50 everyone missed.
+
+### What each outcome means
+
+- **spread inside the CI** → it does not discriminate. Do not add items; change difficulty.
+- **cloze far below MCQ** → convert grammar to cloze and retire the whole distractor problem.
+- **mined far above synth** → contamination confirmed; lean on the synthetic set.
+- **pair_agreement below ~0.9** → that is the publishable finding.
+
+Cost: ~1100 items x ~110 tokens is a few dollars across three models. Cheap enough that
+there is no reason to defer it.

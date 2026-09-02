@@ -5,6 +5,7 @@ import sys
 from collections.abc import Sequence
 
 from serbeval.data import load_items, validate_dataset
+from serbeval.schema import ClozeItem, EvalItem
 
 DEFAULT_DATA_DIR = "data"
 
@@ -188,6 +189,61 @@ def _cmd_check(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_pool(data_dir: str) -> "list[EvalItem | ClozeItem]":
+    """Every item across every task, MCQ and cloze alike."""
+    import json
+    from pathlib import Path
+
+    from serbeval.data import load_cloze_items, load_items
+
+    pool: list[EvalItem | ClozeItem] = []
+    for path in sorted(Path(data_dir).glob("*/items.jsonl")):
+        with open(path, encoding="utf-8") as fh:
+            first = next((line for line in fh if line.strip()), "")
+        if not first:
+            continue
+        is_cloze = "answers" in json.loads(first)
+        pool.extend(load_cloze_items(path) if is_cloze else load_items(path))
+    return pool
+
+
+def _cmd_baseline(args: argparse.Namespace) -> int:
+    """Build or score a human-baseline worksheet.
+
+    This is the control that separates "the model is weak" from "the items are broken".
+    Without it a low score is ambiguous and no model comparison means anything.
+    """
+    from pathlib import Path
+
+    from serbeval.baseline import build_worksheet, sample_items, score_worksheet
+
+    pool = _load_pool(args.data_dir)
+    if not pool:
+        print(f"FAIL: no items under {args.data_dir}")
+        return 1
+
+    if args.new:
+        items = sample_items(pool, n=args.n, seed=args.seed)
+        Path(args.out).write_text(build_worksheet(items), encoding="utf-8")
+        print(f"OK: {len(items)} item(s) -> {args.out}")
+        print("     popuni ODGOVOR: linije, pa: serbeval baseline --score " + args.out)
+        return 0
+
+    text = Path(args.score).read_text(encoding="utf-8")
+    by_id = {item.id: item for item in pool}
+    from serbeval.baseline import parse_worksheet
+
+    answered_ids = parse_worksheet(text)
+    items = [by_id[i] for i in answered_ids if i in by_id]
+    result = score_worksheet(text, items)
+    print(f"{result.correct}/{result.answered} tačno ({result.accuracy:.0%})")
+    if result.wrong:
+        print("\nPromašeni itemi — proveri JESU LI ONI TAČNI, ne ti:")
+        for item_id in result.wrong:
+            print(f"  {item_id}")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -316,6 +372,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--ignore", nargs="*", default=[], help="finding kinds to suppress"
     )
     check.set_defaults(func=_cmd_check)
+
+    baseline = sub.add_parser("baseline", help="human baseline worksheet: build or score")
+    group = baseline.add_mutually_exclusive_group(required=True)
+    group.add_argument("--new", action="store_true", help="build a worksheet")
+    group.add_argument("--score", metavar="FILE", help="score a filled worksheet")
+    baseline.add_argument("-n", type=int, default=30)
+    baseline.add_argument("--seed", type=int, default=0)
+    baseline.add_argument("--out", default="baseline.txt")
+    baseline.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    baseline.set_defaults(func=_cmd_baseline)
 
     from serbeval.generate import DEFAULT_MODEL
 

@@ -94,3 +94,14 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 ## Usable today (no API key)
 - [ ] Wire `serbeval check` into Pripremi.rs output as a quality gate
 - [ ] Optional next tier: preposition-case government on free text (needs a tagger)
+
+## v0.8 — validation-run prep — DONE (2026-09-02)
+- [x] 32. `unparsed` metric on all six tasks — a response we cannot read != a wrong answer
+- [x] 33. Task YAMLs for the mined and synthetic candidate sets (contamination comparison)
+- [x] 34. `serbeval baseline --new / --score` — the human control
+
+## The run itself (needs ANTHROPIC_API_KEY) — see results/README.md
+- [ ] Answer 30 baseline items yourself FIRST. Below ~100% means fix items, not models.
+- [ ] haiku + opus + one non-Anthropic model, all six tasks, --log_samples
+- [ ] `serbeval report --results-dir results` — check `unparsed` before believing accuracy
+- [ ] Pull the items every model failed; those are the verification queue
