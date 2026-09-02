@@ -4,7 +4,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from serbeval.data import load_items
+from serbeval.data import load_cloze_items, load_items
 
 _PAIRED_TASKS = {"srb_cyrillic_agreement"}
 
@@ -19,6 +19,24 @@ class TaskStats:
     discarded: int = 0
     pairs: int | None = None
     error: str | None = None
+
+
+def _load_any(path: Path) -> list:  # type: ignore[type-arg]
+    """Load a dataset without knowing whether it holds MCQ or cloze items.
+
+    A cloze item has no `choices`/`answer_index`, so loading one as an EvalItem reports
+    the whole task as a validation error. Detect by shape, the same way `validate` does.
+    """
+    import json
+
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                is_cloze = "answers" in json.loads(line)
+                break
+        else:
+            return []
+    return load_cloze_items(path) if is_cloze else load_items(path)
 
 
 def _count_lines(path: Path) -> int:
@@ -36,7 +54,7 @@ def collect_stats(data_dir: str) -> list[TaskStats]:
     for items_path in sorted(root.glob("*/items.jsonl")):
         task_dir = items_path.parent
         try:
-            items = load_items(items_path)
+            items = _load_any(items_path)
         except (OSError, ValueError) as exc:
             # one broken file must not hide the stats of every other task
             stats.append(TaskStats(task=task_dir.name, total=0, verified=0, error=str(exc)))
@@ -50,7 +68,11 @@ def collect_stats(data_dir: str) -> list[TaskStats]:
                 total=len(items),
                 verified=sum(1 for i in items if i.verified),
                 categories=dict(Counter(i.category for i in items)),
-                candidates=_count_lines(task_dir / "candidates.jsonl"),
+                    # candidates arrive from several producers (generate, mine, synth),
+                # each writing its own file; count them all.
+                candidates=sum(
+                    _count_lines(path) for path in sorted(task_dir.glob("candidates*.jsonl"))
+                ),
                 discarded=_count_lines(task_dir / "discarded.jsonl"),
                 pairs=pairs,
             )

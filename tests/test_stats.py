@@ -59,3 +59,54 @@ def test_collect_stats_reports_broken_file_without_aborting(tmp_path: Path) -> N
     text = format_stats(stats)
     assert "ERROR" in text
     assert "srb_grammar: 0/1 verified" in text
+
+
+def test_stats_handles_a_cloze_dataset(tmp_path: Path) -> None:
+    # Cloze items have no `choices`/`answer_index`; loading them as MCQ items made
+    # `serbeval stats` report the whole task as a validation error.
+    task = tmp_path / "srb_grammar_cloze"
+    task.mkdir(parents=True)
+    (task / "items.jsonl").write_text(
+        "\n".join(
+            json.dumps(
+                {
+                    "id": f"c{i}",
+                    "task": "srb_grammar_cloze",
+                    "category": "padezi",
+                    "question": "Otkazali su izlet zbog ____.",
+                    "cue": f"nevreme{i}",
+                    "answers": ["nevremena"],
+                    "explanation": "Predlog „zbog“ traži genitiv.",
+                    "script": "latin",
+                    "source": "handwritten-claude",
+                    "verified": i == 0,
+                },
+                ensure_ascii=False,
+            )
+            for i in range(3)
+        ),
+        encoding="utf-8",
+    )
+    stats = {s.task: s for s in collect_stats(str(tmp_path))}
+    cloze = stats["srb_grammar_cloze"]
+    assert cloze.error is None
+    assert (cloze.total, cloze.verified) == (3, 1)
+    assert cloze.categories == {"padezi": 3}
+
+
+def test_stats_counts_synth_candidates_too(tmp_path: Path) -> None:
+    task = tmp_path / "srb_grammar_cloze"
+    task.mkdir(parents=True)
+    row = json.dumps(
+        {
+            "id": "c1", "task": "srb_grammar_cloze", "category": "padezi",
+            "question": "Zbog ____.", "cue": "x", "answers": ["y"],
+            "explanation": "e", "script": "latin", "source": "s",
+        },
+        ensure_ascii=False,
+    )
+    (task / "items.jsonl").write_text(row, encoding="utf-8")
+    (task / "candidates.jsonl").write_text(row, encoding="utf-8")
+    (task / "candidates-synth.jsonl").write_text(row + "\n" + row, encoding="utf-8")
+    stats = {s.task: s for s in collect_stats(str(tmp_path))}
+    assert stats["srb_grammar_cloze"].candidates == 3
