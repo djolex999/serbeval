@@ -25,6 +25,42 @@ def _cmd_validate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_lint(args: argparse.Namespace) -> int:
+    """Advisory: always exits 0 unless the file itself is unreadable.
+
+    Quality is a judgement call, so lint reports and lets the maintainer decide. Only
+    `validate` gates on well-formedness.
+    """
+    from serbeval.lint import lint_items
+
+    try:
+        items = load_items(args.path)
+    except (OSError, ValueError) as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    reports = [r for r in lint_items(items) if r.score < 1.0 or r.flags]
+    if not reports:
+        print(f"OK: no weak items in {len(items)} item(s)")
+        return 0
+
+    print(f"WEAK ITEMS ({len(reports)} of {len(items)})\n")
+    for report in reports[: args.limit]:
+        flags = f"  [{', '.join(report.flags)}]" if report.flags else ""
+        print(f"  {report.item_id}    score {report.score:.2f}  ({report.shape}){flags}")
+        for verdict in report.verdicts:
+            if verdict.verdict in ("minimal-pair", "n/a"):
+                continue
+            print(f"      {verdict.letter}. {verdict.text}")
+            print(f"         → {verdict.verdict}: {verdict.reason}")
+        print()
+
+    if len(reports) > args.limit:
+        print(f"  ... {len(reports) - args.limit} more (use --limit to show)")
+    print("advisory only — exit 0")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -81,12 +117,25 @@ def _cmd_stats(args: argparse.Namespace) -> int:
 
 
 def _cmd_report(args: argparse.Namespace) -> int:
-    from serbeval.report import collect_results, format_markdown
+    """Markdown metrics table, followed by the statistics when per-sample logs exist.
+
+    The table alone invites ranking models that the item count cannot separate, so any run
+    with `--log_samples` also gets confidence intervals and an explicit rankability verdict.
+    """
+    from serbeval.report import collect_results, format_analysis, format_markdown, load_runs
 
     runs, warnings = collect_results(args.results_dir)
     for warning in warnings:
         print(f"WARNING: {warning}")
+
     text = format_markdown(runs)
+    sampled = load_runs(args.results_dir)
+    if sampled:
+        text += "\n" + format_analysis(sampled)
+    elif runs:
+        text += "\n\nNo per-sample logs found — re-run with --log_samples for confidence\n"
+        text += "intervals and the script/difficulty breakdown.\n"
+
     if args.out is not None:
         from pathlib import Path
 
@@ -104,6 +153,11 @@ def build_parser() -> argparse.ArgumentParser:
     validate = sub.add_parser("validate", help="validate a dataset JSONL file")
     validate.add_argument("path", help="path to items.jsonl")
     validate.set_defaults(func=_cmd_validate)
+
+    lint = sub.add_parser("lint", help="advisory distractor-quality report (never fails)")
+    lint.add_argument("path", help="path to items.jsonl")
+    lint.add_argument("--limit", type=int, default=20, help="how many weak items to print")
+    lint.set_defaults(func=_cmd_lint)
 
     from serbeval.generate import DEFAULT_MODEL
 
@@ -131,7 +185,7 @@ def build_parser() -> argparse.ArgumentParser:
     stats.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     stats.set_defaults(func=_cmd_stats)
 
-    report = sub.add_parser("report", help="markdown summary of lm-eval results")
+    report = sub.add_parser("report", help="lm-eval results table + confidence intervals")
     report.add_argument("--results-dir", default="results")
     report.add_argument("--out", default=None, help="write to file instead of stdout")
     report.set_defaults(func=_cmd_report)

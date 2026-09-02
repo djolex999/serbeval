@@ -64,6 +64,39 @@ serbeval report                                      # markdown table from resul
 independent re-answers all agree with the gold label (rejects go to `data/<task>/discarded.jsonl`).
 Surviving candidates stay `verified: false` until a human merges them into `items.jsonl`.
 
+## Item quality
+
+```bash
+serbeval lint data/srb_grammar/items.jsonl     # advisory distractor report, always exits 0
+```
+
+`lint` is advisory and never fails a build — `validate` asks whether the data is well-formed,
+`lint` asks whether it is *good*. It classifies each distractor against the gold answer as a
+**minimal pair** (one error dimension — a real trap), **weak** (two stacked errors), or **dead**,
+and flags items with fewer than two real traps as `two-way-mcq`: on those, chance is 50%, not 25%.
+
+It deliberately cannot judge semantic plausibility. A clean one-token edit that happens to mean
+something absurd scores as a minimal pair; catching that needs morphological analysis of Serbian
+case government, which is out of scope. Read the ranked output, don't trust the score alone.
+
+## Reading results
+
+```bash
+serbeval report                          # scans results/ recursively
+serbeval report --results-dir results --out results/SUMMARY.md
+```
+
+Prints a markdown metrics table for every run it finds. For runs logged with `--log_samples` it
+then adds per-task accuracy with a **Wilson 95% confidence interval**, the cross-model spread,
+and — the point of the command — an explicit line when the intervals overlap and the item count
+therefore *cannot* rank the models. It also warns on any category with n < 10, and breaks the
+cyrillic task down by script and difficulty tier. Without `--log_samples` you get the table and a
+note saying why the intervals are missing, rather than numbers implying more precision than exists.
+
+**Read this before quoting any number:** at the current sizes (50 / 30 / 30 items) the 95% CI on a
+task accuracy is roughly ±14 points, and every individual `srb_grammar` category is under n=10.
+The benchmark can currently detect catastrophic failure; it cannot rank comparable models.
+
 ## Item schema
 
 ```json
@@ -76,6 +109,7 @@ Surviving candidates stay `verified: false` until a human merges them into `item
   "answer_index": 2,
   "explanation": "…",
   "script": "latin",
+  "difficulty": null,
   "pair_id": null,
   "source": "handwritten-claude",
   "verified": false,

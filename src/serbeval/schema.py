@@ -7,6 +7,9 @@ from pydantic import BaseModel, Field, field_validator
 ANSWER_LETTERS = "ABCD"
 
 Script = Literal["cyrillic", "latin"]
+# Difficulty of the underlying question, independent of script. Optional: the seed items
+# predate it, and a None tier simply drops out of the by-tier breakdowns in `serbeval report`.
+Difficulty = Literal["easy", "medium", "hard"]
 
 
 class EvalItem(BaseModel):
@@ -18,6 +21,7 @@ class EvalItem(BaseModel):
     answer_index: int = Field(ge=0, le=3)
     explanation: str
     script: Script
+    difficulty: Difficulty | None = None
     pair_id: str | None = None
     source: str
     verified: bool = False

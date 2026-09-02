@@ -124,3 +124,112 @@ def test_review_subcommand_wiring(
     monkeypatch.setattr("builtins.input", lambda _prompt: "y")
     assert main(["review", "--task", "srb_grammar", "--data-dir", str(tmp_path)]) == 0
     assert "verified 1" in capsys.readouterr().out
+def test_lint_exits_zero_even_when_it_finds_problems(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # lint is advisory by design: it must never fail a build the way validate does.
+    path = tmp_path / "items.jsonl"
+    write_jsonl(
+        path,
+        [
+            valid_row(
+                choices=[
+                    "Pišem pismo olovkom koju si mi poklonio.",
+                    "Juče je padala kiša ceo dan bez prestanka.",
+                    "Sutra putujemo na more ako bude lepo vreme.",
+                    "Voz za Novi Sad kasni petnaest minuta.",
+                ]
+            )
+        ],
+    )
+    assert main(["lint", str(path)]) == 0
+    out = capsys.readouterr().out
+    assert "two-way-mcq" in out
+
+
+def test_lint_reports_a_clean_file_as_clean(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    path = tmp_path / "items.jsonl"
+    write_jsonl(
+        path,
+        [
+            valid_row(
+                choices=[
+                    "Pišem pismo olovkom koju si mi poklonio.",
+                    "Pišem pismo sa olovkom koju si mi poklonio.",
+                    "Pišem pismo o olovkom koju si mi poklonio.",
+                    "Pišem pismo za olovkom koju si mi poklonio.",
+                ]
+            )
+        ],
+    )
+    assert main(["lint", str(path)]) == 0
+    assert "no weak items" in capsys.readouterr().out
+
+
+def test_lint_fails_on_a_malformed_file(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    path = tmp_path / "items.jsonl"
+    path.write_text("{not json}\n", encoding="utf-8")
+    assert main(["lint", str(path)]) == 1
+    assert "FAIL" in capsys.readouterr().out
+
+
+def test_report_prints_the_table_and_the_statistics_together(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = tmp_path / "haiku" / "claude-haiku-4-5"
+    run_dir.mkdir(parents=True)
+    (run_dir / "results_2026-09-02T00-00-00.json").write_text(
+        json.dumps(
+            {
+                "results": {
+                    "srb_grammar": {
+                        "alias": "srb_grammar",
+                        "exact_match,extract_answer": 0.5,
+                    }
+                },
+                "config": {"model": "anthropic-chat", "model_args": "model=claude-haiku-4-5"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    write_jsonl(
+        run_dir / "samples_srb_grammar_2026-09-02T00-00-00.jsonl",
+        [
+            {"doc_id": 0, "doc": valid_row(), "exact_match": 1.0},
+            {"doc_id": 1, "doc": valid_row(id="b"), "exact_match": 0.0},
+        ],
+    )
+    assert main(["report", "--results-dir", str(tmp_path)]) == 0
+    out = capsys.readouterr().out
+    assert "| Model | Task |" in out       # aggregate table
+    assert "claude-haiku-4-5" in out
+    assert "95% CI" in out                 # statistics appended below it
+
+
+def test_report_without_logged_samples_says_so_instead_of_faking_intervals(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = tmp_path / "haiku"
+    run_dir.mkdir(parents=True)
+    (run_dir / "results_2026-09-02T00-00-00.json").write_text(
+        json.dumps(
+            {
+                "results": {"srb_grammar": {"exact_match,extract_answer": 0.5}},
+                "config": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert main(["report", "--results-dir", str(tmp_path)]) == 0
+    out = capsys.readouterr().out
+    assert "No per-sample logs found" in out
+    assert "95% CI" not in out
+
+
+def test_report_on_an_empty_directory_reports_no_results(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(["report", "--results-dir", str(tmp_path)]) == 0
+    assert "No results found" in capsys.readouterr().out

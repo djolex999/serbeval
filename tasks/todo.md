@@ -32,3 +32,22 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] Human-verify seed items → flip `verified: true`
 - [ ] Live haiku-4-5 smoke run + full model matrix (needs ANTHROPIC_API_KEY)
 - [ ] Expand thin `glagolski-vid` category (only 4 items survived verification)
+
+## v0.3 — measurement tooling — DONE (2026-09-02)
+- [x] 14. `difficulty` tier on EvalItem + pair difficulty-consistency rule
+- [x] 15. `serbeval lint` — advisory distractor quality report (never fails)
+- [x] 16. `serbeval report` — Wilson CI, model spread, "cannot rank" verdict, script gap by tier
+- [x] 17. Tag the 30 srb_cyrillic_agreement items `easy`
+- [x] 18. pytest (96) + mypy + ruff green; report verified against real `dummy` lm-eval output
+
+## v0.4 — dataset work, driven by lint output
+- [ ] Rewrite distractors in `standard` (0.29), `kongruencija` (0.33), `komparacija` (0.40), `pravopis` (0.41) — 24 of 50 grammar items are effectively 2-way MCQ
+- [ ] Expand `srb_cyrillic_agreement` to ~60 pairs across easy/medium/hard, so the script gap can be measured against difficulty
+- [ ] Re-aim `srb_idioms` at rare/regional expressions, or drop the task
+- [ ] Scale `srb_grammar` toward 300 items (needs ANTHROPIC_API_KEY for generate/selfcheck)
+
+## Still needs maintainer
+- [ ] Human-verify seed items → flip `verified: true`
+- [ ] **Run the model matrix and check the benchmark discriminates at all** (needs ANTHROPIC_API_KEY).
+      If haiku and opus land within ~10 points, more items will not help and the item difficulty
+      is what needs changing. This gates all of v0.4.

@@ -77,6 +77,10 @@ def _pair_problems(items: Sequence[EvalItem]) -> list[str]:
             problems.append(f"pair {pair_id}: answer_index differs between scripts")
         if len({(m.task, m.category) for m in members}) != 1:
             problems.append(f"pair {pair_id}: task/category differs between scripts")
+        # Difficulty describes the base fact, so it must be identical across the pair —
+        # otherwise a script-gap-by-tier breakdown would split one pair across two tiers.
+        if len({m.difficulty for m in members}) != 1:
+            problems.append(f"pair {pair_id}: difficulty differs between scripts")
     return problems
 
 

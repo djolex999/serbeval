@@ -99,3 +99,25 @@ def test_validate_flags_pair_with_mismatched_answers() -> None:
 def test_validate_flags_incomplete_pair() -> None:
     problems = validate_dataset(_pair()[:1])
     assert any("pair" in p for p in problems)
+
+
+def test_validate_flags_pair_with_mismatched_difficulty() -> None:
+    items = _pair()
+    items[0].difficulty = "easy"
+    items[1].difficulty = "hard"
+    problems = validate_dataset(items)
+    assert any("difficulty" in p for p in problems)
+
+
+def test_validate_accepts_pair_sharing_difficulty() -> None:
+    items = _pair()
+    items[0].difficulty = "medium"
+    items[1].difficulty = "medium"
+    assert validate_dataset(items) == []
+
+
+def test_validate_flags_pair_with_difficulty_on_only_one_side() -> None:
+    items = _pair()
+    items[0].difficulty = "easy"
+    problems = validate_dataset(items)
+    assert any("difficulty" in p for p in problems)

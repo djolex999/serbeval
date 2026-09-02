@@ -61,3 +61,19 @@ def test_rejects_unknown_script() -> None:
 def test_answer_letter_property() -> None:
     item = EvalItem.model_validate(make_raw(answer_index=2))
     assert item.answer_letter == "C"
+
+
+def test_difficulty_defaults_to_none() -> None:
+    item = EvalItem.model_validate(make_raw())
+    assert item.difficulty is None
+
+
+def test_difficulty_accepts_known_tiers() -> None:
+    for tier in ("easy", "medium", "hard"):
+        item = EvalItem.model_validate(make_raw(difficulty=tier))
+        assert item.difficulty == tier
+
+
+def test_difficulty_rejects_unknown_tier() -> None:
+    with pytest.raises(ValidationError, match="difficulty"):
+        EvalItem.model_validate(make_raw(difficulty="trivial"))
