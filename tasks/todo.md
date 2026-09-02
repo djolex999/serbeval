@@ -20,6 +20,14 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 12. CONTRIBUTING.md + issue templates
 - [x] 13. Final checks + HANDOFF.md
 
+## v0.3 — human-verification tooling (in progress)
+- [x] 14. `serbeval review` — interactive verification: y/n/s/q per item, pair-atomic for
+      srb_cyrillic_agreement, saves after every decision, rejects → discarded.jsonl with reason
+- [x] 15. `serbeval stats` — per-task verification progress + category/candidate/discard counts
+- [x] 16. `serbeval report` — markdown summary table from lm-eval `results_*.json` under results/
+- [x] 17. pytest + mypy + ruff green; adversarial review workflow (26 agents, 17 confirmed
+      findings → all fixed: atomic saves, reject ordering, recursive report discovery, …); docs updated
+
 ## Needs maintainer (see HANDOFF.md)
 - [ ] Human-verify seed items → flip `verified: true`
 - [ ] Live haiku-4-5 smoke run + full model matrix (needs ANTHROPIC_API_KEY)

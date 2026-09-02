@@ -14,3 +14,12 @@
 - Smoke run: validated full pipeline with lm-eval `dummy` model (no API key for live haiku). Both metrics aggregate.
 - Gates green: 50 tests, mypy src strict, ruff. CONTRIBUTING + issue templates + HANDOFF.md written.
 - Outstanding (maintainer): human-verify items, live model runs, expand thin glagolski-vid (4 items).
+
+## 2026-08-06 — v0.3 human-verification tooling
+- New CLI: `serbeval review` (interactive y/n/s/q verification; pair-atomic for
+  srb_cyrillic_agreement; saves after every decision; rejects → discarded.jsonl with reason),
+  `serbeval stats` (verification progress per task/category), `serbeval report` (markdown table
+  from lm-eval results_*.json; newest file per run dir; parses "metric,filter" keys).
+- Rationale: the whole benchmark is blocked on human verification of 110 items — review removes
+  the friction (maintainer just runs it and presses y/n).
+- Gates green: pytest (73), mypy src strict, ruff. Adversarial multi-agent review run over the diff.

@@ -1,6 +1,7 @@
 """Dataset IO and integrity validation."""
 
 import json
+import os
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
@@ -27,10 +28,14 @@ def load_items(path: Path | str) -> list[EvalItem]:
 
 
 def save_items(items: Sequence[EvalItem], path: Path | str) -> None:
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as fh:
+    # atomic: a crash mid-write must never truncate the curated dataset in place
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_suffix(target.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fh:
         for item in items:
             fh.write(json.dumps(item.model_dump(), ensure_ascii=False) + "\n")
+    os.replace(tmp, target)
 
 
 def _has_cyrillic(text: str) -> bool:

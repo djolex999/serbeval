@@ -10,7 +10,18 @@ one-line rationale behind every non-obvious choice.
 Claude agents (and the cyrillic set was transliterated deterministically), but a model verifying a
 model is not human verification.
 
-Please review and, where correct, flip `verified: true`:
+**v0.3 makes this a guided flow — run:**
+
+```bash
+./.venv/bin/serbeval review --task srb_cyrillic_agreement
+```
+
+(then `srb_idioms`, then `srb_grammar`). For each item you press `y` (correct → `verified: true`),
+`n` (reject → moved to `discarded.jsonl` with your reason), `s` (skip), `q` (quit). Every decision
+is saved immediately, so you can stop anytime. Cyrillic pairs are shown and decided together.
+Track progress with `./.venv/bin/serbeval stats`.
+
+The raw files, if you prefer editing by hand:
 
 | File | Items | How made |
 | --- | --- | --- |
@@ -42,6 +53,9 @@ Those rejection reasons are a good guide to the failure modes to watch for in th
 - **Pipeline validated end-to-end** against lm-eval 0.4.12 via the `dummy` model: both metrics
   aggregate, results JSON is written. See [results/README.md](results/README.md).
 - **Transliterator** (`src/serbeval/translit.py`): tested, digraph-aware Latin→Cyrillic.
+- **v0.3 verification tooling**: `serbeval review` (interactive human verification, pair-atomic,
+  crash-safe), `serbeval stats` (progress per task/category), `serbeval report` (markdown table
+  from lm-eval `results_*.json` — ready for the first live runs).
 
 ## 🟡 Stubbed / blocked on you
 
@@ -60,7 +74,7 @@ No HF Hub push, no PyPI publish, no upstream PRs. Everything is local; publishin
 
 ## Suggested next steps
 
-1. Verify the seed items (above); flip `verified: true` on the ones that pass.
+1. Verify the seed items: `serbeval review --task <task>` (above).
 2. Add `ANTHROPIC_API_KEY`, run the haiku smoke run, commit the summary JSON to `results/haiku-4-5/`.
 3. Expand thin grammar categories — `glagolski-vid` ended up at only 4 items (the verifiers were
    strict on aspect): `serbeval generate --task srb_grammar --category glagolski-vid -n 8`, then

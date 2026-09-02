@@ -47,10 +47,17 @@ lm_eval \
   --apply_chat_template
 ```
 
-Expected artifacts:
-- `results/haiku-4-5/results_*.json` — aggregate scores (`exact_match` per task; `pair_agreement`
-  additionally for `srb_cyrillic_agreement`)
-- `results/haiku-4-5/raw/` — per-sample logs (gitignored)
+Expected artifacts (note: lm-eval appends a `<model_name_sanitized>` directory below
+`--output_path`):
+- `results/haiku-4-5/claude-haiku-4-5/results_*.json` — aggregate scores (`exact_match` per task;
+  `pair_agreement` additionally for `srb_cyrillic_agreement`)
+- sample logs next to it (gitignored)
+
+Then summarize everything committed under `results/` with:
+
+```bash
+serbeval report            # markdown table to stdout; add --out results/SUMMARY.md to write a file
+```
 
 ## Full model matrix (TODO — run after smoke run is green)
 

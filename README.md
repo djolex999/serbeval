@@ -55,6 +55,9 @@ See [results/README.md](results/README.md) for the model matrix and exact per-mo
 serbeval validate data/srb_grammar/items.jsonl       # schema + integrity checks
 serbeval generate --task srb_grammar --category enklitike -n 10   # author candidates via Claude
 serbeval selfcheck --task srb_grammar                # 3x self-consistency filter on candidates
+serbeval review --task srb_grammar                   # interactive human verification (y/n/s/q)
+serbeval stats                                       # verification progress per task/category
+serbeval report                                      # markdown table from results/*/results_*.json
 ```
 
 `generate` writes to `data/<task>/candidates.jsonl`; `selfcheck` keeps only candidates whose three

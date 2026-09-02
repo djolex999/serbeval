@@ -93,3 +93,34 @@ def test_selfcheck_subcommand_wiring(
     code = main(["selfcheck", "--task", "srb_grammar", "--runs", "3", "--data-dir", str(tmp_path)])
     assert code == 0
     assert "kept 1, discarded 0" in capsys.readouterr().out
+
+
+def test_stats_subcommand(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    write_jsonl(tmp_path / "srb_grammar" / "items.jsonl", [valid_row(verified=True)])
+    assert main(["stats", "--data-dir", str(tmp_path)]) == 0
+    assert "1/1" in capsys.readouterr().out
+
+
+def test_report_subcommand_writes_file(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    results = {
+        "results": {"srb_grammar": {"alias": "srb_grammar", "exact_match,extract_answer": 0.5}},
+        "config": {"model": "anthropic-chat", "model_args": "model=claude-haiku-4-5"},
+    }
+    run_dir = tmp_path / "results" / "haiku-4-5"
+    run_dir.mkdir(parents=True)
+    (run_dir / "results_2026-06-14T12-00-00.json").write_text(json.dumps(results))
+    out = tmp_path / "SUMMARY.md"
+    assert main(["report", "--results-dir", str(tmp_path / "results"), "--out", str(out)]) == 0
+    assert "claude-haiku-4-5" in out.read_text(encoding="utf-8")
+    assert "OK: wrote" in capsys.readouterr().out
+
+
+def test_review_subcommand_wiring(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    write_jsonl(tmp_path / "srb_grammar" / "items.jsonl", [valid_row()])
+    monkeypatch.setattr("builtins.input", lambda _prompt: "y")
+    assert main(["review", "--task", "srb_grammar", "--data-dir", str(tmp_path)]) == 0
+    assert "verified 1" in capsys.readouterr().out

@@ -62,6 +62,41 @@ def _cmd_selfcheck(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_review(args: argparse.Namespace) -> int:
+    from serbeval.review import run_review
+
+    summary = run_review(task=args.task, data_dir=args.data_dir)
+    print(
+        f"OK: verified {summary['verified']}, rejected {summary['rejected']}, "
+        f"skipped {summary['skipped']}, remaining {summary['remaining']}"
+    )
+    return 0
+
+
+def _cmd_stats(args: argparse.Namespace) -> int:
+    from serbeval.stats import collect_stats, format_stats
+
+    print(format_stats(collect_stats(args.data_dir)))
+    return 0
+
+
+def _cmd_report(args: argparse.Namespace) -> int:
+    from serbeval.report import collect_results, format_markdown
+
+    runs, warnings = collect_results(args.results_dir)
+    for warning in warnings:
+        print(f"WARNING: {warning}")
+    text = format_markdown(runs)
+    if args.out is not None:
+        from pathlib import Path
+
+        Path(args.out).write_text(text + "\n", encoding="utf-8")
+        print(f"OK: wrote {args.out}")
+    else:
+        print(text)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="serbeval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -86,6 +121,20 @@ def build_parser() -> argparse.ArgumentParser:
     selfcheck.add_argument("--model", default=DEFAULT_MODEL)
     selfcheck.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     selfcheck.set_defaults(func=_cmd_selfcheck)
+
+    review = sub.add_parser("review", help="interactively verify unverified items")
+    review.add_argument("--task", required=True)
+    review.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    review.set_defaults(func=_cmd_review)
+
+    stats = sub.add_parser("stats", help="dataset composition and verification progress")
+    stats.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    stats.set_defaults(func=_cmd_stats)
+
+    report = sub.add_parser("report", help="markdown summary of lm-eval results")
+    report.add_argument("--results-dir", default="results")
+    report.add_argument("--out", default=None, help="write to file instead of stdout")
+    report.set_defaults(func=_cmd_report)
 
     return parser
 
