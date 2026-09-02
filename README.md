@@ -119,6 +119,49 @@ Shipped: `data/srb_grammar_cloze/candidates.jsonl`, 453 items mined from
 [UD_Serbian-SET](https://github.com/UniversalDependencies/UD_Serbian-SET) (CC BY-SA 4.0;
 Samardžić, Miletić, Ljubešić). Unverified — candidates, not items.
 
+## Synthesising items (the contamination answer)
+
+```bash
+serbeval synth --lexicon srLex_v1.3.gz     # -> data/<task>/candidates-synth.jsonl
+```
+
+Mining takes attested sentences, which for any published corpus are already on the web and
+plausibly in training data. Synthesis writes the sentence itself, so it demonstrably never
+existed before — while the gold form still comes from a lexicon rather than a tagger or a
+model, so nothing is guessed.
+
+    frame:    "Otvorio je vrata ____."   (requires instrumental)
+    lexicon:  ključ -> ključem
+
+Three things follow. **Verification collapses**: a frame that is grammatical for one lemma
+of its class is grammatical for all of them, so you check ~24 frames instead of 519 items.
+**Scale is free.** And the exam is no longer written by the kind of system sitting it.
+
+Because the frames are authored, the required case is guaranteed by construction rather than
+inferred — which is why, unlike `mine`, this can use `u` and `na`. Those take locative or
+accusative depending on whether the verb expresses motion, so mining had to skip them; here
+the frame supplies the verb, and that contrast is the deliberate `hard` tier:
+
+    Ostali smo u ____ do večeri.   (šuma)     ->  šumi     [rest, locative]
+    Ušli smo u ____ i seli.        (bašta)    ->  baštu    [motion, accusative]
+
+Frames declare a **semantic role**, not a category, and only lemmas of that role are
+substituted. A single "things" class produced grammatical nonsense — *Knjiga je ostala na
+olovci*, *Otvorio je vrata stolicama* — because what you rest a book ON and what you open a
+door WITH are different sets. Hence `OBJECT` / `SURFACE` / `TOOL`.
+
+Get srLex from [CLARIN.SI](https://www.clarin.si/repository/xmlui/handle/11356/1233)
+(CC BY-SA 4.0, ~54 MB gzipped). It is not vendored here.
+
+Shipped: `data/srb_grammar_cloze/candidates-synth.jsonl`, 519 items. Kept separate from the
+mined candidates on purpose — see below.
+
+### The measurement this enables
+
+The same phenomenon now exists in two forms: **mined** (attested, memorisable) and
+**synthetic** (novel, not memorisable). The accuracy gap between them estimates the
+contamination effect — which is a finding in its own right, not just hygiene.
+
 ## Item quality
 
 ```bash

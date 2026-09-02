@@ -158,3 +158,26 @@ def test_validate_cloze_accepts_a_clean_dataset() -> None:
         make_item(id="b", question="Bavi se ____ godinama.", answers=["fudbalom"]),
     ]
     assert validate_cloze_dataset(items) == []
+
+
+def test_validate_cloze_allows_one_question_across_many_cues() -> None:
+    # Template-generated items share a frame by design; the cue is what distinguishes
+    # them, so a repeated question alone is not a problem.
+    from serbeval.data import validate_cloze_dataset
+
+    items = [
+        make_item(id="a", cue="nevreme", answers=["nevremena"]),
+        make_item(id="b", cue="kvar", answers=["kvara"]),
+    ]
+    assert validate_cloze_dataset(items) == []
+
+
+def test_validate_cloze_flags_a_repeated_question_and_cue() -> None:
+    # Same prompt, different gold answer, is a genuine contradiction.
+    from serbeval.data import validate_cloze_dataset
+
+    items = [
+        make_item(id="a", cue="nevreme", answers=["nevremena"]),
+        make_item(id="b", cue="nevreme", answers=["nevremenu"]),
+    ]
+    assert any("duplicate question and cue" in p for p in validate_cloze_dataset(items))

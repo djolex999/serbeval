@@ -110,7 +110,7 @@ def mine_cloze_items(
 
     items: list[ClozeItem] = []
     seen: set[tuple[str, str]] = set()
-    seen_questions: set[str] = set()
+    seen_questions: set[tuple[str, str]] = set()
     for sentence in sentences:
         for token in sentence.tokens:
             if token.upos != "ADP" or token.deprel != "case":
@@ -130,12 +130,15 @@ def mine_cloze_items(
                 continue
 
             question = sentence.render_with_blank(noun.id)
-            # Two sentences differing only in the blanked word render to the same prompt.
-            # Keeping both would put contradictory gold answers behind one question.
-            if question in seen_questions:
+            plural = noun.feats.get("Number") == "Plur"
+            cue = f"{noun.lemma}, {'množina' if plural else 'jednina'}"
+            # (question, cue) is the prompt a model actually sees. Two sentences that
+            # render alike but blank different words differ by cue and are both usable;
+            # a repeated pair would put contradictory gold answers behind one prompt.
+            if (question, cue) in seen_questions:
                 continue
             seen.add(key)
-            seen_questions.add(question)
+            seen_questions.add((question, cue))
 
             plural = noun.feats.get("Number") == "Plur"
             # Number is stated on EVERY item, singular included. Genitive singular "želje"

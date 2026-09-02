@@ -74,3 +74,14 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] Second phenomenon: numeral + noun (paukal) — annotated in the treebank, same approach
 - [ ] Contamination fix: tag recent Serbian news with a UD tagger, run the same miner over it
 - [ ] Consider `u`/`na` as a deliberately HARD tier (needs the verb, not just the preposition)
+
+## v0.6 — synthesis — DONE (2026-09-02)
+- [x] 26. srLex reader (`serbeval.lexicon`) — paradigms, all variant forms per slot
+- [x] 27. `serbeval synth` — 24 frames x semantic roles x srLex, 519 items, validate clean
+- [x] 28. Motion-vs-rest hard tier (`u`/`na`), impossible to mine
+
+## Next
+- [ ] Human-check the 24 FRAMES (not the 519 items) — that is the whole verification cost now
+- [ ] Run mined vs synthetic on the same models: the gap estimates contamination
+- [ ] More frames: numerals/paukal, comparatives, verb forms
+- [ ] Still open and still gating: does the benchmark separate models at all? (needs API key)

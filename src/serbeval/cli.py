@@ -116,6 +116,34 @@ def _cmd_mine(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_synth(args: argparse.Namespace) -> int:
+    """Generate cloze items from authored frames + an inflectional lexicon."""
+    from pathlib import Path
+
+    from serbeval.data import save_cloze_items
+    from serbeval.lexicon import load_lexicon
+    from serbeval.synth import LEMMA_CLASSES, synthesize_items
+
+    wanted = {lemma for lemmas in LEMMA_CLASSES.values() for lemma in lemmas}
+    try:
+        lexicon = load_lexicon(args.lexicon, upos="NOUN", lemmas=wanted)
+    except OSError as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    absent = wanted - lexicon.lemmas()
+    if absent:
+        print(f"WARNING: lexicon has no NOUN entry for: {', '.join(sorted(absent))}")
+
+    items = synthesize_items(lexicon, limit=args.n, seed=args.seed)
+    out = Path(args.out) if args.out else Path(args.data_dir) / args.task / "candidates-synth.jsonl"
+    save_cloze_items(items, out)
+    print(f"OK: wrote {len(items)} candidate(s) to {out}")
+    print("     novel sentences — never published, so not in any training set")
+    print("     unverified: check the FRAMES, not every item")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -222,6 +250,15 @@ def build_parser() -> argparse.ArgumentParser:
     mine.add_argument("--min-count", type=int, default=20)
     mine.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     mine.set_defaults(func=_cmd_mine)
+
+    synth = sub.add_parser("synth", help="generate cloze items from frames + a lexicon")
+    synth.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")
+    synth.add_argument("--task", default="srb_grammar_cloze")
+    synth.add_argument("-n", type=int, default=None, help="cap on items produced")
+    synth.add_argument("--seed", type=int, default=0)
+    synth.add_argument("--out", default=None)
+    synth.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    synth.set_defaults(func=_cmd_synth)
 
     from serbeval.generate import DEFAULT_MODEL
 

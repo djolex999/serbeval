@@ -277,3 +277,27 @@ def test_mine_reports_a_corpus_with_nothing_minable(
     )
     assert main(["mine", "--conllu", str(conllu), "--data-dir", str(tmp_path / "d")]) == 0
     assert "0 candidate" in capsys.readouterr().out
+
+
+def test_synth_writes_its_own_candidates_file(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # Synthetic and mined candidates stay in separate files: comparing accuracy across
+    # the two is the contamination measurement, so they must not be merged by accident.
+    lexicon = tmp_path / "lex.tsv"
+    lexicon.write_text(
+        "".join(
+            f"{lemma}e\t{lemma}\tNcfsg\t_\tNOUN\tCase=Gen|Number=Sing\t100\t0.1\n"
+            for lemma in ("nevreme", "kiša", "kvar", "štrajk", "kriza")
+        ),
+        encoding="utf-8",
+    )
+    data_dir = tmp_path / "data"
+    assert main(["synth", "--lexicon", str(lexicon), "--data-dir", str(data_dir)]) == 0
+
+    written = data_dir / "srb_grammar_cloze" / "candidates-synth.jsonl"
+    assert written.exists()
+    assert not (data_dir / "srb_grammar_cloze" / "candidates.jsonl").exists()
+    rows = [json.loads(line) for line in written.read_text(encoding="utf-8").splitlines()]
+    assert rows and all(r["source"] == "synthetic-srlex" for r in rows)
+    assert "candidate" in capsys.readouterr().out

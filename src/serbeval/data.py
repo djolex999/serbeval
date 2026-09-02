@@ -134,16 +134,19 @@ def validate_cloze_dataset(items: Sequence[ClozeItem]) -> list[str]:
 
     problems = []
     seen_ids: set[str] = set()
-    seen_questions: set[str] = set()
+    seen_questions: set[tuple[str, str]] = set()
     for item in items:
         if item.id in seen_ids:
             problems.append(f"{item.id}: duplicate id")
         seen_ids.add(item.id)
 
-        question_key = item.question.strip()
-        if question_key in seen_questions:
-            problems.append(f"{item.id}: duplicate question text")
-        seen_questions.add(question_key)
+        # The prompt a model sees is question PLUS cue, so that pair is the identity of
+        # an item. Template-generated items deliberately share one question across many
+        # lemmas; only a repeated (question, cue) is an actual contradiction.
+        prompt_key = (item.question.strip(), item.cue.strip())
+        if prompt_key in seen_questions:
+            problems.append(f"{item.id}: duplicate question and cue")
+        seen_questions.add(prompt_key)
 
         # The prompt must not hand the model the form it is being asked to produce.
         context = normalize(item.question.replace(BLANK, " "))
