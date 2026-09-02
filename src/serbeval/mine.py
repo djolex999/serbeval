@@ -131,7 +131,11 @@ def mine_cloze_items(
 
             question = sentence.render_with_blank(noun.id)
             plural = noun.feats.get("Number") == "Plur"
+            # Number is stated on EVERY item, singular included. Genitive singular "želje"
+            # and genitive plural "želja" are both grammatical after "zbog", so a bare
+            # lemma would leave two defensible answers and mark one of them wrong.
             cue = f"{noun.lemma}, {'množina' if plural else 'jednina'}"
+
             # (question, cue) is the prompt a model actually sees. Two sentences that
             # render alike but blank different words differ by cue and are both usable;
             # a repeated pair would put contradictory gold answers behind one prompt.
@@ -140,11 +144,6 @@ def mine_cloze_items(
             seen.add(key)
             seen_questions.add((question, cue))
 
-            plural = noun.feats.get("Number") == "Plur"
-            # Number is stated on EVERY item, singular included. Genitive singular "želje"
-            # and genitive plural "želja" are both grammatical after "zbog", so a bare
-            # lemma would leave two defensible answers and mark one of them wrong.
-            cue = f"{noun.lemma}, {'množina' if plural else 'jednina'}"
             case_name = _CASE_NAMES.get(required, required)
 
             items.append(

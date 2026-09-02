@@ -45,8 +45,6 @@ _ADAPTER_NAMES = {
 _STDERR_MARKER = "_stderr"
 
 
-
-
 @dataclass
 class RunResult:
     model: str
