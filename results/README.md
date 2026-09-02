@@ -100,6 +100,43 @@ the numbers cannot separate them. A native speaker can. **If a native speaker do
 score near 100%, stop: fix the items before comparing any models.** Twenty minutes, and
 every item the human misses is a verification target, not a human error.
 
+### 1a. Use the fixed adapter for current models
+
+**lm-eval 0.4.12's stock `anthropic-chat` adapter cannot evaluate Claude Opus 5, Sonnet 5,
+Opus 4.8 or Opus 4.7 at all.** It sends `temperature` on every request — removed on those
+models, so the API answers 400 — and it reads every response block as `block["text"]`,
+which raises KeyError on the thinking block those models return. Either way the run dies
+before producing a result.
+
+`scripts/run_eval.py` registers a fixed adapter (`anthropic-chat-fixed`) and then hands
+over to lm_eval; every lm_eval flag works unchanged:
+
+```bash
+scripts/run_eval.py --model anthropic-chat-fixed \
+  --model_args model=claude-opus-5 \
+  --tasks srb_grammar --include_path lm_eval_tasks \
+  --output_path results/opus-5 --log_samples
+```
+
+The stock adapter is left registered and untouched, so the two can be compared if a
+result ever looks wrong — and a `pip install` cannot silently revert the fix.
+
+Haiku 4.5, Sonnet 4.6 and Opus 4.6 still accept `temperature` and work with plain
+`lm_eval --model anthropic-chat`.
+
+**Thinking is off by default** in the fixed adapter. These items want one letter or one
+word form, and on Opus 5 thinking is on by default — at `max_gen_toks: 32` the model
+would spend its budget reasoning and return nothing, scoring `unparsed` across the board.
+To measure a model as it behaves in normal use instead, pass
+`--model_args model=claude-opus-5,thinking=adaptive,effort=low` with a much larger
+`--gen_kwargs max_gen_toks=1024`. Running both settings on the same items is itself
+informative, and costs more: thinking tokens are billed as output.
+
+One known consequence, shared with the stock adapter: `"\n\n".strip()` is empty, so the
+tasks' `until: ["\n\n"]` is dropped (the API rejects whitespace-only stop sequences) and
+generation runs to `max_tokens`. Harmless here — both extractors read only the leading
+part of the response.
+
 ### 1. Pick models with a known spread
 
 Not three similar models. A floor, a ceiling, and one outside the family:

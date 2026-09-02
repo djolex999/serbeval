@@ -105,3 +105,8 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] haiku + opus + one non-Anthropic model, all six tasks, --log_samples
 - [ ] `serbeval report --results-dir results` — check `unparsed` before believing accuracy
 - [ ] Pull the items every model failed; those are the verification queue
+
+## v0.9 — working adapter — DONE (2026-09-02)
+- [x] 35. `anthropic-chat-fixed` — drops `temperature`, reads text past thinking blocks
+- [x] 36. `scripts/run_eval.py` wrapper; stock adapter left registered for comparison
+- [x] 37. Verified end-to-end through the harness with the dummy model
