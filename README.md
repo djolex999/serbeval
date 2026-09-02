@@ -83,6 +83,42 @@ serbeval report                                      # markdown table from resul
 independent re-answers all agree with the gold label (rejects go to `data/<task>/discarded.jsonl`).
 Surviving candidates stay `verified: false` until a human merges them into `items.jsonl`.
 
+## Mining items from an annotated corpus
+
+```bash
+serbeval mine --conllu path/to/corpus.conllu          # -> data/<task>/candidates.jsonl
+```
+
+Reads any morphologically annotated CoNLL-U corpus and builds cloze items from
+**prepositional case government**: a preposition whose annotation fixes its noun's case,
+with the noun blanked and its lemma given as the cue.
+
+    Obojica su izbačeni iz ____.  (tim, jednina)   ->  tima
+
+This exists to stop a model authoring the exam it will sit. The sentence is attested text and
+the gold form is what a linguist tagged, so a human spot-checks a sample instead of verifying
+every gold answer.
+
+Which prepositions qualify is **computed from the corpus, never hardcoded** — a preposition is
+used only if it governs one case in ≥95% of its attestations. That excludes `u` and `na`, which
+take locative or accusative depending on whether the verb expresses motion; the preposition
+alone cannot determine the answer there. It also means the same thresholds work on a different
+corpus.
+
+Every cue states grammatical number, singular included: after `zbog`, genitive singular `želje`
+and genitive plural `želja` are both grammatical, so a bare lemma would leave two defensible
+answers.
+
+**Two honest caveats.** (1) Mining does *not* solve contamination — a published treebank's
+sentences are on the public web and likely in training data. Point the miner at recently
+published text you tag yourself to get around that; the pipeline is corpus-agnostic by design.
+(2) Licensing is inherited: items mined from a CC BY-SA corpus carry `CC-BY-SA-4.0`, not the
+`CC-BY-4.0` the hand-written items use.
+
+Shipped: `data/srb_grammar_cloze/candidates.jsonl`, 453 items mined from
+[UD_Serbian-SET](https://github.com/UniversalDependencies/UD_Serbian-SET) (CC BY-SA 4.0;
+Samardžić, Miletić, Ljubešić). Unverified — candidates, not items.
+
 ## Item quality
 
 ```bash

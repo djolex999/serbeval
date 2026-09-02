@@ -233,3 +233,47 @@ def test_report_on_an_empty_directory_reports_no_results(
 ) -> None:
     assert main(["report", "--results-dir", str(tmp_path)]) == 0
     assert "No results found" in capsys.readouterr().out
+
+
+def test_mine_writes_candidates_not_items(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # Mined items are unverified like generated ones, so they land in candidates.jsonl
+    # and only a human moves them into items.jsonl.
+    conllu = tmp_path / "c.conllu"
+    conllu.write_text(
+        "".join(
+            f"# sent_id = s{i}\n# text = t\n"
+            f"1\tRadnici{i}\tradnik{i}\tNOUN\tNcmpn\tCase=Nom|Number=Plur\t3\tnsubj\t_\t_\n"
+            f"2\tsu\tbiti\tAUX\tVar3p\tTense=Pres\t3\taux\t_\t_\n"
+            f"3\tprotestovali\tprotestovati\tVERB\tVmp-pm\tTense=Past\t0\troot\t_\t_\n"
+            f"4\tzbog\tzbog\tADP\tSg\tCase=Gen\t5\tcase\t_\t_\n"
+            f"5\tplate{i}\tplata{i}\tNOUN\tNcfsg\tCase=Gen|Number=Sing\t3\tobl\t_\tSpaceAfter=No\n"
+            f"6\t.\t.\tPUNCT\tZ\t_\t3\tpunct\t_\t_\n\n"
+            for i in range(25)
+        ),
+        encoding="utf-8",
+    )
+    data_dir = tmp_path / "data"
+    assert main(["mine", "--conllu", str(conllu), "--data-dir", str(data_dir), "-n", "5"]) == 0
+
+    written = data_dir / "srb_grammar_cloze" / "candidates.jsonl"
+    assert written.exists()
+    assert not (data_dir / "srb_grammar_cloze" / "items.jsonl").exists()
+    rows = [json.loads(line) for line in written.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 5
+    assert all(r["verified"] is False for r in rows)
+    assert all(r["license"] == "CC-BY-SA-4.0" for r in rows)
+    assert "5 candidate" in capsys.readouterr().out
+
+
+def test_mine_reports_a_corpus_with_nothing_minable(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    conllu = tmp_path / "empty.conllu"
+    conllu.write_text(
+        "# sent_id = s1\n# text = t\n1\ta\ta\tNOUN\tN\t_\t0\troot\t_\t_\n",
+        encoding="utf-8",
+    )
+    assert main(["mine", "--conllu", str(conllu), "--data-dir", str(tmp_path / "d")]) == 0
+    assert "0 candidate" in capsys.readouterr().out

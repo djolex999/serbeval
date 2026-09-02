@@ -92,6 +92,30 @@ def _cmd_lint(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_mine(args: argparse.Namespace) -> int:
+    """Mine cloze candidates from an annotated corpus — no API key, no model authorship."""
+    from pathlib import Path
+
+    from serbeval.conllu import load_conllu
+    from serbeval.data import save_cloze_items
+    from serbeval.mine import mine_cloze_items
+
+    try:
+        sentences = load_conllu(args.conllu)
+    except OSError as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    items = mine_cloze_items(
+        sentences, min_purity=args.min_purity, min_count=args.min_count, limit=args.n
+    )
+    out = Path(args.data_dir) / args.task / "candidates.jsonl"
+    save_cloze_items(items, out)
+    print(f"OK: wrote {len(items)} candidate(s) to {out}")
+    print("     unverified — a human must spot-check before merging into items.jsonl")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -189,6 +213,15 @@ def build_parser() -> argparse.ArgumentParser:
     lint.add_argument("path", help="path to items.jsonl")
     lint.add_argument("--limit", type=int, default=20, help="how many weak items to print")
     lint.set_defaults(func=_cmd_lint)
+
+    mine = sub.add_parser("mine", help="mine cloze candidates from a CoNLL-U corpus")
+    mine.add_argument("--conllu", required=True, help="path to an annotated .conllu file")
+    mine.add_argument("--task", default="srb_grammar_cloze")
+    mine.add_argument("-n", type=int, default=None, help="cap on candidates produced")
+    mine.add_argument("--min-purity", type=float, default=0.95)
+    mine.add_argument("--min-count", type=int, default=20)
+    mine.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    mine.set_defaults(func=_cmd_mine)
 
     from serbeval.generate import DEFAULT_MODEL
 

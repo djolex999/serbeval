@@ -63,3 +63,14 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] `serbeval report --results-dir results` → is any spread larger than the CI?
 - [ ] Compare `srb_grammar` vs `srb_grammar_cloze` accuracy. If cloze is materially harder,
       convert srb_grammar to cloze and retire the MCQ distractor problem entirely.
+
+## v0.5 — corpus mining — DONE (2026-09-02)
+- [x] 23. CoNLL-U reader (`serbeval.conllu`)
+- [x] 24. `serbeval mine` — corpus-driven cloze generation, purity computed not hardcoded
+- [x] 25. 453 candidates mined from UD_Serbian-SET, validate clean
+
+## Next on mining
+- [ ] Spot-check a random sample of the 453 (say 40) and merge the good ones into items.jsonl
+- [ ] Second phenomenon: numeral + noun (paukal) — annotated in the treebank, same approach
+- [ ] Contamination fix: tag recent Serbian news with a UD tagger, run the same miner over it
+- [ ] Consider `u`/`na` as a deliberately HARD tier (needs the verb, not just the preposition)
