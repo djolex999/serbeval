@@ -85,3 +85,12 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] Run mined vs synthetic on the same models: the gap estimates contamination
 - [ ] More frames: numerals/paukal, comparatives, verb forms
 - [ ] Still open and still gating: does the benchmark separate models at all? (needs API key)
+
+## v0.7 — output checker — DONE (2026-09-02)
+- [x] 29. `serbeval check` — mixed script, diacritics, unknown forms, dialect mixing
+- [x] 30. `serbeval index` + committed data/forms.txt.gz (1.45M forms, no download needed)
+- [x] 31. False-positive rate measured on real Serbian: 0.012% in low-noise mode
+
+## Usable today (no API key)
+- [ ] Wire `serbeval check` into Pripremi.rs output as a quality gate
+- [ ] Optional next tier: preposition-case government on free text (needs a tagger)

@@ -144,6 +144,50 @@ def _cmd_synth(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_index(args: argparse.Namespace) -> int:
+    """Condense a full lexicon into the one column `check` needs."""
+    from serbeval.check import forms_from_lexicon, write_form_index
+
+    try:
+        forms = forms_from_lexicon(args.lexicon)
+    except OSError as exc:
+        print(f"FAIL: {exc}")
+        return 1
+    write_form_index(forms, args.out)
+    print(f"OK: {len(forms)} form(s) -> {args.out}")
+    return 0
+
+
+def _cmd_check(args: argparse.Namespace) -> int:
+    """Advisory, like `lint`: reports language problems, never fails the caller."""
+    import sys as _sys
+
+    from serbeval.check import check_text, load_form_index
+
+    try:
+        index = load_form_index(args.index)
+    except OSError as exc:
+        print(f"FAIL: {exc} (build one with `serbeval index`)")
+        return 1
+
+    total = 0
+    for path in args.paths or ["-"]:
+        if path == "-":
+            text = _sys.stdin.read()
+        else:
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+        findings = [f for f in check_text(text, index) if f.kind not in args.ignore]
+        label = "<stdin>" if path == "-" else path
+        for finding in findings:
+            where = f"{label}:{finding.line}:{finding.column}" if finding.line else label
+            print(f"{where}: {finding.kind}: {finding.message}")
+        total += len(findings)
+
+    print(f"{total} finding(s)" if total else "OK: no language problems found")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -259,6 +303,19 @@ def build_parser() -> argparse.ArgumentParser:
     synth.add_argument("--out", default=None)
     synth.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     synth.set_defaults(func=_cmd_synth)
+
+    index = sub.add_parser("index", help="build the form index `check` uses")
+    index.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")
+    index.add_argument("--out", default="data/forms.txt.gz")
+    index.set_defaults(func=_cmd_index)
+
+    check = sub.add_parser("check", help="find Serbian language errors in generated text")
+    check.add_argument("paths", nargs="*", help="files to check (default: stdin)")
+    check.add_argument("--index", default="data/forms.txt.gz")
+    check.add_argument(
+        "--ignore", nargs="*", default=[], help="finding kinds to suppress"
+    )
+    check.set_defaults(func=_cmd_check)
 
     from serbeval.generate import DEFAULT_MODEL
 

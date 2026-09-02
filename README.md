@@ -162,6 +162,53 @@ The same phenomenon now exists in two forms: **mined** (attested, memorisable) a
 **synthetic** (novel, not memorisable). The accuracy gap between them estimates the
 contamination effect — which is a finding in its own right, not just hygiene.
 
+## Checking generated Serbian (`serbeval check`)
+
+Separate tool, same lexicon. The benchmark asks *how good is this model at Serbian*; this
+asks *what is wrong with this text*, which has no gold answer to compare against. Use it as
+a quality gate on any Serbian your product generates.
+
+```bash
+serbeval check output.txt                  # uses data/forms.txt.gz
+cat output.txt | serbeval check --ignore unknown-form
+```
+
+```
+priprema.txt:3:17: missing-diacritics: „ucenici“ nije oblik u rečniku; verovatno „učenici“
+priprema.txt:3:59: missing-diacritics: „ce“ nije oblik u rečniku; verovatno „će“
+priprema.txt:4:9:  unknown-form: „dogadjaje“ nije poznat oblik — tipfeler ili izmišljena fleksija
+priprema.txt: mixed-script-document: tekst meša pisma: 55 latiničnih i 1 ćiriličnih reči
+priprema.txt: dialect-mixing: tekst meša ekavicu i ijekavicu: posledice, svetski, ume vs mjera
+```
+
+Four checks, all pure lexicon lookups — no model, no parser, no API key:
+
+| kind | catches |
+| --- | --- |
+| `mixed-script-word` | a Cyrillic letter inside a Latin word — invisible to the reader, broken in the data |
+| `mixed-script-document` | the whole text drifting between scripts |
+| `missing-diacritics` | `ucenici` → `učenici`, `ce` → `će`; the most common way generated Serbian goes wrong |
+| `unknown-form` | a form absent from the lexicon: a typo or an invented inflection |
+| `dialect-mixing` | ekavian and ijekavian in one document (`mera` alongside `mjera`) |
+
+**Measured noise**, on 8329 words of attested Serbian news:
+
+| mode | false positives |
+| --- | --- |
+| all checks | 0.73% of words |
+| `--ignore unknown-form` | **0.012%** — one word in 8329 |
+
+Nearly all the noise is `unknown-form`, and it is srLex coverage rather than a logic
+error — the lexicon genuinely lacks ordinary words like *omladine*, *hapšenja*, *biznisa*.
+Treat that check as advisory and suppress it when you want a clean signal; the other three
+are effectively silent on correct text.
+
+It does **not** judge meaning. If the text states a wrong date, a lexicon has no opinion —
+that needs a judge model and is a separate problem.
+
+`data/forms.txt.gz` (1.45M forms) is built from srLex and committed, so this works out of
+the box. Rebuild with `serbeval index --lexicon srLex_v1.3.gz`.
+
 ## Item quality
 
 ```bash
