@@ -3,6 +3,7 @@
 These run against the real seed data under data/, from the repo root.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -76,3 +77,28 @@ def test_lm_eval_loads_all_tasks() -> None:
     rendered = task.doc_to_text(docs[0])
     assert "A)" in rendered and "Odgovor:" in rendered
     assert task.doc_to_target(docs[0]) in {"A", "B", "C", "D"}
+
+
+@pytest.mark.slow
+def test_cloze_task_runs_through_the_harness(tmp_path: Path) -> None:
+    """The cloze task is a real lm-eval task, not a bespoke script: prove it aggregates."""
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [
+            sys.executable, "-m", "lm_eval",
+            "--model", "dummy",
+            "--tasks", "srb_grammar_cloze",
+            "--include_path", "lm_eval_tasks",
+            "--output_path", str(tmp_path),
+        ],
+        capture_output=True,
+        text=True,
+        cwd=REPO_ROOT,
+    )
+    assert result.returncode == 0, result.stderr
+    written = list(Path(tmp_path).rglob("results_*.json"))
+    assert written, "no results file written"
+    payload = json.loads(written[0].read_text(encoding="utf-8"))
+    assert "exact_match,none" in payload["results"]["srb_grammar_cloze"]

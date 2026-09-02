@@ -51,3 +51,15 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] **Run the model matrix and check the benchmark discriminates at all** (needs ANTHROPIC_API_KEY).
       If haiku and opus land within ~10 points, more items will not help and the item difficulty
       is what needs changing. This gates all of v0.4.
+
+## v0.4 — cloze prototype — DONE (2026-09-02)
+- [x] 19. `ClozeItem` schema + cloze scoring (diacritic-strict exact match, multi-answer)
+- [x] 20. 20 cloze items across padezi / brojevi / komparacija / glagolski-oblici
+- [x] 21. `srb_grammar_cloze` lm-eval task; `serbeval validate` auto-detects cloze files
+- [x] 22. 159 tests + mypy + ruff green; harness integration test on the new task
+
+## The one experiment that decides everything (needs ANTHROPIC_API_KEY)
+- [ ] Run haiku + opus + one non-Anthropic model on all four tasks with --log_samples
+- [ ] `serbeval report --results-dir results` → is any spread larger than the CI?
+- [ ] Compare `srb_grammar` vs `srb_grammar_cloze` accuracy. If cloze is materially harder,
+      convert srb_grammar to cloze and retire the MCQ distractor problem entirely.

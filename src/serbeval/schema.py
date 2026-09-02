@@ -47,3 +47,54 @@ class EvalItem(BaseModel):
     @property
     def answer_letter(self) -> str:
         return ANSWER_LETTERS[self.answer_index]
+
+
+BLANK = "____"
+
+
+class ClozeItem(BaseModel):
+    """A fill-in-the-blank grammar item, scored by exact match on the produced form.
+
+    Cloze sidesteps the whole distractor-quality problem that MCQ items have: there is
+    nothing to eliminate, no 25% chance floor, and no structural giveaway for a model to
+    pattern-match. `answers` is a list because Serbian norm has genuinely contested cases
+    (ijekavian doublets, tolerated variants) — listing every accepted form keeps such an
+    item usable instead of forcing one reading and dropping it.
+    """
+
+    id: str
+    task: str
+    category: str
+    question: str
+    cue: str
+    answers: list[str] = Field(min_length=1)
+    explanation: str
+    script: Script
+    difficulty: Difficulty | None = None
+    source: str
+    verified: bool = False
+    license: str = "CC-BY-4.0"
+
+    @field_validator("id", "task", "category", "cue", "explanation", "source")
+    @classmethod
+    def _non_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("must not be blank")
+        return value
+
+    @field_validator("question")
+    @classmethod
+    def _has_blank(cls, value: str) -> str:
+        if BLANK not in value:
+            raise ValueError(f"question must contain the blank marker {BLANK!r}")
+        return value
+
+    @field_validator("answers")
+    @classmethod
+    def _usable_answers(cls, answers: list[str]) -> list[str]:
+        stripped = [a.strip() for a in answers]
+        if any(not a for a in stripped):
+            raise ValueError("answers must not be blank")
+        if len(set(stripped)) != len(stripped):
+            raise ValueError("answers must be unique")
+        return answers

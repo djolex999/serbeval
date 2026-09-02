@@ -61,3 +61,34 @@ def pair_agreement(items: Sequence[tuple[str, float]]) -> float:
         return 0.0
     agreed = sum(1 for vals in complete if vals[0] == vals[1])
     return agreed / len(complete)
+
+
+# --- srb_grammar_cloze -----------------------------------------------------
+#
+# Unlike the MCQ letter extraction above, cloze scoring is NOT duplicated here: it imports
+# serbeval.cloze directly. Answer normalization is a correctness-critical judgement (which
+# characters may be folded — never the Serbian diacritics), and two copies of that rule
+# would drift silently and change scores. The package is always installed alongside these
+# task files, so the import is safe.
+
+
+def doc_to_text_cloze(doc: dict) -> str:
+    return (
+        "Dopuni rečenicu pravilnim oblikom reči u zagradi.\n\n"
+        f"{doc['question']}  ({doc['cue']})\n\n"
+        "Odgovori samo traženim oblikom reči, bez objašnjenja.\n"
+        "Odgovor:"
+    )
+
+
+def doc_to_target_cloze(doc: dict) -> str:
+    return doc["answers"][0]
+
+
+def process_results_cloze(doc: dict, results: list[str]) -> dict:
+    from serbeval.cloze import is_correct
+    from serbeval.schema import ClozeItem
+
+    item = ClozeItem.model_validate(doc)
+    raw = results[0] if results else ""
+    return {"exact_match": 1.0 if is_correct(raw, item) else 0.0}

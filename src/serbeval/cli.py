@@ -9,7 +9,38 @@ from serbeval.data import load_items, validate_dataset
 DEFAULT_DATA_DIR = "data"
 
 
+def _is_cloze_file(path: str) -> bool:
+    """Cloze and MCQ datasets share the .jsonl name, so detect by shape, not by path."""
+    import json
+
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                if line.strip():
+                    return "answers" in json.loads(line)
+    except (OSError, json.JSONDecodeError):
+        return False
+    return False
+
+
 def _cmd_validate(args: argparse.Namespace) -> int:
+    if _is_cloze_file(args.path):
+        from serbeval.data import load_cloze_items, validate_cloze_dataset
+
+        try:
+            cloze_items = load_cloze_items(args.path)
+        except (OSError, ValueError) as exc:
+            print(f"FAIL: {exc}")
+            return 1
+        cloze_problems = validate_cloze_dataset(cloze_items)
+        if cloze_problems:
+            for problem in cloze_problems:
+                print(problem)
+            print(f"FAIL: {len(cloze_problems)} problem(s) in {len(cloze_items)} item(s)")
+            return 1
+        print(f"OK: {len(cloze_items)} cloze item(s)")
+        return 0
+
     try:
         items = load_items(args.path)
     except (OSError, ValueError) as exc:

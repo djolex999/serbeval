@@ -6,7 +6,7 @@ from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 
-from serbeval.schema import EvalItem
+from serbeval.schema import BLANK, ClozeItem, EvalItem
 
 # A/B/C/D answer labels are intentionally Latin even in Cyrillic items (script-independent
 # extraction), so label letters never count as a script violation.
@@ -102,4 +102,57 @@ def validate_dataset(items: Sequence[EvalItem]) -> list[str]:
         problems.extend(_script_problems(item))
 
     problems.extend(_pair_problems(items))
+    return problems
+
+
+def load_cloze_items(path: Path | str) -> list[ClozeItem]:
+    items = []
+    with open(path, encoding="utf-8") as fh:
+        for line_no, line in enumerate(fh, start=1):
+            if not line.strip():
+                continue
+            try:
+                items.append(ClozeItem.model_validate(json.loads(line)))
+            except (json.JSONDecodeError, ValueError) as exc:
+                raise ValueError(f"{path}:{line_no}: {exc}") from exc
+    return items
+
+
+def save_cloze_items(items: Sequence[ClozeItem], path: Path | str) -> None:
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_suffix(target.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        for item in items:
+            fh.write(json.dumps(item.model_dump(), ensure_ascii=False) + "\n")
+    os.replace(tmp, target)
+
+
+def validate_cloze_dataset(items: Sequence[ClozeItem]) -> list[str]:
+    """Integrity checks for fill-in-the-blank items; empty list means clean."""
+    from serbeval.cloze import normalize
+
+    problems = []
+    seen_ids: set[str] = set()
+    seen_questions: set[str] = set()
+    for item in items:
+        if item.id in seen_ids:
+            problems.append(f"{item.id}: duplicate id")
+        seen_ids.add(item.id)
+
+        question_key = item.question.strip()
+        if question_key in seen_questions:
+            problems.append(f"{item.id}: duplicate question text")
+        seen_questions.add(question_key)
+
+        # The prompt must not hand the model the form it is being asked to produce.
+        context = normalize(item.question.replace(BLANK, " "))
+        context_tokens = set(context.split())
+        for answer in item.answers:
+            answer_tokens = normalize(answer).split()
+            if answer_tokens and all(tok in context_tokens for tok in answer_tokens):
+                problems.append(
+                    f"{item.id}: question contains its own answer ({answer!r})"
+                )
+                break
     return problems

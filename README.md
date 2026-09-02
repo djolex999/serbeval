@@ -14,9 +14,28 @@ script consistency. serbeval is a small, hand-verifiable benchmark targeting exa
 | `srb_grammar` | `data/srb_grammar/items.jsonl` | Case government, verbal aspect, agreement (incl. paukal), clitic placement, comparison, orthography, standard usage | seed set, `verified: false` |
 | `srb_idioms` | `data/srb_idioms/items.jsonl` | Meaning of Serbian idioms (lexical knowledge that doesn't transfer from English) | seed set, `verified: false` |
 | `srb_cyrillic_agreement` | `data/srb_cyrillic_agreement/items.jsonl` | Same question asked in Cyrillic and Latin — measures per-pair answer agreement plus accuracy | seed set, `verified: false` |
+| `srb_grammar_cloze` | `data/srb_grammar_cloze/items.jsonl` | Same grammar competence as `srb_grammar` but **fill-in-the-blank**: the model must produce the form, not pick it | prototype, 20 items, `verified: false` |
 
-All items are 4-way multiple choice (A/B/C/D), evaluated as `generate_until` with regex letter
+MCQ items are 4-way multiple choice (A/B/C/D), evaluated as `generate_until` with regex letter
 extraction — no logprobs required, so any chat API works.
+
+`srb_grammar_cloze` is an experiment in a different direction:
+
+```
+Dopuni rečenicu pravilnim oblikom reči u zagradi.
+
+Uprkos ____, krenuli smo na put.  (loše vreme)
+```
+→ `lošem vremenu`
+
+Cloze removes the three weaknesses MCQ has here at once: no 25% chance floor, no distractors to
+get wrong, and no structural giveaway for a model to pattern-match. `answers` is a list, so
+genuinely contested norms (ijekavian doublets, tolerated variants) list every accepted form
+rather than forcing one reading and dropping the item. Scoring folds case and punctuation but
+**never Serbian diacritics** — `kuca` is not `kuća`.
+
+**Open question this exists to answer:** is cloze actually harder than the MCQ set? That needs a
+live model run; the `dummy` model only proves the pipeline works.
 
 **⚠️ Verification status:** every item currently carries `verified: false`. Items were authored
 and adversarially cross-checked by Claude agents, and candidates can additionally pass the
