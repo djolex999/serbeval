@@ -7,6 +7,13 @@ Most multilingual benchmarks barely touch Serbian, and none probe the things mod
 wrong: case government, clitic placement, verbal aspect, paukal agreement, and Cyrillic/Latin
 script consistency. serbeval is a small, hand-verifiable benchmark targeting exactly those.
 
+## License
+
+The **code** is MIT ([LICENSE](LICENSE)). The **data is not**, and is not uniform:
+hand-written items are CC BY 4.0, while everything derived from UD_Serbian-SET or srLex
+is CC BY-SA 4.0 — share-alike, so it cannot be relicensed. Each item carries its own
+`license` field; the split and the required attributions are in [data/LICENSE](data/LICENSE).
+
 ## Tasks
 
 | Task | Items | What it tests | Status |
