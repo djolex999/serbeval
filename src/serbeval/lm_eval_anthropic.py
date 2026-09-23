@@ -16,15 +16,51 @@ stock adapter reachable means the two can be compared if a result ever looks odd
 **Thinking defaults to off.** These items ask for a single letter or one word form, and
 on Opus 5 thinking is on by default — with `max_gen_toks` at 32 the model would spend
 its whole budget reasoning and return nothing, scoring as `unparsed` across the board.
-Pass `thinking=adaptive` (with a much larger `max_gen_toks`, and usually `effort=low`)
-to measure the model as it behaves in normal use; comparing the two settings on the same
-items is itself worth doing.
+Pass `thinking=adaptive` (usually with `effort=low`) to measure the model as it behaves
+in normal use; comparing the two settings on the same items is itself worth doing.
+
+**Some models cannot turn thinking off.** Claude Opus 5.5 and the Fable/Mythos line answer
+`thinking: {"type": "disabled"}` with a 400 at every effort level. For those, pass
+`thinking=omit` (the parameter is left out and the model thinks adaptively) and steer cost
+with `effort=low`. Asking for `thinking=off` on one of them fails at startup rather than
+400-ing on every request of a paid run.
+
+Whenever thinking is on, `max_tokens` is raised to at least `THINKING_MIN_TOKENS`: the task
+caps are sized for a bare answer, and reasoning is billed out of the same budget.
 """
 
 from typing import Any
 
 from lm_eval.api.registry import register_model
 from lm_eval.models.anthropic_llms import AnthropicChat
+
+THINKING_MODES = ("off", "adaptive", "omit")
+# Floor on max_tokens whenever the model thinks. The tasks cap generation at 24-32
+# tokens — enough for a bare answer, nowhere near enough for reasoning plus an answer.
+THINKING_MIN_TOKENS = 2048
+# Models that reject `thinking: {"type": "disabled"}` outright, at every effort level.
+_THINKING_ALWAYS_ON = frozenset(
+    {
+        "claude-opus-5-5",
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-mythos-5",
+        "claude-mythos-5-1",
+    }
+)
+
+
+def check_thinking_config(model: str, thinking: str) -> None:
+    """Refuse a configuration the API is known to reject, before any request is sent."""
+    if thinking not in THINKING_MODES:
+        raise ValueError(
+            f"unknown thinking mode {thinking!r}; expected one of {', '.join(THINKING_MODES)}"
+        )
+    if thinking == "off" and model in _THINKING_ALWAYS_ON:
+        raise ValueError(
+            f"{model} cannot run with thinking disabled (the API returns 400). "
+            f"Pass --model_args model={model},thinking=omit,effort=low instead."
+        )
 
 
 def build_payload(
@@ -38,15 +74,20 @@ def build_payload(
 ) -> dict[str, Any]:
     """Build a Messages API request body that current models accept.
 
-    Notably absent: `temperature`. It is not merely optional on Opus 5 / Sonnet 5 /
-    Opus 4.8 / 4.7 — sending it is a 400.
+    Notably absent: `temperature`. It is not merely optional on Opus 5 / Opus 5.5 /
+    Sonnet 5 / Opus 4.8 / 4.7 — sending it is a 400.
     """
+    thinking_on = thinking != "off"
     payload: dict[str, Any] = {
         "messages": messages,
         "model": model,
-        "max_tokens": max_tokens,
-        "thinking": {"type": "adaptive"} if thinking == "adaptive" else {"type": "disabled"},
+        "max_tokens": max(max_tokens, THINKING_MIN_TOKENS) if thinking_on else max_tokens,
     }
+    if thinking == "off":
+        payload["thinking"] = {"type": "disabled"}
+    elif thinking == "adaptive":
+        payload["thinking"] = {"type": "adaptive"}
+    # "omit": no thinking parameter at all — the model's own default (adaptive) applies.
     # The API rejects whitespace-only stop sequences. Note "\n\n".strip() is empty, so
     # the tasks' `until: ["\n\n"]` is dropped here exactly as the stock adapter drops
     # it: generation runs to max_tokens rather than stopping at a blank line. That is
@@ -80,6 +121,9 @@ class AnthropicChatFixed(AnthropicChat):  # type: ignore[misc]  # lm_eval ships 
     """`anthropic-chat` with the temperature and thinking-block bugs fixed."""
 
     def __init__(self, thinking: str = "off", effort: str | None = None, **kwargs: Any):
+        # Before the parent init: it needs only the model name, and a bad config should
+        # be reported even when something later in lm-eval's own setup would also fail.
+        check_thinking_config(str(kwargs.get("model", "")), thinking)
         super().__init__(**kwargs)
         self.thinking = thinking
         self.effort = effort

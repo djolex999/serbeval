@@ -110,3 +110,9 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 35. `anthropic-chat-fixed` — drops `temperature`, reads text past thinking blocks
 - [x] 36. `scripts/run_eval.py` wrapper; stock adapter left registered for comparison
 - [x] 37. Verified end-to-end through the harness with the dummy model
+
+## v0.10 — Opus 5.5 + missing API extras — DONE (2026-09-23)
+- [x] 38. `lm-eval[api]` declared — without it no API model ran at all
+- [x] 39. `thinking=omit` + fail-fast for models that cannot disable thinking (Opus 5.5)
+- [x] 40. max_tokens floor of 2048 whenever thinking is on
+- [ ] Maintainer: `.venv/bin/pip install -e ".[dev]"` to pull tenacity + tiktoken

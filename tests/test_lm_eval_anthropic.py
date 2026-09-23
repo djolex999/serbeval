@@ -1,3 +1,4 @@
+import pytest
 
 from serbeval.lm_eval_anthropic import build_payload, text_from_content
 
@@ -124,3 +125,79 @@ def test_stock_adapter_is_left_alone() -> None:
     from lm_eval.api.registry import MODEL_REGISTRY
 
     assert MODEL_REGISTRY["anthropic-chat"] is not MODEL_REGISTRY["anthropic-chat-fixed"]
+
+
+# --- models where thinking cannot be turned off ----------------------------
+#
+# Claude Opus 5.5 (and the Fable/Mythos line) reject `thinking: {"type": "disabled"}`
+# with a 400 at every effort level. The adapter's default would fail on every request.
+
+
+def test_omit_mode_sends_no_thinking_parameter() -> None:
+    payload = build_payload(messages=[], model="claude-opus-5-5", max_tokens=32, stop=[],
+                            thinking="omit")
+    assert "thinking" not in payload
+
+
+def test_thinking_off_on_a_model_that_forbids_it_fails_fast_with_guidance() -> None:
+    # A clear error at startup beats 1102 identical 400s halfway through a paid run.
+    from serbeval.lm_eval_anthropic import check_thinking_config
+
+    with pytest.raises(ValueError, match="model=claude-opus-5-5,thinking=omit"):
+        check_thinking_config("claude-opus-5-5", "off")
+
+
+@pytest.mark.parametrize(
+    ("model", "thinking"),
+    [
+        ("claude-opus-5-5", "omit"),
+        ("claude-opus-5-5", "adaptive"),
+        ("claude-opus-5", "off"),
+        ("claude-haiku-4-5", "off"),
+    ],
+)
+def test_supported_thinking_configs_pass(model: str, thinking: str) -> None:
+    from serbeval.lm_eval_anthropic import check_thinking_config
+
+    check_thinking_config(model, thinking)
+
+
+def test_unknown_thinking_mode_is_rejected() -> None:
+    from serbeval.lm_eval_anthropic import check_thinking_config
+
+    with pytest.raises(ValueError, match="thinking"):
+        check_thinking_config("claude-opus-5", "sometimes")
+
+
+def test_thinking_models_get_room_beyond_the_tasks_short_answer_cap() -> None:
+    # The tasks cap generation at 24-32 tokens, sized for a bare answer. With thinking
+    # on, reasoning is billed out of the same max_tokens and would exhaust it before
+    # the answer, scoring every item unparsed.
+    payload = build_payload(messages=[], model="claude-opus-5-5", max_tokens=32, stop=[],
+                            thinking="omit")
+    assert payload["max_tokens"] >= 2048
+
+
+def test_short_cap_is_kept_when_thinking_is_off() -> None:
+    payload = build_payload(messages=[], model="claude-opus-5", max_tokens=32, stop=[])
+    assert payload["max_tokens"] == 32
+
+
+def test_a_larger_explicit_cap_is_not_lowered() -> None:
+    payload = build_payload(messages=[], model="claude-opus-5-5", max_tokens=8000, stop=[],
+                            thinking="omit")
+    assert payload["max_tokens"] == 8000
+
+
+def test_project_declares_lm_evals_api_extra() -> None:
+    # Without `lm-eval[api]`, tenacity and tiktoken are missing and EVERY API-backed
+    # model — the stock adapter included — dies with ModuleNotFoundError. The dummy
+    # model does not need them, so no dummy-based test could ever notice.
+    import tomllib
+    from pathlib import Path
+
+    pyproject = tomllib.loads(
+        (Path(__file__).resolve().parent.parent / "pyproject.toml").read_text(encoding="utf-8")
+    )
+    deps = pyproject["project"]["dependencies"]
+    assert any(d.replace(" ", "").startswith("lm-eval[api]") for d in deps)

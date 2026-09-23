@@ -100,6 +100,17 @@ the numbers cannot separate them. A native speaker can. **If a native speaker do
 score near 100%, stop: fix the items before comparing any models.** Twenty minutes, and
 every item the human misses is a verification target, not a human error.
 
+### 0b. Install the API extras — no API run works without them
+
+`lm-eval` needs its `[api]` extra (`tenacity`, `tiktoken`) for every API-backed model,
+the stock `anthropic-chat` adapter included. Without it the run dies immediately with
+`ModuleNotFoundError`. The `dummy` model never needed these, which is why no dummy-based
+check caught it. `pyproject.toml` now declares `lm-eval[api]`; reinstall once:
+
+```bash
+.venv/bin/pip install -e ".[dev]"
+```
+
 ### 1a. Use the fixed adapter for current models
 
 **lm-eval 0.4.12's stock `anthropic-chat` adapter cannot evaluate Claude Opus 5, Sonnet 5,
@@ -123,6 +134,26 @@ result ever looks wrong — and a `pip install` cannot silently revert the fix.
 
 Haiku 4.5, Sonnet 4.6 and Opus 4.6 still accept `temperature` and work with plain
 `lm_eval --model anthropic-chat`.
+
+**Claude Opus 5.5 cannot turn thinking off** — `thinking: {"type": "disabled"}` is a 400 at
+every effort level (the same holds for the Fable/Mythos line). Run it as:
+
+```bash
+scripts/run_eval.py --model anthropic-chat-fixed \
+  --model_args model=claude-opus-5-5,thinking=omit,effort=low \
+  --tasks srb_grammar --include_path lm_eval_tasks \
+  --output_path results/opus-5-5 --log_samples
+```
+
+Asking for the default `thinking=off` on it stops at startup with that exact command in
+the error, instead of 400-ing on every request. With thinking on, `max_tokens` is raised to
+at least 2048 automatically — the tasks' 24-32 token caps are sized for a bare answer.
+
+Cost is therefore different in kind: thinking tokens bill as output ($20/M on Opus 5.5).
+At `effort=low` on items this short expect roughly 100-500 thinking tokens each, i.e.
+**~$3-12 for the full 1102 items** against under $1 for each non-thinking model. The
+2048-token floor bounds the worst case at ~$45. Run the `--limit 10` smoke test first and
+read the actual output-token usage before committing to the full set.
 
 **Thinking is off by default** in the fixed adapter. These items want one letter or one
 word form, and on Opus 5 thinking is on by default — at `max_gen_toks: 32` the model
