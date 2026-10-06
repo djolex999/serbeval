@@ -244,6 +244,36 @@ def _cmd_baseline(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_balance(args: argparse.Namespace) -> int:
+    """Spread gold answers evenly over A/B/C/D, in place. Deterministic and idempotent."""
+    from collections import Counter
+
+    from serbeval.balance import balance_positions
+    from serbeval.data import save_items
+
+    try:
+        items = load_items(args.path)
+    except (OSError, ValueError) as exc:
+        print(f"FAIL: {exc}")
+        return 1
+    before = Counter(i.answer_letter for i in items)
+    balanced = balance_positions(items)
+    problems = validate_dataset(balanced)
+    if problems:
+        for problem in problems:
+            print(problem)
+        print("FAIL: balancing produced an invalid dataset; nothing written")
+        return 1
+    save_items(balanced, args.path)
+    after = Counter(i.answer_letter for i in balanced)
+
+    def show(counts: Counter[str]) -> str:
+        return "  ".join(f"{k}:{counts.get(k, 0)}" for k in "ABCD")
+
+    print(f"OK: {args.path}\n    before  {show(before)}\n    after   {show(after)}")
+    return 0
+
+
 def _cmd_triage(args: argparse.Namespace) -> int:
     """Review queue from triage runs: items some model missed, unanimous misses first."""
     from serbeval.triage import collect_misses, format_misses
@@ -390,6 +420,10 @@ def build_parser() -> argparse.ArgumentParser:
     baseline.add_argument("--out", default="baseline.txt")
     baseline.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     baseline.set_defaults(func=_cmd_baseline)
+
+    balance = sub.add_parser("balance", help="spread gold answers evenly over A/B/C/D")
+    balance.add_argument("path", help="path to an MCQ items.jsonl (rewritten in place)")
+    balance.set_defaults(func=_cmd_balance)
 
     triage = sub.add_parser("triage", help="list items models missed, most-suspect first")
     triage.add_argument("--results-dir", default="results/triage-kie")

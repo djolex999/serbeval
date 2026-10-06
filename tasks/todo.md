@@ -124,3 +124,4 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 44. Key routing by destination; stream=false; e2e test of the real CLI against a mock Kie
 - [x] 45. `serbeval triage` + scripts/kie_triage.sh (smoke / full, budget printed, confirm before full)
 - [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh smoke`, then `full`, then review the queue
+- [x] 46. Position bias removed: gold letters balanced in all three MCQ sets; build-failing guard test
