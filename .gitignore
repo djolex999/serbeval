@@ -13,3 +13,5 @@ build/
 results/**/raw/
 .DS_Store
 .claude/
+# reseller triage runs: review aids only, never reported results
+results/triage-*/

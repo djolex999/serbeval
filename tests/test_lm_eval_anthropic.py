@@ -201,3 +201,82 @@ def test_project_declares_lm_evals_api_extra() -> None:
     )
     deps = pyproject["project"]["dependencies"]
     assert any(d.replace(" ", "").startswith("lm-eval[api]") for d in deps)
+
+
+# --- message shape ---------------------------------------------------------
+#
+# Without --apply_chat_template, lm-eval hands the adapter the prompt as a plain
+# string, not a message list. The stock adapter crashes on it and the first version
+# of this one sent the string as `messages`, which the API rejects. Both shapes must
+# work, so the documented commands do not depend on remembering a flag.
+
+
+def test_a_plain_string_prompt_becomes_one_user_message() -> None:
+    from serbeval.lm_eval_anthropic import normalize_messages
+
+    assert normalize_messages("Koliko je 7 puta 8?") == (
+        None,
+        [{"role": "user", "content": "Koliko je 7 puta 8?"}],
+    )
+
+
+def test_a_leading_system_message_is_lifted_out() -> None:
+    # The Messages API takes the system prompt as a top-level field, not as a turn.
+    from serbeval.lm_eval_anthropic import normalize_messages
+
+    system, messages = normalize_messages(
+        [{"role": "system", "content": "Budi kratak."}, {"role": "user", "content": "q"}]
+    )
+    assert system == "Budi kratak."
+    assert messages == [{"role": "user", "content": "q"}]
+
+
+def test_payload_from_a_string_prompt_is_a_valid_message_list() -> None:
+    payload = build_payload(messages="q", model="claude-opus-5", max_tokens=32, stop=[])
+    assert payload["messages"] == [{"role": "user", "content": "q"}]
+    assert "system" not in payload
+
+
+def test_payload_carries_a_lifted_system_prompt() -> None:
+    payload = build_payload(
+        messages=[{"role": "system", "content": "S"}, {"role": "user", "content": "q"}],
+        model="claude-opus-5", max_tokens=32, stop=[],
+    )
+    assert payload["system"] == "S"
+
+
+def test_payload_always_asks_for_a_non_streaming_response() -> None:
+    # Kie's Claude endpoint defaults `stream` to TRUE, which would return SSE that
+    # the adapter cannot parse. Explicit false is also the Anthropic API's default.
+    payload = build_payload(messages="q", model="claude-opus-5", max_tokens=32, stop=[])
+    assert payload["stream"] is False
+
+
+# --- which key goes where --------------------------------------------------
+
+
+def test_the_anthropic_key_is_used_for_the_anthropic_api(monkeypatch: pytest.MonkeyPatch) -> None:
+    from serbeval.lm_eval_anthropic import resolve_api_key
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-real")
+    monkeypatch.setenv("KIE_API_KEY", "kie-key")
+    assert resolve_api_key("https://api.anthropic.com/v1/messages") == "sk-ant-real"
+
+
+def test_a_real_anthropic_key_is_never_sent_to_kie(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Pointing base_url at a reseller must not ship the first-party key to a third
+    # party just because that is the variable the stock adapter reads.
+    from serbeval.lm_eval_anthropic import resolve_api_key
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-real")
+    monkeypatch.setenv("KIE_API_KEY", "kie-key")
+    assert resolve_api_key("https://api.kie.ai/claude/v1/messages") == "kie-key"
+
+
+def test_kie_without_a_kie_key_fails_clearly(monkeypatch: pytest.MonkeyPatch) -> None:
+    from serbeval.lm_eval_anthropic import resolve_api_key
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-real")
+    monkeypatch.delenv("KIE_API_KEY", raising=False)
+    with pytest.raises(ValueError, match="KIE_API_KEY"):
+        resolve_api_key("https://api.kie.ai/claude/v1/messages")

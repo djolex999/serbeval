@@ -29,7 +29,9 @@ Whenever thinking is on, `max_tokens` is raised to at least `THINKING_MIN_TOKENS
 caps are sized for a bare answer, and reasoning is billed out of the same budget.
 """
 
+import os
 from typing import Any
+from urllib.parse import urlparse
 
 from lm_eval.api.registry import register_model
 from lm_eval.models.anthropic_llms import AnthropicChat
@@ -63,9 +65,47 @@ def check_thinking_config(model: str, thinking: str) -> None:
         )
 
 
+Messages = str | list[dict[str, Any]]
+
+
+def normalize_messages(messages: Messages) -> tuple[str | None, list[dict[str, Any]]]:
+    """Return (system prompt, turns) for either shape lm-eval may pass.
+
+    Without --apply_chat_template lm-eval hands over the prompt as a plain string; with
+    it, a list of role/content dicts that may open with a system message. The stock
+    adapter crashes on the string, so both shapes are accepted here and the documented
+    commands work whether or not the flag is given.
+    """
+    if isinstance(messages, str):
+        return None, [{"role": "user", "content": messages}]
+    turns = [{"role": m["role"], "content": m["content"]} for m in messages]
+    if turns and turns[0]["role"] == "system":
+        return str(turns[0]["content"]), turns[1:]
+    return None, turns
+
+
+def resolve_api_key(base_url: str) -> str:
+    """Pick the credential for wherever requests are actually going.
+
+    The stock adapter always reads ANTHROPIC_API_KEY. Pointing `base_url` at a reseller
+    such as Kie would then ship a first-party key to a third party, so any host other
+    than api.anthropic.com reads KIE_API_KEY instead — and never falls back.
+    """
+    host = urlparse(base_url).hostname or ""
+    if host.endswith("kie.ai"):
+        key = os.environ.get("KIE_API_KEY")
+        if not key:
+            raise ValueError(f"base_url points at Kie ({host}); set KIE_API_KEY")
+        return key
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        raise ValueError("ANTHROPIC_API_KEY is not set")
+    return key
+
+
 def build_payload(
     *,
-    messages: list[dict[str, Any]],
+    messages: Messages,
     model: str,
     max_tokens: int,
     stop: list[str],
@@ -78,11 +118,17 @@ def build_payload(
     Sonnet 5 / Opus 4.8 / 4.7 — sending it is a 400.
     """
     thinking_on = thinking != "off"
+    system, turns = normalize_messages(messages)
     payload: dict[str, Any] = {
-        "messages": messages,
+        "messages": turns,
         "model": model,
         "max_tokens": max(max_tokens, THINKING_MIN_TOKENS) if thinking_on else max_tokens,
+        # The Anthropic API defaults to non-streaming; Kie's Claude endpoint defaults to
+        # streaming, which returns SSE this adapter cannot parse. Always say so.
+        "stream": False,
     }
+    if system is not None:
+        payload["system"] = system
     if thinking == "off":
         payload["thinking"] = {"type": "disabled"}
     elif thinking == "adaptive":
@@ -125,12 +171,22 @@ class AnthropicChatFixed(AnthropicChat):  # type: ignore[misc]  # lm_eval ships 
         # be reported even when something later in lm-eval's own setup would also fail.
         check_thinking_config(str(kwargs.get("model", "")), thinking)
         super().__init__(**kwargs)
+        # Resolve once, at startup: a missing or misrouted key fails before any request.
+        self._resolved_key = resolve_api_key(self.base_url)
         self.thinking = thinking
         self.effort = effort
 
+    @property
+    def api_key(self) -> str:
+        return self._resolved_key
+
+    @property
+    def header(self) -> dict[str, str]:
+        return {"x-api-key": self._resolved_key, "anthropic-version": self.anthropic_version}
+
     def _create_payload(
         self,
-        messages: list[dict[str, Any]],
+        messages: Messages,
         *,
         generate: bool = True,
         gen_kwargs: dict[str, Any] | None = None,

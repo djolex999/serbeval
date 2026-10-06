@@ -102,6 +102,8 @@ every item the human misses is a verification target, not a human error.
 
 ### 0b. Install the API extras — no API run works without them
 
+*(Installed on the dev machine on 2026-10-07.)*
+
 `lm-eval` needs its `[api]` extra (`tenacity`, `tiktoken`) for every API-backed model,
 the stock `anthropic-chat` adapter included. Without it the run dies immediately with
 `ModuleNotFoundError`. The `dummy` model never needed these, which is why no dummy-based
@@ -110,6 +112,29 @@ check caught it. `pyproject.toml` now declares `lm-eval[api]`; reinstall once:
 ```bash
 .venv/bin/pip install -e ".[dev]"
 ```
+
+### 0c. Optional, cheap: item triage through Kie (~$1-2, never reported)
+
+Before spending on first-party runs, two strong models from different families can point
+at broken items. An item every model misses is usually a broken item, not a hard one.
+
+```bash
+KIE_API_KEY=... scripts/kie_triage.sh smoke   # 3 items/task, under $0.10 — first
+KIE_API_KEY=... scripts/kie_triage.sh full    # ~230 items, ~$1-2 expected, ~$5-6 worst
+```
+
+It runs `claude-opus-5-5` and `gpt-6-1-sol`, prints `unparsed` per task (near 0 means the
+plumbing works), then `serbeval triage`: every missed item, unanimous misses first, with
+the gold answer next to each model's answer.
+
+Kie serves these models in two different formats, neither of which is lm-eval's
+chat-completions default: Claude at `/claude/v1/messages` (Anthropic format; handled by
+`anthropic-chat-fixed` with a `base_url`) and GPT at `/codex/v1/responses` (OpenAI
+Responses format; handled by the new `kie-responses` adapter). Credentials come only from
+`KIE_API_KEY` — a first-party Anthropic or OpenAI key is never sent to the reseller.
+
+**Triage only.** Which model actually served and whether answers were cached cannot be
+verified through a reseller. Output goes to `results/triage-kie/`, which is gitignored.
 
 ### 1a. Use the fixed adapter for current models
 

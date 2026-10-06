@@ -116,3 +116,11 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 39. `thinking=omit` + fail-fast for models that cannot disable thinking (Opus 5.5)
 - [x] 40. max_tokens floor of 2048 whenever thinking is on
 - [ ] Maintainer: `.venv/bin/pip install -e ".[dev]"` to pull tenacity + tiktoken
+
+## v0.11 — Kie triage, ready to run — DONE (2026-10-07)
+- [x] 41. `lm-eval[api]` extras installed (tenacity, tiktoken)
+- [x] 42. Adapter accepts string prompts — every documented command was broken without --apply_chat_template
+- [x] 43. `kie-responses` adapter for gpt-6-1-sol (Responses format); Opus via anthropic-chat-fixed + base_url
+- [x] 44. Key routing by destination; stream=false; e2e test of the real CLI against a mock Kie
+- [x] 45. `serbeval triage` + scripts/kie_triage.sh (smoke / full, budget printed, confirm before full)
+- [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh smoke`, then `full`, then review the queue

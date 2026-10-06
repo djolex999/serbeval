@@ -244,6 +244,14 @@ def _cmd_baseline(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_triage(args: argparse.Namespace) -> int:
+    """Review queue from triage runs: items some model missed, unanimous misses first."""
+    from serbeval.triage import collect_misses, format_misses
+
+    print(format_misses(collect_misses(args.results_dir)), end="")
+    return 0
+
+
 def _make_client() -> object:
     import anthropic
 
@@ -382,6 +390,10 @@ def build_parser() -> argparse.ArgumentParser:
     baseline.add_argument("--out", default="baseline.txt")
     baseline.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     baseline.set_defaults(func=_cmd_baseline)
+
+    triage = sub.add_parser("triage", help="list items models missed, most-suspect first")
+    triage.add_argument("--results-dir", default="results/triage-kie")
+    triage.set_defaults(func=_cmd_triage)
 
     from serbeval.generate import DEFAULT_MODEL
 
