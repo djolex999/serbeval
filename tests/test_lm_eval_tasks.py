@@ -191,3 +191,24 @@ def test_probe_tasks_load_one_per_phenomenon_with_twenty_items() -> None:
         assert len(docs) == expected, name
         assert {doc["task"] for doc in docs} == {"srb_probe"}
     assert "srb_probe" in tm.all_tags
+
+
+PRAVOPIS_TASKS = (
+    "srb_pravopis_prefiksoidi",
+    "srb_pravopis_poluslozenice",
+    "srb_pravopis_slozeni_pridevi",
+    "srb_pravopis_sastavljeno_rastavljeno",
+)
+
+
+@pytest.mark.slow
+def test_pravopis_tasks_load_with_source_checked_items() -> None:
+    from lm_eval.tasks import TaskManager
+
+    tm = TaskManager(include_path=str(TASKS_DIR))
+    loaded = tm.load(list(PRAVOPIS_TASKS))["tasks"]
+    for name in PRAVOPIS_TASKS:
+        docs = list(loaded[name].test_docs())
+        assert len(docs) >= 15, name
+        assert {doc["task"] for doc in docs} == {"srb_pravopis"}
+    assert "srb_pravopis" in tm.all_tags

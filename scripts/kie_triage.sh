@@ -4,6 +4,7 @@
 #   KIE_API_KEY=... scripts/kie_triage.sh smoke   # 3 items/task, under $0.10 — run this FIRST
 #   KIE_API_KEY=... scripts/kie_triage.sh full    # 50 items/task (~230 items), ~$1-2 expected
 #   KIE_API_KEY=... scripts/kie_triage.sh probe   # difficulty probe: 6 phenomena x 20 = 120 items
+#   KIE_API_KEY=... scripts/kie_triage.sh pravopis  # pravopis set, ~80 items, Opus only
 #
 # TRIAGE ONLY. Kie is a reseller: which model actually served, and whether responses
 # were cached, cannot be verified. Output lands in results/triage-kie/ (gitignored) and
@@ -15,7 +16,8 @@ case "$MODE" in
   smoke) LIMIT=3 ;;
   full)  LIMIT=50 ;;
   probe) LIMIT=20 ;;
-  *) echo "usage: KIE_API_KEY=... $0 smoke|full|probe" >&2; exit 2 ;;
+  pravopis) LIMIT=100 ;;
+  *) echo "usage: KIE_API_KEY=... $0 smoke|full|probe|pravopis" >&2; exit 2 ;;
 esac
 : "${KIE_API_KEY:?set KIE_API_KEY (Kie dashboard -> API keys)}"
 
@@ -42,6 +44,10 @@ if [ "$MODE" = probe ]; then
   OUT="$ROOT/results/triage-kie-probe"
   TASKS=srb_probe
 fi
+if [ "$MODE" = pravopis ]; then
+  OUT="$ROOT/results/triage-kie-pravopis"
+  TASKS=srb_pravopis
+fi
 cd "$ROOT"
 
 if [ "$MODE" = probe ]; then
@@ -50,6 +56,15 @@ Probe run: 120 cloze items per model (short answers).
   claude-opus-5-5  ~3k hidden Kie prompt/request  -> expected ~$0.10-0.30, worst ~$0.70
   gpt-6-1-sol      ~4.2k hidden prompt, effort=low -> expected ~$0.20-0.40
 Expected total ~$0.30-0.70; worst case ~$1.10. Kie credits are prepaid, so the balance is a hard cap.
+EST
+  read -r -p "Proceed? [y/N] " ok
+  [ "$ok" = y ] || { echo "aborted"; exit 1; }
+fi
+
+if [ "$MODE" = pravopis ]; then
+  cat <<'EST'
+Pravopis run: ~80 cloze items, claude-opus-5-5 ONLY (Kie's GPT endpoint returned 500 on most
+probe requests). Expected ~$0.10-0.30, worst ~$0.50.
 EST
   read -r -p "Proceed? [y/N] " ok
   [ "$ok" = y ] || { echo "aborted"; exit 1; }
@@ -75,11 +90,13 @@ echo "== claude-opus-5-5 =="
   --tasks "$TASKS" --include_path lm_eval_tasks \
   --output_path "$OUT/opus-5-5" --log_samples --limit "$LIMIT"
 
+if [ "$MODE" != pravopis ]; then
 echo "== gpt-6-1-sol =="
 "$PY" scripts/run_eval.py --model kie-responses \
   --model_args "model=gpt-6-1-sol,effort=low" \
   --tasks "$TASKS" --include_path lm_eval_tasks \
   --output_path "$OUT/gpt-6-1-sol" --log_samples --limit "$LIMIT"
+fi
 
 echo
 echo "== unparsed check: near 0 means the plumbing works; near 1 means stop and report back =="
