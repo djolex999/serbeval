@@ -15,7 +15,13 @@ Session plan (2026-10-07, all probe items are CLOZE — MCQ is already at ceilin
 - [x] serbeval.probe: synth aorist + sibilarization/palatalization from srLex (freq>0 only)
 - [x] hand-written: jat, imperfect, numeral agreement, together/apart, polusloženice
 - [x] data/srb_probe/<phenomenon>.jsonl + one lm_eval task per phenomenon; kie_triage.sh `probe` mode
-- [ ] cost estimate → maintainer OK + fresh Kie key → run → keep phenomena < ~90%
+- [x] Kie run (Opus only; GPT stopped at 7/120 — Kie 500s, low credits): morphology + jat 100%,
+  sastavljeno-rastavljeno 95%, polusloženice 90% → only pravopis shows any give
+- [ ] Maintainer: judge „doviđenja“ (do viđenja item) against Pravopis 2010; verify polusloženice +
+  sastavljeno-rastavljeno items (40) before building them out
+- [ ] Decide next lever, since phenomenon choice alone does not beat the ceiling: bigger, harder
+  pravopis set (polusloženice with prefixoids foto-/auto-/radio-, adjective compounds) vs. format
+  changes (no cue parts, free rewriting/error detection in running text)
 
 - [ ] 6 phenomena x 20 items = 120:
   - [ ] ijekavian jat reflex (rijeka / rječnik, mlijeko / mlječni) — synth from srLex

@@ -4,6 +4,15 @@ Why every non-obvious choice was made: [DECISIONS.md](DECISIONS.md). Task list: 
 
 ## Where we left off
 
+**2026-10-07 probe result:** a 120-item difficulty probe (6 phenomena, cloze, `srb_probe_*`)
+did NOT break the ceiling. Opus 5.5 on Kie: aorist/imperfect, numeral agreement, jat and
+sibilarization all 100%; sastavljeno-rastavljeno 95% (the one miss, „doviđenja“, is contested);
+polusloženice 90%. GPT leg stopped at 7/120 (Kie 500s, low credits). Pravopis is the only place
+with any give — see tasks/todo.md for the decision that is now open. Results:
+`results/triage-kie-probe/` in this worktree (gitignored).
+
+Earlier context:
+
 serbeval works end-to-end against real models for the first time, and it is **correct but too
 easy**. On a Kie triage run (230 items per model) Opus 5.5 scored 230/230 and GPT 6.1 Sol 98% of
 the items it answered; the maintainer's blind human baseline scored 29/30 (the one miss,
