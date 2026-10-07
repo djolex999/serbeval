@@ -247,3 +247,29 @@ def test_a_space_is_not_the_same_as_writing_together() -> None:
 def test_a_dash_used_as_punctuation_is_still_stripped() -> None:
     assert normalize("— bašti -") == "bašti"
     assert normalize("bašti - odgovor") == "bašti odgovor"
+
+
+# --- whole-sentence answers --------------------------------------------------
+
+
+def test_a_response_that_repeats_the_whole_sentence_is_scored_on_the_slot() -> None:
+    # Small models often answer with the completed sentence; that is a format slip, not
+    # a grammar error, and the form at the blank is what the item tests.
+    item = ClozeItem.model_validate(make_raw())
+    assert is_correct("Celo popodne sedeli smo u bašti i razgovarali.", item)
+
+
+def test_a_repeated_sentence_with_the_wrong_form_is_still_wrong() -> None:
+    item = ClozeItem.model_validate(make_raw())
+    assert not is_correct("Celo popodne sedeli smo u baštu i razgovarali.", item)
+
+
+def test_a_repeated_sentence_that_changes_other_words_does_not_count() -> None:
+    # „Cela popodne ... na bašti“ rewrites the frame; only an exact frame match is read.
+    item = ClozeItem.model_validate(make_raw())
+    assert not is_correct("Cela popodne sedeli smo na bašti i razgovarali.", item)
+
+
+def test_a_repeated_sentence_must_keep_the_slot_a_separate_word() -> None:
+    item = ClozeItem.model_validate(make_raw(answers=["bašti"]))
+    assert not is_correct("Celo popodne sedeli smo ubašti i razgovarali.", item)

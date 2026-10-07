@@ -16,7 +16,7 @@ import re
 import unicodedata
 from collections.abc import Sequence
 
-from serbeval.schema import ClozeItem
+from serbeval.schema import BLANK, ClozeItem
 from serbeval.translit import cyrillic_to_latin
 
 # Models comply with "answer with the form only" to varying degrees; these prefixes are
@@ -86,5 +86,32 @@ def matches_any(raw: str, answers: Sequence[str]) -> bool:
     return any(produced == _comparable(answer) for answer in answers)
 
 
+def slot_from_sentence(raw: str, question: str) -> str | None:
+    """The form at the blank when a response repeats the whole sentence verbatim.
+
+    Smaller models often answer „Celo popodne sedeli smo u bašti i razgovarali.“ instead
+    of „bašti“ — a format slip, not a grammar error. Only an EXACT repeat of the frame
+    (after folding case, punctuation and script) is read; a response that rewrites other
+    words is not, so this cannot turn a different sentence into a right answer.
+    """
+    raw_head, _, raw_tail = question.partition(BLANK)
+    head, tail = _comparable(raw_head), _comparable(raw_tail)
+    for line in (raw or "").splitlines():
+        text = _comparable(_PREFIXES.sub("", line))
+        if not (text.startswith(head) and text.endswith(tail)):
+            continue
+        middle = text[len(head) : len(text) - len(tail)]
+        # The slot must be its own word(s): „smo ubašti“ is not „smo u“ + „bašti“.
+        if (head and not middle.startswith(" ")) or (tail and not middle.endswith(" ")):
+            continue
+        slot = middle.strip()
+        if slot and len(slot.split()) <= _MAX_ANSWER_WORDS:
+            return slot
+    return None
+
+
 def is_correct(raw: str, item: ClozeItem) -> bool:
-    return matches_any(raw, item.answers)
+    if matches_any(raw, item.answers):
+        return True
+    slot = slot_from_sentence(raw, item.question)
+    return slot is not None and any(slot == _comparable(a) for a in item.answers)

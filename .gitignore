@@ -15,3 +15,5 @@ results/**/raw/
 .claude/
 # reseller triage runs: review aids only, never reported results
 results/triage-*/
+# local open-model runs: keep the summary JSON, not the per-sample logs
+results/local/**/samples_*.jsonl
