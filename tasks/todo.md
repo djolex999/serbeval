@@ -1,158 +1,44 @@
-# serbeval — active task list
+# serbeval — todo
 
-Full plan: [docs/superpowers/plans/2026-06-13-serbeval-v0.1.md](../docs/superpowers/plans/2026-06-13-serbeval-v0.1.md)
-Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
+Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [HANDOFF.md](../HANDOFF.md).
 
-## v0.1 — DONE
-- [x] 1. Scaffolding (git, venv, pyproject, README, DECISIONS.md)
-- [x] 2. EvalItem schema (pydantic, TDD)
-- [x] 3. Dataset IO + `serbeval validate` CLI
-- [x] 4. Seed datasets: srb_grammar (50), srb_idioms (30) — multi-agent authored + adversarially verified, all `verified: false`
-- [x] 5. lm-eval task YAMLs (generate_until + regex filter)
-- [x] 6. `serbeval generate` candidate generation (mock-tested; live run needs API key)
-- [x] 7. Run docs + results/ layout
-- [x] 8. pytest + mypy + ruff green
+## Next — difficulty probe set (agreed 2026-10-07, start in a new session)
 
-## v0.2 — DONE
-- [x] 9. Self-consistency filter `serbeval selfcheck` (mock-tested)
-- [x] 10. srb_cyrillic_agreement — formal harness task (custom pair_agreement metric; 15 pairs)
-- [x] 11. Smoke run — pipeline validated via lm-eval `dummy` model; live haiku command documented (no API key on machine)
-- [x] 12. CONTRIBUTING.md + issue templates
-- [x] 13. Final checks + HANDOFF.md
+The benchmark is correct but too easy: Opus 5.5 230/230, GPT 6.1 Sol 98% on the Kie triage run.
+Measure before building — only phenomena where models drop below ~90% get a full set.
 
-## v0.3 — human-verification tooling (in progress)
-- [x] 14. `serbeval review` — interactive verification: y/n/s/q per item, pair-atomic for
-      srb_cyrillic_agreement, saves after every decision, rejects → discarded.jsonl with reason
-- [x] 15. `serbeval stats` — per-task verification progress + category/candidate/discard counts
-- [x] 16. `serbeval report` — markdown summary table from lm-eval `results_*.json` under results/
-- [x] 17. pytest + mypy + ruff green; adversarial review workflow (26 agents, 17 confirmed
-      findings → all fixed: atomic saves, reject ordering, recursive report discovery, …); docs updated
+- [ ] 6 phenomena x 20 items = 120:
+  - [ ] ijekavian jat reflex (rijeka / rječnik, mlijeko / mlječni) — synth from srLex
+  - [ ] aorist & imperfect (rekoh, bijaše, donesoše) — synth, check srLex has these verb forms first
+  - [ ] sibilarization / palatalization (junak→junaci, ruka→ruci, Bog→Bože) — synth from srLex
+  - [ ] numeral + adjective + noun agreement (dva nova stola, dvadeset i jedan novi sto) — synth
+  - [ ] pravopis together/apart (ne znam / neznanje, nemoj) — hand-written
+  - [ ] polusloženice with a hyphen (kontakt-osoba, spomen-ploča, radio-stanica) — hand-written; the maintainer AND GPT missed kontakt-osoba
+- [ ] Run both models through Kie: `KIE_API_KEY=... scripts/kie_triage.sh` (budget: under $1; GPT ~40 min)
+- [ ] Keep only phenomena below ~90%; maintainer verifies only those
+- [ ] Then: synth with RARE lemmas (srLex frequency column); then adversarial filtering through two model families
+- Don't: remove the number hint from cues (ambiguous, not harder); trick questions
 
-## Needs maintainer (see HANDOFF.md)
-- [ ] Human-verify seed items → flip `verified: true`
-- [ ] Live haiku-4-5 smoke run + full model matrix (needs ANTHROPIC_API_KEY)
-- [ ] Expand thin `glagolski-vid` category (only 4 items survived verification)
+## Open — maintainer
 
-## v0.3 — measurement tooling — DONE (2026-09-02)
-- [x] 14. `difficulty` tier on EvalItem + pair difficulty-consistency rule
-- [x] 15. `serbeval lint` — advisory distractor quality report (never fails)
-- [x] 16. `serbeval report` — Wilson CI, model spread, "cannot rank" verdict, script gap by tier
-- [x] 17. Tag the 30 srb_cyrillic_agreement items `easy`
-- [x] 18. pytest (96) + mypy + ruff green; report verified against real `dummy` lm-eval output
+- [ ] **Rotate the Kie key** — pasted into a terminal, printed in run logs
+- [ ] **Add a git remote** — every commit lives only on this disk; a private repo is fine
+- [ ] Judge the remaining review-queue items: standard-0003 („da se ponesu“), idiomi-b-0008 (luk jeo), cloze-ud-0027 (date in parentheses)
+- [ ] Verify more items: `serbeval review --task <task>` (30 / 1102 verified so far)
+- [ ] First-party run for reportable numbers (needs ANTHROPIC_API_KEY; `pip install -e ".[dev]"` already done)
 
-## v0.4 — dataset work, driven by lint output
-- [ ] Rewrite distractors in `standard` (0.29), `kongruencija` (0.33), `komparacija` (0.40), `pravopis` (0.41) — 24 of 50 grammar items are effectively 2-way MCQ
-- [ ] Expand `srb_cyrillic_agreement` to ~60 pairs across easy/medium/hard, so the script gap can be measured against difficulty
-- [ ] Re-aim `srb_idioms` at rare/regional expressions, or drop the task
-- [ ] Scale `srb_grammar` toward 300 items (needs ANTHROPIC_API_KEY for generate/selfcheck)
+## Open — small fixes
 
-## Still needs maintainer
-- [ ] Human-verify seed items → flip `verified: true`
-- [ ] **Run the model matrix and check the benchmark discriminates at all** (needs ANTHROPIC_API_KEY).
-      If haiku and opus land within ~10 points, more items will not help and the item difficulty
-      is what needs changing. This gates all of v0.4.
+- [ ] Miner: skip blanks adjacent to brackets/digits (cloze-ud-0027 confused GPT)
+- [ ] Optional: re-send the 6 requests Kie never answered (listed by `serbeval triage`)
 
-## v0.4 — cloze prototype — DONE (2026-09-02)
-- [x] 19. `ClozeItem` schema + cloze scoring (diacritic-strict exact match, multi-answer)
-- [x] 20. 20 cloze items across padezi / brojevi / komparacija / glagolski-oblici
-- [x] 21. `srb_grammar_cloze` lm-eval task; `serbeval validate` auto-detects cloze files
-- [x] 22. 159 tests + mypy + ruff green; harness integration test on the new task
+## Done (condensed — details in DECISIONS.md and git log)
 
-## The one experiment that decides everything (needs ANTHROPIC_API_KEY)
-- [ ] Run haiku + opus + one non-Anthropic model on all four tasks with --log_samples
-- [ ] `serbeval report --results-dir results` → is any spread larger than the CI?
-- [ ] Compare `srb_grammar` vs `srb_grammar_cloze` accuracy. If cloze is materially harder,
-      convert srb_grammar to cloze and retire the MCQ distractor problem entirely.
-
-## v0.5 — corpus mining — DONE (2026-09-02)
-- [x] 23. CoNLL-U reader (`serbeval.conllu`)
-- [x] 24. `serbeval mine` — corpus-driven cloze generation, purity computed not hardcoded
-- [x] 25. 453 candidates mined from UD_Serbian-SET, validate clean
-
-## Next on mining
-- [ ] Spot-check a random sample of the 453 (say 40) and merge the good ones into items.jsonl
-- [ ] Second phenomenon: numeral + noun (paukal) — annotated in the treebank, same approach
-- [ ] Contamination fix: tag recent Serbian news with a UD tagger, run the same miner over it
-- [ ] Consider `u`/`na` as a deliberately HARD tier (needs the verb, not just the preposition)
-
-## v0.6 — synthesis — DONE (2026-09-02)
-- [x] 26. srLex reader (`serbeval.lexicon`) — paradigms, all variant forms per slot
-- [x] 27. `serbeval synth` — 24 frames x semantic roles x srLex, 519 items, validate clean
-- [x] 28. Motion-vs-rest hard tier (`u`/`na`), impossible to mine
-
-## Next
-- [ ] Human-check the 24 FRAMES (not the 519 items) — that is the whole verification cost now
-- [ ] Run mined vs synthetic on the same models: the gap estimates contamination
-- [ ] More frames: numerals/paukal, comparatives, verb forms
-- [ ] Still open and still gating: does the benchmark separate models at all? (needs API key)
-
-## v0.7 — output checker — DONE (2026-09-02)
-- [x] 29. `serbeval check` — mixed script, diacritics, unknown forms, dialect mixing
-- [x] 30. `serbeval index` + committed data/forms.txt.gz (1.45M forms, no download needed)
-- [x] 31. False-positive rate measured on real Serbian: 0.012% in low-noise mode
-
-## Usable today (no API key)
-- [ ] Wire `serbeval check` into Pripremi.rs output as a quality gate
-- [ ] Optional next tier: preposition-case government on free text (needs a tagger)
-
-## v0.8 — validation-run prep — DONE (2026-09-02)
-- [x] 32. `unparsed` metric on all six tasks — a response we cannot read != a wrong answer
-- [x] 33. Task YAMLs for the mined and synthetic candidate sets (contamination comparison)
-- [x] 34. `serbeval baseline --new / --score` — the human control
-
-## The run itself (needs ANTHROPIC_API_KEY) — see results/README.md
-- [ ] Answer 30 baseline items yourself FIRST. Below ~100% means fix items, not models.
-- [ ] haiku + opus + one non-Anthropic model, all six tasks, --log_samples
-- [ ] `serbeval report --results-dir results` — check `unparsed` before believing accuracy
-- [ ] Pull the items every model failed; those are the verification queue
-
-## v0.9 — working adapter — DONE (2026-09-02)
-- [x] 35. `anthropic-chat-fixed` — drops `temperature`, reads text past thinking blocks
-- [x] 36. `scripts/run_eval.py` wrapper; stock adapter left registered for comparison
-- [x] 37. Verified end-to-end through the harness with the dummy model
-
-## v0.10 — Opus 5.5 + missing API extras — DONE (2026-09-23)
-- [x] 38. `lm-eval[api]` declared — without it no API model ran at all
-- [x] 39. `thinking=omit` + fail-fast for models that cannot disable thinking (Opus 5.5)
-- [x] 40. max_tokens floor of 2048 whenever thinking is on
-- [ ] Maintainer: `.venv/bin/pip install -e ".[dev]"` to pull tenacity + tiktoken
-
-## v0.11 — Kie triage, ready to run — DONE (2026-10-07)
-- [x] 41. `lm-eval[api]` extras installed (tenacity, tiktoken)
-- [x] 42. Adapter accepts string prompts — every documented command was broken without --apply_chat_template
-- [x] 43. `kie-responses` adapter for gpt-6-1-sol (Responses format); Opus via anthropic-chat-fixed + base_url
-- [x] 44. Key routing by destination; stream=false; e2e test of the real CLI against a mock Kie
-- [x] 45. `serbeval triage` + scripts/kie_triage.sh (smoke / full, budget printed, confirm before full)
-- [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh smoke`, then `full`, then review the queue
-- [x] 46. Position bias removed: gold letters balanced in all three MCQ sets; build-failing guard test
-- [x] 47. First real API run (Kie smoke): both models 18/18 after fixing Bearer auth, 200-wrapped 401s, empty Content-Type, venv path, Cyrillic scoring, and run-killing retries
-- [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh full` (~230 items/model; Opus ~10 min, GPT ~1.5 h)
-- [ ] Rotate the Kie key afterwards — it was pasted into the terminal and appears in run logs
-
-## DONE (2026-10-07) — full Kie triage run
-- Started 02:28 CEST in background: `scripts/kie_triage.sh full` -> results/triage-kie/ (gitignored)
-- Opus 5.5 DONE: 228/230 (99%) — grammar 50/50, idioms 30/30, cyrillic 30/30, cloze 118/120
-- GPT 6.1 Sol running (~15-60 s/item); at 03:08 it was 85/230. If the session died, check
-  whether results/triage-kie/gpt-6-1-sol/**/results_*.json exists; if not, rerun ONLY gpt:
-  scripts/run_eval.py --model kie-responses --model_args model=gpt-6-1-sol,effort=low \
-    --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth \
-    --include_path lm_eval_tasks --output_path results/triage-kie/gpt-6-1-sol --log_samples --limit 50
-- When done: `serbeval triage --results-dir results/triage-kie` -> review queue; report both models' scores
-
-## KEY FINDING: benchmark is at ceiling for frontier models
-Opus 99% on Kie. Serbeval cannot currently separate strong models. Next = make it harder.
-
-## DEFERRED (maintainer decision 2026-10-07): difficulty probe set
-- 20 items x 5 candidate-hard phenomena -> Opus via Kie (cents) -> keep phenomena where Opus < ~90%:
-  ijekavian jat reflex (rijeka/rječnik), aorist & imperfect, sibilarization/palatalization
-  (junak->junaci, ruka->ruci), numeral+adjective+noun agreement (dva nova stola, 21 novi sto),
-  pravopis together/apart (ne znam / neznanje)
-- Cheapest lever after that: synth with RARE lemmas (srLex frequency column)
-- Then adversarial filtering through two model families
-- Don't: remove the number hint from cues (makes items ambiguous, not harder); trick questions
-- RESULT: Opus 230/230, GPT 220/224 answered (98%) -> ceiling confirmed
-- [ ] Maintainer: judge the remaining 3 review-queue items (kontakt-osoba confirmed correct, stays)
-- [ ] Rotate the Kie key (pasted in terminal, printed in run logs)
-- [ ] Optional: re-send the 6 unanswered GPT requests
-- [x] Human baseline: 29/30 (97%) on hand-written items; only miss was kontakt-osoba (gold confirmed correct)
-- Candidate hard phenomenon added: polusloženice with a hyphen (kontakt-osoba, spomen-ploča, radio-stanica)
+- [x] v0.1–v0.3: schema, validate, 3 MCQ tasks, generate/selfcheck, review, stats, report, cyrillic pair metric
+- [x] lint (distractor quality), Wilson-CI report with rankability verdict, difficulty tier
+- [x] cloze format; `mine` (UD treebank, 453), `synth` (frames + srLex, 519); `check` (language QA, 0.012% FP)
+- [x] `unparsed` metric, human `baseline`, `balance` (position bias 60%/80% always-A → ~26%)
+- [x] adapters: `anthropic-chat-fixed` (temperature/thinking/string prompts/Opus 5.5), `kie-responses`; patient retry
+- [x] licensing: code MIT, data split CC BY / CC BY-SA (data/LICENSE)
+- [x] 2026-10-07: first real API runs (Kie) — smoke + full triage: Opus 230/230, GPT 220/224 → ceiling
+- [x] 2026-10-07: human baseline 29/30 (97%); those 30 items marked verified

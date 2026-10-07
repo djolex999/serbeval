@@ -1,94 +1,38 @@
 # HANDOFF
 
-State of serbeval after the autonomous v0.1 + v0.2 build. Read [DECISIONS.md](DECISIONS.md) for the
-one-line rationale behind every non-obvious choice.
+Why every non-obvious choice was made: [DECISIONS.md](DECISIONS.md). Task list: [tasks/todo.md](tasks/todo.md).
 
-## ⚠️ NEEDS YOUR EYES FIRST — seed item verification
+## Where we left off
 
-**Nothing here is publishable until a native speaker verifies the items.** Every item carries
-`verified: false`. They were authored by Claude agents and adversarially cross-checked by other
-Claude agents (and the cyrillic set was transliterated deterministically), but a model verifying a
-model is not human verification.
+serbeval works end-to-end against real models for the first time, and it is **correct but too
+easy**. On a Kie triage run (230 items per model) Opus 5.5 scored 230/230 and GPT 6.1 Sol 98% of
+the items it answered; the maintainer's blind human baseline scored 29/30 (the one miss,
+kontakt-osoba, had the right gold). So the items are sound and the pipeline runs — but the
+benchmark cannot separate frontier models. Next is making it harder, measured before built.
 
-**v0.3 makes this a guided flow — run:**
+## In flight
 
-```bash
-./.venv/bin/serbeval review --task srb_cyrillic_agreement
-```
+- Nothing running. The full Kie triage results are in `results/triage-kie/` **inside the
+  worktree** `.claude/worktrees/serbeval-app-f49544/` (gitignored, not in the main checkout).
+  `serbeval triage --results-dir <that path>` reproduces the review queue.
+- `main` has an uncommitted change to `CLAUDE.md` (a Vir "Distilled Knowledge" block) that is
+  the maintainer's, not part of this work.
 
-(then `srb_idioms`, then `srb_grammar`). For each item you press `y` (correct → `verified: true`),
-`n` (reject → moved to `discarded.jsonl` with your reason), `s` (skip), `q` (quit). Every decision
-is saved immediately, so you can stop anytime. Cyrillic pairs are shown and decided together.
-Track progress with `./.venv/bin/serbeval stats`.
+## Blockers
 
-The raw files, if you prefer editing by hand:
+- **Kie key must be rotated** — it was pasted into a terminal and printed in lm-eval's logs.
+- **No git remote** — every commit exists only on this machine.
+- First-party (reportable) numbers need an `ANTHROPIC_API_KEY`.
 
-| File | Items | How made |
-| --- | --- | --- |
-| `data/srb_grammar/items.jsonl` | 50 | multi-agent authored + 2-lens adversarial verify |
-| `data/srb_idioms/items.jsonl` | 30 | same |
-| `data/srb_cyrillic_agreement/items.jsonl` | 30 (15 pairs) | hand-authored base + tested transliterator |
+## Next session: start here
 
-Suggested review order — quickest wins first:
-1. **`srb_cyrillic_agreement`** (15 base facts). Easiest: just confirm each fact and that the
-   Cyrillic reads naturally. These are deliberately easy/factual (see DECISIONS — the task measures
-   script consistency, not difficulty).
-2. **`srb_idioms`** (30). Confirm each idiom's gold meaning and that no distractor is also defensible.
-3. **`srb_grammar`** (50). The hardest review — these are normative judgments. Watch for items where
-   a second answer is arguably acceptable (ijekavian doublets, norm-tolerated variants).
+The difficulty probe set in [tasks/todo.md](tasks/todo.md): 6 candidate-hard phenomena × 20
+items, run through both models on Kie (under $1), keep only phenomena where models drop below
+~90%. Start by checking whether srLex carries aorist/imperfect forms — that decides how much
+can be synthesised rather than hand-written.
 
-The agents already *dropped* 20 items they couldn't make airtight — see
-`data/srb_grammar/discarded.jsonl` and `data/srb_idioms/discarded.jsonl` (each row has the reasons).
-Those rejection reasons are a good guide to the failure modes to watch for in the kept items.
-
-## ✅ Done and verified green
-
-- `pytest` (50 tests, incl. a `slow` lm-eval integration test), `mypy src` (strict), `ruff check .`
-  — all green. Run all three before calling anything done.
-- **Schema + validation** (`src/serbeval/`): `EvalItem` (pydantic v2), JSONL IO, integrity checks
-  (unique ids/questions, script consistency, pair integrity). CLI: `serbeval validate <file>`.
-- **Three lm-eval tasks** (`lm_eval_tasks/`), all `generate_until` + regex letter extraction:
-  `srb_grammar`, `srb_idioms`, and `srb_cyrillic_agreement` (formal harness task with a custom
-  `pair_agreement` metric — the harness supports it cleanly, so no post-processing fallback needed).
-- **Pipeline validated end-to-end** against lm-eval 0.4.12 via the `dummy` model: both metrics
-  aggregate, results JSON is written. See [results/README.md](results/README.md).
-- **Transliterator** (`src/serbeval/translit.py`): tested, digraph-aware Latin→Cyrillic.
-- **v0.3 verification tooling**: `serbeval review` (interactive human verification, pair-atomic,
-  crash-safe), `serbeval stats` (progress per task/category), `serbeval report` (markdown table
-  from lm-eval `results_*.json` — ready for the first live runs).
-
-## 🟡 Stubbed / blocked on you
-
-- **No live eval numbers.** This machine has no `ANTHROPIC_API_KEY`, so the brief's
-  claude-haiku-4-5 smoke run is documented, not executed. Exact command + the full model matrix are
-  in [results/README.md](results/README.md). The pipeline itself is proven (dummy run).
-- **`serbeval generate` / `serbeval selfcheck`** are implemented and unit-tested with a mocked
-  Anthropic client, but have never made a real API call. First live use: set the key and try
-  `serbeval generate --task srb_grammar --category enklitike -n 5` then
-  `serbeval selfcheck --task srb_grammar`. The brief's self-consistency pre-filter (re-answer 3×,
-  discard disagreements, keep `verified: false`) is exactly `selfcheck`.
-
-## Hard rules I kept (yours)
-
-No HF Hub push, no PyPI publish, no upstream PRs. Everything is local; publishing is your call.
-
-## Suggested next steps
-
-1. Verify the seed items: `serbeval review --task <task>` (above).
-2. Add `ANTHROPIC_API_KEY`, run the haiku smoke run, commit the summary JSON to `results/haiku-4-5/`.
-3. Expand thin grammar categories — `glagolski-vid` ended up at only 4 items (the verifiers were
-   strict on aspect): `serbeval generate --task srb_grammar --category glagolski-vid -n 8`, then
-   `selfcheck`, then human-verify.
-4. Run the full model matrix in [results/README.md](results/README.md).
-
-## Repo map
-
-```
-src/serbeval/      schema.py · data.py · generate.py · selfcheck.py · translit.py · cli.py
-lm_eval_tasks/     srb_grammar.yaml · srb_idioms.yaml · srb_cyrillic_agreement.yaml · utils.py
-data/<task>/       items.jsonl (curated) · candidates.jsonl (generated) · discarded.jsonl (rejects)
-scripts/           seed_workflow.js · ingest_seed.py · build_cyrillic_pairs.py (one-shot builders)
-tests/             50 tests; the lm-eval integration test is marked `slow`
-results/           README = run commands + model matrix (no real numbers yet)
-docs/superpowers/plans/   the implementation plan this build followed
-```
+Working rules that bit us this time:
+- In a worktree, prefix every command with `PYTHONPATH=src` (the venv's editable install points
+  at the main checkout).
+- Kie: Bearer auth, one request at a time, triage only — never report its numbers.
+- Check `unparsed` before believing any accuracy.
