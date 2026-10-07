@@ -32,11 +32,20 @@ cd "$ROOT"
 TASKS=srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth,srb_probe,srb_pravopis,srb_correction
 OUT="$ROOT/results/local/$(echo "$MODEL" | tr ':/' '__')"
 
+# Extra generation fields go straight into the request body. Thinking models must have
+# thinking off: qwen3 spends the whole 24-token cloze budget reasoning and returns "".
+GEN_KWARGS="${GEN_KWARGS:-}"
+case "$MODEL" in
+  qwen3*|*deepseek-r1*) GEN_KWARGS="${GEN_KWARGS:-reasoning_effort=none}" ;;
+esac
+GEN_ARGS=()
+[ -n "$GEN_KWARGS" ] && GEN_ARGS=(--gen_kwargs "$GEN_KWARGS")
+
 # One request at a time: Ollama serves one generation at a time anyway, and lm-eval's
 # concurrent path (aiohttp) is the one that broke on Kie.
 "$PY" scripts/run_eval.py --model local-chat-completions \
   --model_args "model=$MODEL,base_url=$OLLAMA/v1/chat/completions,num_concurrent=1,max_retries=3,tokenized_requests=False" \
-  --apply_chat_template \
+  --apply_chat_template "${GEN_ARGS[@]+"${GEN_ARGS[@]}"}" \
   --tasks "$TASKS" --include_path lm_eval_tasks \
   --output_path "$OUT" --log_samples --limit "$LIMIT"
 
