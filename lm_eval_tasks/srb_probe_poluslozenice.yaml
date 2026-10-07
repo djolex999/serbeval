@@ -1,0 +1,29 @@
+# DIFFICULTY PROBE (tasks/todo.md): ~20 candidate-hard items for one phenomenon.
+# Unverified; triage only. Kept or dropped by whether models fall below ~90%.
+task: srb_probe_poluslozenice
+tag: srb_probe
+dataset_path: json
+dataset_kwargs:
+  data_files:
+    test:
+      - data/srb_probe/poluslozenice.jsonl
+test_split: test
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_cloze
+doc_to_target: !function utils.doc_to_target_cloze
+process_results: !function utils.process_results_cloze
+generation_kwargs:
+  until:
+    - "\n\n"
+  max_gen_toks: 24
+  do_sample: false
+  temperature: 0.0
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+  - metric: unparsed
+    aggregation: mean
+    higher_is_better: false
+metadata:
+  version: 0.1

@@ -7,6 +7,16 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 The benchmark is correct but too easy: Opus 5.5 230/230, GPT 6.1 Sol 98% on the Kie triage run.
 Measure before building — only phenomena where models drop below ~90% get a full set.
 
+Session plan (2026-10-07, all probe items are CLOZE — MCQ is already at ceiling):
+- [x] srLex check: aorist YES (attested, e.g. rekoh/donesoše); imperfect present but ~all freq 0
+  (generated); freq-0 forms include generator errors (mačci, tetci, mlječni) → only freq>0 is gold
+- [x] cloze.normalize keeps intra-word hyphens (else kontakt osoba == kontakt-osoba)
+- [x] lexicon: `min_frequency` on forms(); verb paradigms (tense × person × number)
+- [x] serbeval.probe: synth aorist + sibilarization/palatalization from srLex (freq>0 only)
+- [x] hand-written: jat, imperfect, numeral agreement, together/apart, polusloženice
+- [x] data/srb_probe/<phenomenon>.jsonl + one lm_eval task per phenomenon; kie_triage.sh `probe` mode
+- [ ] cost estimate → maintainer OK + fresh Kie key → run → keep phenomena < ~90%
+
 - [ ] 6 phenomena x 20 items = 120:
   - [ ] ijekavian jat reflex (rijeka / rječnik, mlijeko / mlječni) — synth from srLex
   - [ ] aorist & imperfect (rekoh, bijaše, donesoše) — synth, check srLex has these verb forms first

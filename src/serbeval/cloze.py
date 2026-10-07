@@ -29,12 +29,19 @@ _PREFIXES = re.compile(
 _WRAPPERS = "\"'`„“”‘’«»()[]{}*_ \t.,;:!?"
 
 
+# A hyphen between two letters is orthography (kontakt-osoba, crveno-beli), not
+# punctuation: folding it to a space would accept the rastavljeno spelling as correct.
+_INTRA_WORD_HYPHEN = re.compile(r"(?<=\w)-(?=\w)")
+_KEPT_HYPHEN = "\x00"
+
+
 def normalize(text: str) -> str:
-    """Casefold and strip punctuation/whitespace, leaving diacritics intact."""
+    """Casefold and strip punctuation/whitespace, leaving diacritics and intra-word hyphens."""
+    protected = _INTRA_WORD_HYPHEN.sub(_KEPT_HYPHEN, text)
     stripped = "".join(
-        " " if unicodedata.category(ch).startswith("P") else ch for ch in text
+        " " if unicodedata.category(ch).startswith("P") else ch for ch in protected
     )
-    return " ".join(stripped.lower().split())
+    return " ".join(stripped.lower().split()).replace(_KEPT_HYPHEN, "-")
 
 
 # An answer is a word form or a short phrase ("lošem vremenu", "budeš stigao").

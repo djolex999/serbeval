@@ -145,6 +145,47 @@ def _cmd_synth(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_probe(args: argparse.Namespace) -> int:
+    """Synthesise the srLex-backed half of the difficulty probe set."""
+    from pathlib import Path
+
+    from serbeval.data import save_cloze_items
+    from serbeval.lexicon import load_lexicon, load_verb_lexicon
+    from serbeval.probe import (
+        AORIST_FRAMES,
+        SIBILARIZATION_FRAMES,
+        synthesize_noun_probe,
+        synthesize_verb_probe,
+    )
+
+    noun_lemmas = {lemma for frame in SIBILARIZATION_FRAMES for lemma in frame.lemmas}
+    verb_lemmas = {lemma for frame in AORIST_FRAMES for lemma in frame.lemmas}
+    try:
+        nouns = load_lexicon(args.lexicon, upos="NOUN", lemmas=noun_lemmas)
+        verbs = load_verb_lexicon(args.lexicon, lemmas=verb_lemmas)
+    except OSError as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    out_dir = Path(args.data_dir) / "srb_probe"
+    outputs = [
+        ("sibilarizacija", synthesize_noun_probe(
+            nouns, SIBILARIZATION_FRAMES, category="sibilarizacija")),
+        ("aorist-imperfekat", synthesize_verb_probe(
+            verbs, AORIST_FRAMES, category="aorist-imperfekat")),
+    ]
+    for category, items in outputs:
+        path = out_dir / f"{category}.synth.jsonl"
+        save_cloze_items(items, path)
+        print(f"OK: wrote {len(items)} item(s) to {path}")
+
+    # A frame lemma with no attested form silently shrinks the set; say which.
+    missing = sorted((noun_lemmas - nouns.lemmas()) | (verb_lemmas - verbs.lemmas()))
+    if missing:
+        print(f"missing from lexicon (no item): {', '.join(missing)}")
+    return 0
+
+
 def _cmd_index(args: argparse.Namespace) -> int:
     """Condense a full lexicon into the one column `check` needs."""
     from serbeval.check import forms_from_lexicon, write_form_index
@@ -398,6 +439,11 @@ def build_parser() -> argparse.ArgumentParser:
     synth.add_argument("--out", default=None)
     synth.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     synth.set_defaults(func=_cmd_synth)
+
+    probe = sub.add_parser("probe", help="synthesise the srLex half of the difficulty probe")
+    probe.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")
+    probe.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    probe.set_defaults(func=_cmd_probe)
 
     index = sub.add_parser("index", help="build the form index `check` uses")
     index.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")

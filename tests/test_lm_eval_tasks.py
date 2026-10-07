@@ -166,3 +166,28 @@ def test_cloze_wrong_but_readable_answer_is_not_unparsed() -> None:
         "exact_match": 0.0,
         "unparsed": 0.0,
     }
+
+
+PROBE_TASKS = {
+    "srb_probe_jat": 20,
+    "srb_probe_aorist_imperfekat": 20,
+    "srb_probe_sibilarizacija": 20,
+    "srb_probe_broj_pridev_imenica": 20,
+    "srb_probe_sastavljeno_rastavljeno": 20,
+    "srb_probe_poluslozenice": 20,
+}
+
+
+@pytest.mark.slow
+def test_probe_tasks_load_one_per_phenomenon_with_twenty_items() -> None:
+    # One task per phenomenon so the results table reads off per-phenomenon accuracy
+    # directly: the probe's only question is which phenomena fall below ~90%.
+    from lm_eval.tasks import TaskManager
+
+    tm = TaskManager(include_path=str(TASKS_DIR))
+    loaded = tm.load(list(PROBE_TASKS))["tasks"]
+    for name, expected in PROBE_TASKS.items():
+        docs = list(loaded[name].test_docs())
+        assert len(docs) == expected, name
+        assert {doc["task"] for doc in docs} == {"srb_probe"}
+    assert "srb_probe" in tm.all_tags

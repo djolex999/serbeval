@@ -3,6 +3,7 @@
 #
 #   KIE_API_KEY=... scripts/kie_triage.sh smoke   # 3 items/task, under $0.10 — run this FIRST
 #   KIE_API_KEY=... scripts/kie_triage.sh full    # 50 items/task (~230 items), ~$1-2 expected
+#   KIE_API_KEY=... scripts/kie_triage.sh probe   # difficulty probe: 6 phenomena x 20 = 120 items
 #
 # TRIAGE ONLY. Kie is a reseller: which model actually served, and whether responses
 # were cached, cannot be verified. Output lands in results/triage-kie/ (gitignored) and
@@ -13,7 +14,8 @@ MODE="${1:-}"
 case "$MODE" in
   smoke) LIMIT=3 ;;
   full)  LIMIT=50 ;;
-  *) echo "usage: KIE_API_KEY=... $0 smoke|full" >&2; exit 2 ;;
+  probe) LIMIT=20 ;;
+  *) echo "usage: KIE_API_KEY=... $0 smoke|full|probe" >&2; exit 2 ;;
 esac
 : "${KIE_API_KEY:?set KIE_API_KEY (Kie dashboard -> API keys)}"
 
@@ -34,7 +36,24 @@ PY="$(find_python)"
 export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 OUT="$ROOT/results/triage-kie"
 TASKS=srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth
+if [ "$MODE" = probe ]; then
+  # Separate output dir: the probe is a different question (which phenomena are hard),
+  # and mixing it into the main triage results would blur both review queues.
+  OUT="$ROOT/results/triage-kie-probe"
+  TASKS=srb_probe
+fi
 cd "$ROOT"
+
+if [ "$MODE" = probe ]; then
+  cat <<'EST'
+Probe run: 120 cloze items per model (short answers).
+  claude-opus-5-5  ~3k hidden Kie prompt/request  -> expected ~$0.10-0.30, worst ~$0.70
+  gpt-6-1-sol      ~4.2k hidden prompt, effort=low -> expected ~$0.20-0.40
+Expected total ~$0.30-0.70; worst case ~$1.10. Kie credits are prepaid, so the balance is a hard cap.
+EST
+  read -r -p "Proceed? [y/N] " ok
+  [ "$ok" = y ] || { echo "aborted"; exit 1; }
+fi
 
 if [ "$MODE" = full ]; then
   cat <<'EST'

@@ -325,3 +325,25 @@ def test_baseline_new_then_score_round_trip(
     assert main(["baseline", "--score", str(sheet), "--data-dir", str(tmp_path / "data")]) == 0
     out = capsys.readouterr().out
     assert "3/3" in out
+
+
+def test_probe_synth_writes_one_file_per_synthesised_phenomenon(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    lexicon = tmp_path / "lex.tsv"
+    lexicon.write_text(
+        "majci\tmajka\tNcfsd\t_\tNOUN\tCase=Dat|Gender=Fem|Number=Sing\t3869\t0.1\n"
+        "dođoh\tdoći\tVma1s\tType=main|VForm=aorist|Person=first|Number=singular\tVERB\t"
+        "Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin\t540\t0.1\n",
+        encoding="utf-8",
+    )
+    data_dir = tmp_path / "data"
+    assert main(["probe", "--lexicon", str(lexicon), "--data-dir", str(data_dir)]) == 0
+
+    sib = data_dir / "srb_probe" / "sibilarizacija.synth.jsonl"
+    aor = data_dir / "srb_probe" / "aorist-imperfekat.synth.jsonl"
+    sib_rows = [json.loads(line) for line in sib.read_text(encoding="utf-8").splitlines()]
+    aor_rows = [json.loads(line) for line in aor.read_text(encoding="utf-8").splitlines()]
+    assert [r["answers"] for r in sib_rows] == [["majci"]]
+    assert [r["answers"] for r in aor_rows] == [["dođoh"]]
+    assert "missing" in capsys.readouterr().out

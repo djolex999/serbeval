@@ -220,3 +220,30 @@ def test_extract_keeps_a_two_word_answer_after_an_explanation() -> None:
 def test_extract_falls_back_to_the_first_line_when_nothing_is_short() -> None:
     raw = "ovo je dugačak odgovor bez kratke linije\ni još jedna duga linija ovde"
     assert extract_answer(raw) == "ovo je dugačak odgovor bez kratke linije"
+
+
+# --- orthography: hyphen and word boundaries --------------------------------
+
+
+def test_normalize_keeps_an_intra_word_hyphen() -> None:
+    # Polusloženice are spelled with a hyphen; folding it to a space would make the
+    # wrong „kontakt osoba“ identical to the right „kontakt-osoba“.
+    assert normalize("Kontakt-osobu.") == "kontakt-osobu"
+
+
+def test_a_hyphen_is_not_the_same_as_a_space() -> None:
+    item = ClozeItem.model_validate(make_raw(answers=["kontakt-osobu"]))
+    assert is_correct("kontakt-osobu", item)
+    assert not is_correct("kontakt osobu", item)
+    assert not is_correct("kontaktosobu", item)
+
+
+def test_a_space_is_not_the_same_as_writing_together() -> None:
+    item = ClozeItem.model_validate(make_raw(answers=["ne znam"]))
+    assert is_correct("Ne znam.", item)
+    assert not is_correct("neznam", item)
+
+
+def test_a_dash_used_as_punctuation_is_still_stripped() -> None:
+    assert normalize("— bašti -") == "bašti"
+    assert normalize("bašti - odgovor") == "bašti odgovor"
