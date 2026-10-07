@@ -11,6 +11,11 @@ polusloženice 90%. GPT leg stopped at 7/120 (Kie 500s, low credits). Pravopis i
 with any give — see tasks/todo.md for the decision that is now open. Results:
 `results/triage-kie-probe/` in this worktree (gitignored).
 
+**Later the same day:** a source-checked pravopis set (`srb_pravopis_*`, 82 items) and a cue-free
+error-correction set (`srb_correction_*`, 90 items) were built and run on Opus via Kie. Both at
+ceiling (pravopis ~97.5% clean, correction 84/84 answered). Conclusion and open options in
+DECISIONS.md (last entries) and tasks/todo.md.
+
 Earlier context:
 
 serbeval works end-to-end against real models for the first time, and it is **correct but too

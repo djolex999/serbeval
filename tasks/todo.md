@@ -20,7 +20,9 @@ Session plan (2026-10-07, all probe items are CLOZE — MCQ is already at ceilin
 - [ ] Maintainer: judge „doviđenja“ (do viđenja item) against Pravopis 2010; verify polusloženice +
   sastavljeno-rastavljeno items (40) before building them out
 - [x] Built srb_pravopis (83 source-checked items) and ran Opus: ~97.5% clean → also ceiling
-- [ ] Next lever (open): (b) cue-free format — error detection/correction in running text — or
+- [x] Built srb_correction (cue-free, 90 items) and ran Opus: 84/84 answered correct → ceiling
+- [ ] Next (open): measure mid-tier/open models on the existing sets (needs a non-Kie endpoint), or a new construct (multi-error texts, register/style)
+- [ ] (superseded) Next lever: (b) cue-free format — error detection/correction in running text — or
   test whether current sets discriminate mid-tier/open models (needs a working non-Kie endpoint)
 - [ ] (superseded) Decide next lever, since phenomenon choice alone does not beat the ceiling: bigger, harder
   pravopis set (polusloženice with prefixoids foto-/auto-/radio-, adjective compounds) vs. format
