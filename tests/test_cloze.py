@@ -200,3 +200,23 @@ def test_cyrillic_tolerance_does_not_fold_diacritics() -> None:
     # „башти“ transliterates to „bašti“, never to „basti“.
     assert is_correct("башти", make_item()) is True
     assert is_correct("basti", make_item()) is False
+
+
+def test_extract_skips_a_leading_explanation_line() -> None:
+    # Opus via Kie twice answered "<reasoning line>\n\n<form>": the form was right but
+    # the first line was scored, so a correct answer counted as a miss.
+    assert extract_answer('"kroz" + accusative plural: sela.\n\nsela') == "sela"
+
+
+def test_extract_still_ignores_a_trailing_explanation() -> None:
+    assert extract_answer("bašti\n\nObjašnjenje: lokativ posle predloga u.") == "bašti"
+
+
+def test_extract_keeps_a_two_word_answer_after_an_explanation() -> None:
+    raw = 'Uprkos takes the dative case in Serbian, so "loše vreme" becomes:\n\nlošem vremenu'
+    assert extract_answer(raw) == "lošem vremenu"
+
+
+def test_extract_falls_back_to_the_first_line_when_nothing_is_short() -> None:
+    raw = "ovo je dugačak odgovor bez kratke linije\ni još jedna duga linija ovde"
+    assert extract_answer(raw) == "ovo je dugačak odgovor bez kratke linije"

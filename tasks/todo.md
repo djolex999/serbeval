@@ -129,7 +129,7 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh full` (~230 items/model; Opus ~10 min, GPT ~1.5 h)
 - [ ] Rotate the Kie key afterwards — it was pasted into the terminal and appears in run logs
 
-## IN PROGRESS (2026-10-07) — full Kie triage run
+## DONE (2026-10-07) — full Kie triage run
 - Started 02:28 CEST in background: `scripts/kie_triage.sh full` -> results/triage-kie/ (gitignored)
 - Opus 5.5 DONE: 228/230 (99%) — grammar 50/50, idioms 30/30, cyrillic 30/30, cloze 118/120
 - GPT 6.1 Sol running (~15-60 s/item); at 03:08 it was 85/230. If the session died, check
@@ -150,3 +150,7 @@ Opus 99% on Kie. Serbeval cannot currently separate strong models. Next = make i
 - Cheapest lever after that: synth with RARE lemmas (srLex frequency column)
 - Then adversarial filtering through two model families
 - Don't: remove the number hint from cues (makes items ambiguous, not harder); trick questions
+- RESULT: Opus 230/230, GPT 220/224 answered (98%) -> ceiling confirmed
+- [ ] Maintainer: judge the 4 review-queue items (see DECISIONS 2026-10-07); check Pravopis for kontakt-osoba
+- [ ] Rotate the Kie key (pasted in terminal, printed in run logs)
+- [ ] Optional: re-send the 6 unanswered GPT requests

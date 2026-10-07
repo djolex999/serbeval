@@ -37,24 +37,31 @@ def normalize(text: str) -> str:
     return " ".join(stripped.lower().split())
 
 
+# An answer is a word form or a short phrase ("lošem vremenu", "budeš stigao").
+_MAX_ANSWER_WORDS = 3
+
+
+def _clean(line: str) -> str:
+    return _PREFIXES.sub("", line.strip()).strip(_WRAPPERS)
+
+
 def extract_answer(raw: str) -> str:
     """Pull the produced form out of a model response.
 
-    Takes the first non-empty line — anything after it is commentary — then removes an
-    "Odgovor:"-style prefix and any wrapping quotes or brackets. Multi-word answers are
-    preserved, since case government on a phrase ("lošem vremenu") is a legitimate item.
+    Returns the first non-empty line that is short enough to be an answer, after
+    removing an "Odgovor:"-style prefix and wrapping quotes or brackets. That covers
+    both orders models use: "bašti⏎⏎Objašnjenje: …" (answer first) and
+    '"kroz" + accusative plural: sela.⏎⏎sela' (reasoning first, which Opus produced
+    twice through Kie and was scored wrong while answering correctly). If no line is
+    short enough, the first non-empty line is returned.
     """
-    if not raw:
+    lines = [cleaned for line in (raw or "").splitlines() if (cleaned := _clean(line))]
+    if not lines:
         return ""
-    for line in raw.splitlines():
-        candidate = line.strip()
-        if not candidate:
-            continue
-        candidate = _PREFIXES.sub("", candidate)
-        candidate = candidate.strip(_WRAPPERS)
-        if candidate:
-            return candidate
-    return ""
+    for line in lines:
+        if len(line.split()) <= _MAX_ANSWER_WORDS:
+            return line
+    return lines[0]
 
 
 def _comparable(text: str) -> str:

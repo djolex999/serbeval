@@ -102,7 +102,8 @@ def collect_misses(results_dir: str) -> list[Miss]:
                 )
                 response = _response(row)
                 entry.answers[model] = response
-                if not _correct(doc, response, row):
+                # No answer at all is a provider failure, not evidence about the item.
+                if response and not _correct(doc, response, row):
                     entry.missed_by += 1
 
     result = []
@@ -115,9 +116,36 @@ def collect_misses(results_dir: str) -> list[Miss]:
     return sorted(result, key=lambda m: (-m.missed_by / max(m.models, 1), m.task, m.item_id))
 
 
-def format_misses(misses: list[Miss]) -> str:
+def collect_unanswered(results_dir: str) -> list[tuple[str, str]]:
+    """(item id, model) for every request that came back with no answer at all.
+
+    On Kie, 6 of GPT's 10 apparent misses were requests the provider never answered.
+    They say nothing about the item, so they are reported apart from the review queue
+    — and are the ones to re-send.
+    """
+    out: list[tuple[str, str]] = []
+    for model, run_dir in _runs(Path(results_dir)).items():
+        for sample_file in sorted(run_dir.glob("samples_*.jsonl")):
+            for line in sample_file.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    row = json.loads(line)
+                    if not _response(row):
+                        out.append((str(row.get("doc", {}).get("id", "?")), model))
+    return sorted(out)
+
+
+def format_misses(
+    misses: list[Miss], unanswered: list[tuple[str, str]] | None = None
+) -> str:
+    footer = ""
+    if unanswered:
+        footer = (
+            f"\n{len(unanswered)} request(s) got no answer from the provider — not counted "
+            "as misses; re-send them:\n"
+            + "".join(f"    {model}: {item_id}\n" for item_id, model in unanswered)
+        )
     if not misses:
-        return "No misses: every model answered every item correctly.\n"
+        return "No misses: every model answered every item correctly.\n" + footer
     lines = [f"{len(misses)} item(s) missed by at least one model — check the ITEM first.\n"]
     for miss in misses:
         lines.append(f"{miss.item_id}   [{miss.task}]   missed by {miss.missed_by}/{miss.models}")
@@ -127,4 +155,4 @@ def format_misses(misses: list[Miss]) -> str:
             shown = answer.replace("\n", " ")[:60] or "(no readable answer)"
             lines.append(f"    {model}: {shown}")
         lines.append("")
-    return "\n".join(lines)
+    return "\n".join(lines) + footer

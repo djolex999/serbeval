@@ -276,9 +276,10 @@ def _cmd_balance(args: argparse.Namespace) -> int:
 
 def _cmd_triage(args: argparse.Namespace) -> int:
     """Review queue from triage runs: items some model missed, unanimous misses first."""
-    from serbeval.triage import collect_misses, format_misses
+    from serbeval.triage import collect_misses, collect_unanswered, format_misses
 
-    print(format_misses(collect_misses(args.results_dir)), end="")
+    misses = collect_misses(args.results_dir)
+    print(format_misses(misses, collect_unanswered(args.results_dir)), end="")
     return 0
 
 

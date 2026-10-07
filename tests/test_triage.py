@@ -85,3 +85,23 @@ def test_cloze_answers_are_rescored_with_the_current_rules(tmp_path: Path) -> No
 def test_a_genuinely_wrong_cloze_answer_is_still_a_miss(tmp_path: Path) -> None:
     write_model_run(tmp_path, "opus", {"srb_grammar_cloze": [(CLOZE, "nevremenu", 0.0)]})
     assert [m.item_id for m in collect_misses(str(tmp_path))] == ["c1"]
+
+
+def test_an_empty_response_is_a_provider_failure_not_an_item_miss(tmp_path: Path) -> None:
+    # On Kie, 6 of GPT's 10 "misses" were requests that never got an answer. Listing
+    # them as suspect items sends a reviewer to check items that are fine.
+    from serbeval.triage import collect_unanswered
+
+    write_model_run(tmp_path, "gpt", {"srb_grammar": [(MCQ, "", 0.0)]})
+    assert collect_misses(str(tmp_path)) == []
+    assert collect_unanswered(str(tmp_path)) == [("g1", "gpt")]
+
+
+def test_report_counts_provider_failures_separately(tmp_path: Path) -> None:
+    from serbeval.triage import collect_unanswered
+
+    rows = [(MCQ, "", 0.0), ({**MCQ, "id": "g2"}, "C", 0.0)]
+    write_model_run(tmp_path, "gpt", {"srb_grammar": rows})
+    out = format_misses(collect_misses(str(tmp_path)), collect_unanswered(str(tmp_path)))
+    assert "g2" in out
+    assert "1 request(s) got no answer" in out
