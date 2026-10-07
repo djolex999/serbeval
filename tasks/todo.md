@@ -128,3 +128,25 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 47. First real API run (Kie smoke): both models 18/18 after fixing Bearer auth, 200-wrapped 401s, empty Content-Type, venv path, Cyrillic scoring, and run-killing retries
 - [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh full` (~230 items/model; Opus ~10 min, GPT ~1.5 h)
 - [ ] Rotate the Kie key afterwards — it was pasted into the terminal and appears in run logs
+
+## IN PROGRESS (2026-10-07) — full Kie triage run
+- Started 02:28 CEST in background: `scripts/kie_triage.sh full` -> results/triage-kie/ (gitignored)
+- Opus 5.5 DONE: 228/230 (99%) — grammar 50/50, idioms 30/30, cyrillic 30/30, cloze 118/120
+- GPT 6.1 Sol running (~15-60 s/item); at 03:08 it was 85/230. If the session died, check
+  whether results/triage-kie/gpt-6-1-sol/**/results_*.json exists; if not, rerun ONLY gpt:
+  scripts/run_eval.py --model kie-responses --model_args model=gpt-6-1-sol,effort=low \
+    --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth \
+    --include_path lm_eval_tasks --output_path results/triage-kie/gpt-6-1-sol --log_samples --limit 50
+- When done: `serbeval triage --results-dir results/triage-kie` -> review queue; report both models' scores
+
+## KEY FINDING: benchmark is at ceiling for frontier models
+Opus 99% on Kie. Serbeval cannot currently separate strong models. Next = make it harder.
+
+## DEFERRED (maintainer decision 2026-10-07): difficulty probe set
+- 20 items x 5 candidate-hard phenomena -> Opus via Kie (cents) -> keep phenomena where Opus < ~90%:
+  ijekavian jat reflex (rijeka/rječnik), aorist & imperfect, sibilarization/palatalization
+  (junak->junaci, ruka->ruci), numeral+adjective+noun agreement (dva nova stola, 21 novi sto),
+  pravopis together/apart (ne znam / neznanje)
+- Cheapest lever after that: synth with RARE lemmas (srLex frequency column)
+- Then adversarial filtering through two model families
+- Don't: remove the number hint from cues (makes items ambiguous, not harder); trick questions
