@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 ANSWER_LETTERS = "ABCD"
 
@@ -98,3 +98,42 @@ class ClozeItem(BaseModel):
         if len(set(stripped)) != len(stripped):
             raise ValueError("answers must be unique")
         return answers
+
+
+class CorrectionItem(BaseModel):
+    """A sentence that may contain one error; the model returns it corrected or unchanged.
+
+    Unlike a cloze item there is no cue: the model is not told which word is under test,
+    or whether anything is wrong at all. Clean sentences (`has_error=False`) are part of
+    the set on purpose — without them a model could assume an error always exists, and
+    over-correction would go unmeasured.
+    """
+
+    id: str
+    task: str
+    category: str
+    text: str
+    answers: list[str] = Field(min_length=1)
+    has_error: bool
+    explanation: str
+    script: Script
+    difficulty: Difficulty | None = None
+    source: str
+    verified: bool = False
+    license: str = "CC-BY-4.0"
+
+    @field_validator("id", "task", "category", "text", "explanation", "source")
+    @classmethod
+    def _non_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("must not be blank")
+        return value
+
+    @model_validator(mode="after")
+    def _answers_match_has_error(self) -> "CorrectionItem":
+        unchanged = self.text.strip() in {a.strip() for a in self.answers}
+        if self.has_error and unchanged:
+            raise ValueError("an error item must not accept its own text as the correction")
+        if not self.has_error and not unchanged:
+            raise ValueError("a clean item must accept its own text unchanged")
+        return self

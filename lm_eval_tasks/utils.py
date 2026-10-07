@@ -114,3 +114,36 @@ def process_results_cloze(doc: dict, results: list[str]) -> dict:
         # An empty extraction is a response we could not read, not a wrong form.
         "unparsed": 0.0 if extract_answer(raw) else 1.0,
     }
+
+
+# --- srb_correction --------------------------------------------------------
+#
+# No cue: the model is not told which word is under test or whether anything is wrong.
+# The answer is marked with „Ispravljeno:“ so a model that reasons first still scores.
+
+
+def doc_to_text_correction(doc: dict) -> str:
+    return (
+        "Sledeća rečenica možda sadrži jednu pravopisnu grešku, a možda je potpuno "
+        "ispravna. Ako ima grešku, ispravi je i ne menjaj ništa drugo. Ako je ispravna, "
+        "prepiši je bez izmena.\n\n"
+        f"Rečenica: {doc['text']}\n\n"
+        "Odgovori jednim redom u obliku:\n"
+        "Ispravljeno: <rečenica>"
+    )
+
+
+def doc_to_target_correction(doc: dict) -> str:
+    return f"Ispravljeno: {doc['answers'][0]}"
+
+
+def process_results_correction(doc: dict, results: list[str]) -> dict:
+    from serbeval.correction import extract_correction, is_correct
+    from serbeval.schema import CorrectionItem
+
+    item = CorrectionItem.model_validate(doc)
+    raw = results[0] if results else ""
+    return {
+        "exact_match": 1.0 if is_correct(raw, item) else 0.0,
+        "unparsed": 0.0 if extract_correction(raw) else 1.0,
+    }

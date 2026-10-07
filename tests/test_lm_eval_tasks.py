@@ -212,3 +212,54 @@ def test_pravopis_tasks_load_with_source_checked_items() -> None:
         assert len(docs) >= 15, name
         assert {doc["task"] for doc in docs} == {"srb_pravopis"}
     assert "srb_pravopis" in tm.all_tags
+
+
+# --- srb_correction --------------------------------------------------------
+
+CORRECTION_DOC = {
+    "id": "srb-correction-razmak-crtica-0001", "task": "srb_correction",
+    "category": "razmak-crtica", "text": "Zapišite naš kontakt telefon.",
+    "answers": ["Zapišite naš kontakt-telefon."], "has_error": True,
+    "explanation": "Polusloženica.", "script": "latin", "source": "derived:x",
+}
+
+
+def test_correction_prompt_shows_the_sentence_but_not_whether_it_is_wrong() -> None:
+    prompt = utils.doc_to_text_correction(CORRECTION_DOC)
+    assert "Zapišite naš kontakt telefon." in prompt
+    assert "Ispravljeno:" in prompt
+    assert "kontakt-telefon" not in prompt
+    assert "Polusloženica" not in prompt
+
+
+def test_correction_scores_the_fixed_sentence() -> None:
+    assert utils.process_results_correction(
+        CORRECTION_DOC, ["Ispravljeno: Zapišite naš kontakt-telefon."]
+    ) == {"exact_match": 1.0, "unparsed": 0.0}
+    assert utils.process_results_correction(
+        CORRECTION_DOC, ["Ispravljeno: Zapišite naš kontakt telefon."]
+    ) == {"exact_match": 0.0, "unparsed": 0.0}
+
+
+def test_correction_empty_response_is_unparsed() -> None:
+    assert utils.process_results_correction(CORRECTION_DOC, [""]) == {
+        "exact_match": 0.0, "unparsed": 1.0,
+    }
+
+
+CORRECTION_TASKS = (
+    "srb_correction_razmak_crtica", "srb_correction_c_c", "srb_correction_ispravno",
+)
+
+
+@pytest.mark.slow
+def test_correction_tasks_load_with_thirty_items_each() -> None:
+    from lm_eval.tasks import TaskManager
+
+    tm = TaskManager(include_path=str(TASKS_DIR))
+    loaded = tm.load(list(CORRECTION_TASKS))["tasks"]
+    for name in CORRECTION_TASKS:
+        docs = list(loaded[name].test_docs())
+        assert len(docs) == 30, name
+        assert {doc["task"] for doc in docs} == {"srb_correction"}
+    assert "srb_correction" in tm.all_tags

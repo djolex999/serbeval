@@ -186,6 +186,72 @@ def _cmd_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+# Sentences for the c-ć errors and plain clean items. Hand-written or single-frame sets
+# only: mined sentences are web text that may carry errors of its own, and the bulk synth
+# set pairs frames with lemmas into odd sentences („Ušli smo u luke i seli“) that invite
+# a "correction" the scorer would count as wrong.
+_CORRECTION_CLOZE_POOL = (
+    "srb_grammar_cloze/items.jsonl",
+    "srb_probe/sibilarizacija.synth.jsonl",
+    "srb_probe/aorist-imperfekat.synth.jsonl",
+    "srb_probe/broj-pridev-imenica.jsonl",
+)
+# MCQ sets whose gold choice is often a full, hand-checked sentence.
+_CORRECTION_MCQ_POOL = ("srb_grammar/items.jsonl", "srb_idioms/items.jsonl")
+
+
+def _is_sentence(text: str) -> bool:
+    return len(text.split()) >= 4 and text[:1].isupper() and text.rstrip()[-1:] in ".!?"
+
+
+def _cmd_correction(args: argparse.Namespace) -> int:
+    """Derive the cue-free error-correction set from the source-checked cloze sets."""
+    from pathlib import Path
+
+    from serbeval.check import load_form_index
+    from serbeval.correction import SLUGS, Sentence, build_correction_set, fill
+    from serbeval.data import load_cloze_items, load_items
+
+    data = Path(args.data_dir)
+    pravopis = [
+        item
+        for path in sorted((data / "srb_pravopis").glob("*.jsonl"))
+        for item in load_cloze_items(path)
+    ]
+    pool = [
+        Sentence(fill(item, item.answers[0]), item.id, item.license)
+        for name in _CORRECTION_CLOZE_POOL
+        if (data / name).exists()
+        for item in load_cloze_items(data / name)
+    ]
+    pool += [
+        Sentence(gold, item.id, item.license)
+        for name in _CORRECTION_MCQ_POOL
+        if (data / name).exists()
+        for item in load_items(data / name)
+        if _is_sentence(gold := item.choices[item.answer_index])
+    ]
+    try:
+        known = load_form_index(args.index).forms
+        items = build_correction_set(
+            pravopis, pool, known=known, per_category=args.n, seed=args.seed
+        )
+    except (OSError, ValueError) as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    out = data / "srb_correction"
+    out.mkdir(parents=True, exist_ok=True)
+    for category, slug in SLUGS.items():
+        rows = [item for item in items if item.category == category]
+        path = out / f"{slug}.jsonl"
+        path.write_text(
+            "".join(row.model_dump_json() + "\n" for row in rows), encoding="utf-8"
+        )
+        print(f"OK: wrote {len(rows)} item(s) to {path}")
+    return 0
+
+
 def _cmd_index(args: argparse.Namespace) -> int:
     """Condense a full lexicon into the one column `check` needs."""
     from serbeval.check import forms_from_lexicon, write_form_index
@@ -444,6 +510,13 @@ def build_parser() -> argparse.ArgumentParser:
     probe.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")
     probe.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     probe.set_defaults(func=_cmd_probe)
+
+    correction = sub.add_parser("correction", help="derive the cue-free correction set")
+    correction.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    correction.add_argument("--index", default="data/forms.txt.gz", help="form index")
+    correction.add_argument("-n", type=int, default=30, help="items per category")
+    correction.add_argument("--seed", type=int, default=0)
+    correction.set_defaults(func=_cmd_correction)
 
     index = sub.add_parser("index", help="build the form index `check` uses")
     index.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")

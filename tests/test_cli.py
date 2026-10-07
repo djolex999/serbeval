@@ -1,3 +1,4 @@
+import gzip
 import json
 from pathlib import Path
 from unittest.mock import Mock
@@ -347,3 +348,36 @@ def test_probe_synth_writes_one_file_per_synthesised_phenomenon(
     assert [r["answers"] for r in sib_rows] == [["majci"]]
     assert [r["answers"] for r in aor_rows] == [["dođoh"]]
     assert "missing" in capsys.readouterr().out
+
+
+def test_correction_builds_one_file_per_category_from_the_data_dir(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    def row(i: int, task: str, question: str, cue: str, answer: str, cat: str) -> str:
+        return json.dumps({
+            "id": f"{task}-{i}", "task": task, "category": cat, "question": question,
+            "cue": cue, "answers": [answer], "explanation": "e", "script": "latin",
+            "source": "s",
+        }, ensure_ascii=False) + "\n"
+
+    data = tmp_path / "data"
+    (data / "srb_pravopis").mkdir(parents=True)
+    (data / "srb_pravopis" / "poluslozenice.jsonl").write_text("".join(
+        row(i, "srb_pravopis", f"Rečenica {i} ima ____.", "kontakt + osoba",
+            "kontakt-osobu", "poluslozenice") for i in range(6)), encoding="utf-8")
+    (data / "srb_grammar_cloze").mkdir()
+    (data / "srb_grammar_cloze" / "items.jsonl").write_text("".join(
+        row(i, "srb_grammar_cloze", f"{word} {i} je kod ____.", "reka", "reke", "padezi")
+        for i, word in enumerate(["Kuća", "Noć", "Ključ", "Čaša", "Ćebe", "Čamac"])),
+        encoding="utf-8")
+    index = tmp_path / "forms.txt.gz"
+    index.write_bytes(gzip.compress("kuća\nreke\n".encode()))
+
+    assert main([
+        "correction", "--data-dir", str(data), "--index", str(index), "-n", "2",
+    ]) == 0
+    out = data / "srb_correction"
+    assert sorted(p.name for p in out.glob("*.jsonl")) == [
+        "c-c.jsonl", "ispravno.jsonl", "razmak-crtica.jsonl",
+    ]
+    assert "OK" in capsys.readouterr().out

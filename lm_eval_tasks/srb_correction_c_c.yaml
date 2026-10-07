@@ -1,0 +1,29 @@
+# Cue-free error correction (2026-10-07): the model sees a sentence that may contain one
+# error and returns it corrected or unchanged. Derived from source-checked cloze items.
+task: srb_correction_c_c
+tag: srb_correction
+dataset_path: json
+dataset_kwargs:
+  data_files:
+    test: data/srb_correction/c-c.jsonl
+test_split: test
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_correction
+doc_to_target: !function utils.doc_to_target_correction
+process_results: !function utils.process_results_correction
+generation_kwargs:
+  # No "\n\n" stop: a model that explains first would be cut off before the answer line.
+  until:
+    - "\n\n\n"
+  max_gen_toks: 160
+  do_sample: false
+  temperature: 0.0
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+  - metric: unparsed
+    aggregation: mean
+    higher_is_better: false
+metadata:
+  version: 0.1
