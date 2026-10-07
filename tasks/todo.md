@@ -151,6 +151,8 @@ Opus 99% on Kie. Serbeval cannot currently separate strong models. Next = make i
 - Then adversarial filtering through two model families
 - Don't: remove the number hint from cues (makes items ambiguous, not harder); trick questions
 - RESULT: Opus 230/230, GPT 220/224 answered (98%) -> ceiling confirmed
-- [ ] Maintainer: judge the 4 review-queue items (see DECISIONS 2026-10-07); check Pravopis for kontakt-osoba
+- [ ] Maintainer: judge the remaining 3 review-queue items (kontakt-osoba confirmed correct, stays)
 - [ ] Rotate the Kie key (pasted in terminal, printed in run logs)
 - [ ] Optional: re-send the 6 unanswered GPT requests
+- [x] Human baseline: 29/30 (97%) on hand-written items; only miss was kontakt-osoba (gold confirmed correct)
+- Candidate hard phenomenon added: polusloženice with a hyphen (kontakt-osoba, spomen-ploča, radio-stanica)
