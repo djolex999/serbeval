@@ -99,3 +99,29 @@ def test_a_transient_failure_parses_as_an_unreadable_answer() -> None:
     assert AnthropicChatFixed.parse_generations(None, TRANSIENT_FAILURE) == [""]
     assert KieResponses.parse_generations(TRANSIENT_FAILURE) == [""]
     assert text_from_content([]) == ""
+
+
+def test_every_request_carries_a_timeout() -> None:
+    # Without one, a connection Kie accepts but never answers blocks the run forever:
+    # a correction run sat on request 52/90 for two hours with the socket ESTABLISHED.
+    seen: list[Any] = []
+
+    def post(url: str, **kwargs: Any) -> FakeResponse:
+        seen.append(kwargs.get("timeout"))
+        return FakeResponse(200, {"ok": True})
+
+    post_with_patience(post, "u", {}, {}, sleep=no_sleep)
+    assert seen and seen[0] is not None
+
+
+def test_a_request_that_times_out_is_retried_like_a_dropped_connection() -> None:
+    calls: list[int] = []
+
+    def post(url: str, **kwargs: Any) -> FakeResponse:
+        calls.append(1)
+        if len(calls) == 1:
+            raise requests.Timeout("read timed out")
+        return FakeResponse(200, {"ok": True})
+
+    assert post_with_patience(post, "u", {}, {}, sleep=no_sleep) == {"ok": True}
+    assert len(calls) == 2

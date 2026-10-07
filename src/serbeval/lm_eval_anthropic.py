@@ -116,6 +116,10 @@ TRANSIENT_FAILURE: dict[str, Any] = {"serbeval_transient_failure": True, "conten
 _TRANSIENT_STATUS = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
 PATIENT_ATTEMPTS = 8
 _MAX_WAIT = 60.0
+# (connect, read) seconds. Without a timeout, a connection the provider accepts but never
+# answers blocks forever — a Kie run once sat on one request for two hours. The read limit
+# is generous because Kie's GPT endpoint legitimately takes up to ~70 s.
+REQUEST_TIMEOUT = (15.0, 180.0)
 
 
 def post_with_patience(
@@ -140,7 +144,9 @@ def post_with_patience(
     wait = 2.0
     for attempt in range(1, attempts + 1):
         try:
-            response = post(url, json=payload, headers=headers, verify=verify)
+            response = post(
+                url, json=payload, headers=headers, verify=verify, timeout=REQUEST_TIMEOUT
+            )
         except (requests.ConnectionError, requests.Timeout) as exc:
             reason = f"connection: {exc}"
         else:
