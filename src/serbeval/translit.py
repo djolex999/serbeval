@@ -42,3 +42,16 @@ def latin_to_cyrillic(text: str) -> str:
             out.append(text[i])
             i += 1
     return "".join(out)
+
+
+# Cyrillic -> Latin is unambiguous: every Cyrillic letter has exactly one Latin spelling
+# (љ -> lj, њ -> nj, џ -> dž), so the morpheme-boundary caveat above does not apply.
+# The first pair listed for each Cyrillic letter is its canonical spelling.
+_REVERSE: dict[str, str] = {}
+for _latin, _cyr in _PAIRS:
+    _REVERSE.setdefault(_cyr, _latin)
+
+
+def cyrillic_to_latin(text: str) -> str:
+    """Transliterate Serbian Cyrillic to Latin; anything else passes through unchanged."""
+    return "".join(_REVERSE.get(ch, ch) for ch in text)

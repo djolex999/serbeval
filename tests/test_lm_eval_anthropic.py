@@ -280,3 +280,13 @@ def test_kie_without_a_kie_key_fails_clearly(monkeypatch: pytest.MonkeyPatch) ->
     monkeypatch.delenv("KIE_API_KEY", raising=False)
     with pytest.raises(ValueError, match="KIE_API_KEY"):
         resolve_api_key("https://api.kie.ai/claude/v1/messages")
+
+
+
+def test_first_party_anthropic_keeps_the_x_api_key_header(monkeypatch: pytest.MonkeyPatch) -> None:
+    from serbeval.lm_eval_anthropic import AnthropicChatFixed
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant")
+    model = AnthropicChatFixed(model="claude-opus-5")
+    assert model.header["x-api-key"] == "sk-ant"
+    assert "Authorization" not in model.header

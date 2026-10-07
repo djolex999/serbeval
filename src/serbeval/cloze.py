@@ -6,14 +6,18 @@ eliminate and no structural giveaway — at the cost of having to decide what co
 the same answer. This module is that decision, and it is deliberately strict:
 
 Serbian diacritics are NEVER folded. `č`/`ć`, `ž`, `š`, `đ` carry the orthography the
-benchmark is testing, so "kuca" is not "kuća" and "basti" is not "bašti". Only case,
-surrounding punctuation and whitespace are normalized away.
+benchmark is testing, so "kuca" is not "kuća" and "basti" is not "bašti". Case, surrounding
+punctuation and whitespace are normalized away, and so is script: a form written in
+Cyrillic is compared after transliteration, since this task measures morphology and
+script consistency has its own task.
 """
 
 import re
 import unicodedata
+from collections.abc import Sequence
 
 from serbeval.schema import ClozeItem
+from serbeval.translit import cyrillic_to_latin
 
 # Models comply with "answer with the form only" to varying degrees; these prefixes are
 # framing, not answer content.
@@ -53,9 +57,20 @@ def extract_answer(raw: str) -> str:
     return ""
 
 
-def is_correct(raw: str, item: ClozeItem) -> bool:
-    """True when the response matches any accepted form after normalization."""
-    produced = normalize(extract_answer(raw))
+def _comparable(text: str) -> str:
+    # Script is folded, diacritics are not: „рата“ and „rata“ are the same form, but
+    # „башти“ becomes „bašti“, never „basti“. Grammar is what this task measures;
+    # script consistency has its own task (srb_cyrillic_agreement).
+    return normalize(cyrillic_to_latin(text))
+
+
+def matches_any(raw: str, answers: Sequence[str]) -> bool:
+    """True when the response matches any accepted form, in either script."""
+    produced = _comparable(extract_answer(raw))
     if not produced:
         return False
-    return any(produced == normalize(answer) for answer in item.answers)
+    return any(produced == _comparable(answer) for answer in answers)
+
+
+def is_correct(raw: str, item: ClozeItem) -> bool:
+    return matches_any(raw, item.answers)

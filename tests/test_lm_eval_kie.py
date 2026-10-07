@@ -11,9 +11,9 @@ from serbeval.lm_eval_kie import build_responses_payload, text_from_responses
 def test_payload_uses_the_responses_shape() -> None:
     payload = build_responses_payload(messages="Koliko je 7 puta 8?", model="gpt-6-1-sol")
     assert payload["model"] == "gpt-6-1-sol"
-    assert payload["input"] == [
-        {"role": "user", "content": [{"type": "input_text", "text": "Koliko je 7 puta 8?"}]}
-    ]
+    # Plain-string content: the input_text-array form returned HTTP 500 twice in a row
+    # from Kie while every string-content request succeeded.
+    assert payload["input"] == [{"role": "user", "content": "Koliko je 7 puta 8?"}]
     assert "messages" not in payload
 
 
@@ -131,7 +131,10 @@ def test_both_adapters_construct_against_kie_without_network(
         base_url="https://api.kie.ai/claude/v1/messages",
         thinking="omit",
     )
-    assert opus.header["x-api-key"] == "kie-key"
+    # Kie's docs say X-Api-Key; the live endpoint rejects it with HTTP 200 + code 401
+    # and only accepts a Bearer token.
+    assert opus.header["Authorization"] == "Bearer kie-key"
+    assert "x-api-key" not in opus.header
 
 
 # --- end to end through the real lm_eval CLI, against a local mock of Kie ----
@@ -208,3 +211,40 @@ def test_both_kie_adapters_run_end_to_end_against_a_mock(tmp_path: object) -> No
     for path in results:
         unparsed = json.loads(path.read_text())["results"]["srb_cyrillic_agreement"]
         assert unparsed["unparsed,extract_answer"] == 0.0
+
+
+
+# --- error envelopes -------------------------------------------------------
+#
+# Kie answers an auth failure with HTTP 200 and {"code": 401, "msg": ...}. Parsed as
+# "no text", every item scored unparsed and a full paid run would have finished with
+# 0% and no error. Fatal account errors must stop the run instead.
+
+
+@pytest.mark.parametrize("code", [401, 402, 403])
+def test_fatal_envelopes_stop_the_run(code: int) -> None:
+    from serbeval.lm_eval_kie import check_envelope
+
+    with pytest.raises(RuntimeError, match=str(code)):
+        check_envelope({"code": code, "msg": "nope"})
+
+
+def test_a_normal_response_passes_the_envelope_check() -> None:
+    from serbeval.lm_eval_kie import check_envelope
+
+    check_envelope({"output": [], "status": "completed"})
+    check_envelope({"code": 200, "data": {"output": []}})
+
+
+def test_the_claude_adapter_also_stops_on_a_fatal_envelope() -> None:
+    from serbeval.lm_eval_anthropic import AnthropicChatFixed
+
+    with pytest.raises(RuntimeError, match="401"):
+        AnthropicChatFixed.parse_generations(None, {"code": 401, "msg": "Unauthorized"})
+
+
+def test_the_gpt_adapter_stops_on_a_fatal_envelope() -> None:
+    from serbeval.lm_eval_kie import KieResponses
+
+    with pytest.raises(RuntimeError, match="402"):
+        KieResponses.parse_generations({"code": 402, "msg": "insufficient credits"})

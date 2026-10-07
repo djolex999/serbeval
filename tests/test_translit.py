@@ -33,3 +33,34 @@ def test_full_sentence() -> None:
     assert (
         latin_to_cyrillic("Koji je glavni grad Srbije?") == "Који је главни град Србије?"
     )
+
+
+def test_cyrillic_to_latin_simple() -> None:
+    from serbeval.translit import cyrillic_to_latin
+
+    assert cyrillic_to_latin("рата") == "rata"
+
+
+def test_cyrillic_to_latin_expands_single_letters_to_digraphs() -> None:
+    from serbeval.translit import cyrillic_to_latin
+
+    assert cyrillic_to_latin("љубав њива џеп") == "ljubav njiva džep"
+
+
+def test_cyrillic_to_latin_keeps_diacritics() -> None:
+    from serbeval.translit import cyrillic_to_latin
+
+    assert cyrillic_to_latin("ђак ћерка шума жаба чаша") == "đak ćerka šuma žaba čaša"
+
+
+def test_cyrillic_to_latin_leaves_latin_and_punctuation_alone() -> None:
+    from serbeval.translit import cyrillic_to_latin
+
+    assert cyrillic_to_latin("bašti, рата.") == "bašti, rata."
+
+
+def test_round_trip_on_controlled_vocabulary() -> None:
+    from serbeval.translit import cyrillic_to_latin, latin_to_cyrillic
+
+    for word in ("nevremena", "ključem", "ljubav", "džep", "bašti", "Šuma"):
+        assert cyrillic_to_latin(latin_to_cyrillic(word)) == word

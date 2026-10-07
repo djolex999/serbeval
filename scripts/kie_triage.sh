@@ -18,7 +18,20 @@ esac
 : "${KIE_API_KEY:?set KIE_API_KEY (Kie dashboard -> API keys)}"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PY="${PYTHON:-$ROOT/.venv/bin/python}"
+# The venv may live above ROOT: inside a git worktree, ROOT is the worktree and the
+# venv belongs to the main checkout. Walk up until one is found.
+find_python() {
+  [ -n "${PYTHON:-}" ] && { echo "$PYTHON"; return; }
+  local dir="$ROOT"
+  while [ "$dir" != "/" ]; do
+    [ -x "$dir/.venv/bin/python" ] && { echo "$dir/.venv/bin/python"; return; }
+    dir="$(dirname "$dir")"
+  done
+  echo "no .venv found above $ROOT; set PYTHON=/path/to/python" >&2; exit 1
+}
+PY="$(find_python)"
+# Run against THIS checkout's code even if the venv's editable install points elsewhere.
+export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 OUT="$ROOT/results/triage-kie"
 TASKS=srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth
 cd "$ROOT"
@@ -34,6 +47,9 @@ EST
   [ "$ok" = y ] || { echo "aborted"; exit 1; }
 fi
 
+# Requests are sent one at a time on purpose. With num_concurrent > 1 lm-eval switches
+# to aiohttp, which rejects Kie's JSON because Kie sends it with an EMPTY Content-Type
+# ("unexpected mimetype"), and Kie answers 429 at just 4 parallel requests anyway.
 echo "== claude-opus-5-5 =="
 "$PY" scripts/run_eval.py --model anthropic-chat-fixed \
   --model_args "model=claude-opus-5-5,thinking=omit,effort=low,base_url=https://api.kie.ai/claude/v1/messages" \

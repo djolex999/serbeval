@@ -72,3 +72,16 @@ def test_report_flags_unanimous_misses_as_suspect_items(tmp_path: Path) -> None:
 def test_report_on_a_clean_run_says_so(tmp_path: Path) -> None:
     write_model_run(tmp_path, "opus", {"srb_grammar": [(MCQ, "B", 1.0)]})
     assert "No misses" in format_misses(collect_misses(str(tmp_path)))
+
+
+def test_cloze_answers_are_rescored_with_the_current_rules(tmp_path: Path) -> None:
+    # A run records exact_match under the scoring rules of its day. When a scoring bug
+    # is fixed (e.g. Cyrillic answers to Latin items), triage must not keep flagging
+    # items as missed on stale verdicts — or keep charging for re-runs to clear them.
+    write_model_run(tmp_path, "opus", {"srb_grammar_cloze": [(CLOZE, "невремена", 0.0)]})
+    assert collect_misses(str(tmp_path)) == []
+
+
+def test_a_genuinely_wrong_cloze_answer_is_still_a_miss(tmp_path: Path) -> None:
+    write_model_run(tmp_path, "opus", {"srb_grammar_cloze": [(CLOZE, "nevremenu", 0.0)]})
+    assert [m.item_id for m in collect_misses(str(tmp_path))] == ["c1"]

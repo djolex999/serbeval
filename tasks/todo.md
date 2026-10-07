@@ -125,3 +125,6 @@ Status at end of autonomous build: [HANDOFF.md](../HANDOFF.md)
 - [x] 45. `serbeval triage` + scripts/kie_triage.sh (smoke / full, budget printed, confirm before full)
 - [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh smoke`, then `full`, then review the queue
 - [x] 46. Position bias removed: gold letters balanced in all three MCQ sets; build-failing guard test
+- [x] 47. First real API run (Kie smoke): both models 18/18 after fixing Bearer auth, 200-wrapped 401s, empty Content-Type, venv path, Cyrillic scoring, and run-killing retries
+- [ ] Maintainer: `KIE_API_KEY=... scripts/kie_triage.sh full` (~230 items/model; Opus ~10 min, GPT ~1.5 h)
+- [ ] Rotate the Kie key afterwards — it was pasted into the terminal and appears in run logs

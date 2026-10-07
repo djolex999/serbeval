@@ -16,13 +16,22 @@ Credentials come only from KIE_API_KEY. The parent class reads OPENAI_API_KEY, a
 real OpenAI key has no business being sent to a reseller.
 """
 
+import copy
 import os
 from typing import Any
 
+import requests
 from lm_eval.api.registry import register_model
 from lm_eval.models.openai_completions import LocalChatCompletion
 
-from serbeval.lm_eval_anthropic import Messages, normalize_messages
+from serbeval.lm_eval_anthropic import (
+    Messages,
+    check_envelope,
+    normalize_messages,
+    post_with_patience,
+)
+
+__all__ = ["KieResponses", "build_responses_payload", "check_envelope", "text_from_responses"]
 
 KIE_RESPONSES_URL = "https://api.kie.ai/codex/v1/responses"
 EFFORTS = ("low", "medium", "high", "xhigh")
@@ -50,10 +59,9 @@ def build_responses_payload(
         turns = [{"role": "system", "content": system}, *turns]
     return {
         "model": model,
-        "input": [
-            {"role": t["role"], "content": [{"type": "input_text", "text": str(t["content"])}]}
-            for t in turns
-        ],
+        # Plain-string content. The input_text-array form got HTTP 500 from Kie twice in
+        # a row while every string-content request succeeded.
+        "input": [{"role": t["role"], "content": str(t["content"])} for t in turns],
         "stream": False,
         "reasoning": {"effort": effort},
     }
@@ -93,6 +101,21 @@ class KieResponses(LocalChatCompletion):  # type: ignore[misc]  # lm_eval ships 
     def api_key(self) -> str:
         return self._resolved_key
 
+    def model_call(
+        self,
+        messages: Any,
+        *,
+        generate: bool = True,
+        gen_kwargs: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        payload = self._create_payload(
+            self.create_message(messages), generate=generate, gen_kwargs=copy.deepcopy(gen_kwargs)
+        )
+        return post_with_patience(
+            requests.post, self.base_url, payload, self.header, verify=self.verify_certificate
+        )
+
     @property
     def header(self) -> dict[str, str]:
         return {"Authorization": f"Bearer {self._resolved_key}"}
@@ -113,4 +136,6 @@ class KieResponses(LocalChatCompletion):  # type: ignore[misc]  # lm_eval ships 
     ) -> list[str]:
         if not isinstance(outputs, list):
             outputs = [outputs]
+        for out in outputs:
+            check_envelope(out)
         return [text_from_responses(out) for out in outputs]

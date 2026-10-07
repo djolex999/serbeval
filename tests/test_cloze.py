@@ -181,3 +181,22 @@ def test_validate_cloze_flags_a_repeated_question_and_cue() -> None:
         make_item(id="b", cue="nevreme", answers=["nevremenu"]),
     ]
     assert any("duplicate question and cue" in p for p in validate_cloze_dataset(items))
+
+
+def test_a_correct_form_written_in_cyrillic_scores_correct() -> None:
+    # Opus answered a Latin cloze item with „рата“ — the right genitive, in the other
+    # script. This task measures case morphology; script consistency is measured by
+    # srb_cyrillic_agreement. Penalising it here would mark correct grammar wrong.
+    item = make_item(cue="rat, jednina", answers=["rata"])
+    assert is_correct("рата", item) is True
+
+
+def test_a_wrong_form_in_cyrillic_is_still_wrong() -> None:
+    item = make_item(cue="rat, jednina", answers=["rata"])
+    assert is_correct("рату", item) is False
+
+
+def test_cyrillic_tolerance_does_not_fold_diacritics() -> None:
+    # „башти“ transliterates to „bašti“, never to „basti“.
+    assert is_correct("башти", make_item()) is True
+    assert is_correct("basti", make_item()) is False

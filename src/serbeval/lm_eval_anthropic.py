@@ -29,10 +29,15 @@ Whenever thinking is on, `max_tokens` is raised to at least `THINKING_MIN_TOKENS
 caps are sized for a bare answer, and reasoning is billed out of the same budget.
 """
 
+import copy
+import logging
 import os
+import time
+from collections.abc import Callable
 from typing import Any
 from urllib.parse import urlparse
 
+import requests
 from lm_eval.api.registry import register_model
 from lm_eval.models.anthropic_llms import AnthropicChat
 
@@ -101,6 +106,78 @@ def resolve_api_key(base_url: str) -> str:
     if not key:
         raise ValueError("ANTHROPIC_API_KEY is not set")
     return key
+
+
+log = logging.getLogger(__name__)
+
+# Returned in place of a response body when a request keeps failing transiently. It
+# parses as "no text", so that ONE item scores `unparsed` and the run carries on.
+TRANSIENT_FAILURE: dict[str, Any] = {"serbeval_transient_failure": True, "content": []}
+_TRANSIENT_STATUS = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
+PATIENT_ATTEMPTS = 8
+_MAX_WAIT = 60.0
+
+
+def post_with_patience(
+    post: Callable[..., Any],
+    url: str,
+    payload: dict[str, Any],
+    headers: dict[str, str],
+    *,
+    attempts: int = PATIENT_ATTEMPTS,
+    sleep: Callable[[float], None] = time.sleep,
+    verify: bool = True,
+) -> dict[str, Any]:
+    """POST with a long backoff on transient failures; never let one item end the run.
+
+    lm-eval's own retry gives up after ~35 s and then raises, which aborts the whole
+    task: on Kie, one request hitting a streak of 500s threw away 17 answers already
+    collected. Here 5xx, 429 and dropped connections back off up to a minute between
+    tries, and if they never clear, TRANSIENT_FAILURE is returned so that item scores
+    `unparsed` — visible in the report — while everything else is kept. Other 4xx
+    (bad request, bad credentials) raise at once: they fail the same way every time.
+    """
+    wait = 2.0
+    for attempt in range(1, attempts + 1):
+        try:
+            response = post(url, json=payload, headers=headers, verify=verify)
+        except (requests.ConnectionError, requests.Timeout) as exc:
+            reason = f"connection: {exc}"
+        else:
+            if response.ok:
+                body: dict[str, Any] = response.json()
+                return body
+            if response.status_code not in _TRANSIENT_STATUS:
+                response.raise_for_status()
+            reason = f"HTTP {response.status_code}: {response.text[:200]}"
+        if attempt == attempts:
+            log.warning("giving up on one item after %d attempts (%s)", attempts, reason)
+            return copy.deepcopy(TRANSIENT_FAILURE)
+        log.warning("transient failure, retry %d/%d in %.0fs (%s)", attempt, attempts, wait, reason)
+        sleep(wait)
+        wait = min(wait * 2, _MAX_WAIT)
+    return copy.deepcopy(TRANSIENT_FAILURE)
+
+
+# Account-level failures. Kie reports them with HTTP 200 and an error envelope, so
+# lm-eval's HTTP retry logic never sees them.
+_FATAL_ENVELOPE_CODES = frozenset({401, 402, 403})
+
+
+def check_envelope(response: dict[str, Any]) -> None:
+    """Stop the run on an auth or billing failure disguised as a successful response.
+
+    Kie answered a wrong auth header with HTTP 200 and {"code": 401, "msg": ...}. Read as
+    "no text", every item scored unparsed and a full paid run would have ended at 0%
+    without a single error. Other envelope codes still degrade to unparsed per item.
+    """
+    code = response.get("code")
+    if isinstance(code, int) and code in _FATAL_ENVELOPE_CODES:
+        raise RuntimeError(f"provider returned {code}: {response.get('msg', '')}")
+
+
+def _is_kie(base_url: str) -> bool:
+    return (urlparse(base_url).hostname or "").endswith("kie.ai")
 
 
 def build_payload(
@@ -180,8 +257,30 @@ class AnthropicChatFixed(AnthropicChat):  # type: ignore[misc]  # lm_eval ships 
     def api_key(self) -> str:
         return self._resolved_key
 
+    def model_call(
+        self,
+        messages: Any,
+        *,
+        generate: bool = True,
+        gen_kwargs: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        payload = self._create_payload(
+            self.create_message(messages), generate=generate, gen_kwargs=copy.deepcopy(gen_kwargs)
+        )
+        return post_with_patience(
+            requests.post, self.base_url, payload, self.header, verify=self.verify_certificate
+        )
+
     @property
     def header(self) -> dict[str, str]:
+        if _is_kie(self.base_url):
+            # Kie's docs say X-Api-Key; the live endpoint rejects it (HTTP 200, code 401)
+            # and accepts only a Bearer token.
+            return {
+                "Authorization": f"Bearer {self._resolved_key}",
+                "anthropic-version": self.anthropic_version,
+            }
         return {"x-api-key": self._resolved_key, "anthropic-version": self.anthropic_version}
 
     def _create_payload(
@@ -217,4 +316,6 @@ class AnthropicChatFixed(AnthropicChat):  # type: ignore[misc]  # lm_eval ships 
     ) -> list[str]:
         if not isinstance(outputs, list):
             outputs = [outputs]
+        for out in outputs:
+            check_envelope(out)
         return [text_from_content(out.get("content", [])) for out in outputs]
