@@ -11,6 +11,7 @@ from serbeval.report import (
     load_run,
     load_runs,
     rankable,
+    rescore_table,
     stat_by,
     task_stat,
     wilson_interval,
@@ -372,3 +373,81 @@ def test_load_runs_ignores_runs_without_logged_samples(tmp_path: Path) -> None:
 
 def test_load_runs_on_a_missing_directory_is_empty(tmp_path: Path) -> None:
     assert load_runs(str(tmp_path / "nope")) == []
+
+
+# --- re-scoring with the current rules -------------------------------------
+
+CLOZE_DOC: dict[str, object] = {
+    "id": "c1",
+    "task": "srb_grammar_cloze",
+    "category": "padezi",
+    "question": "Otkazali su izlet zbog ____.",
+    "cue": "nevreme, jednina",
+    "answers": ["nevremena"],
+    "script": "latin",
+    "difficulty": "medium",
+}
+
+
+def write_raw_run(root: Path, task: str, rows: list[tuple[dict[str, object], str, float]]) -> Path:
+    """A run whose per-sample rows carry the raw response, as lm-eval writes them."""
+    run_dir = root / "opus" / "claude-opus-5-5"
+    run_dir.mkdir(parents=True)
+    recorded = sum(c for _, _, c in rows) / len(rows)
+    (run_dir / "results_2026-10-07T00-00-00.json").write_text(
+        json.dumps(
+            {
+                "results": {task: {"exact_match,none": recorded, "exact_match_stderr,none": 0.05}},
+                "config": {"model_args": "model=claude-opus-5-5"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    with open(run_dir / f"samples_{task}_2026-10-07T00-00-00.jsonl", "w", encoding="utf-8") as fh:
+        for i, (item, response, correct) in enumerate(rows):
+            row = {"doc_id": i, "doc": item, "resps": [[response]], "exact_match": correct}
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    return root
+
+
+def test_cloze_samples_are_rescored_with_the_current_rules(tmp_path: Path) -> None:
+    # Recorded 0.0 under an older rule that did not fold script; today the Cyrillic
+    # form of the right answer counts. report must agree with triage on this.
+    write_raw_run(tmp_path, "srb_grammar_cloze", [(CLOZE_DOC, "невремена", 0.0)])
+    (run,) = load_runs(str(tmp_path))
+    assert task_stat(run, "srb_grammar_cloze").correct == 1
+
+
+def test_a_wrong_cloze_answer_stays_wrong_after_rescoring(tmp_path: Path) -> None:
+    write_raw_run(tmp_path, "srb_grammar_cloze", [(CLOZE_DOC, "nevremenu", 1.0)])
+    (run,) = load_runs(str(tmp_path))
+    assert task_stat(run, "srb_grammar_cloze").correct == 0
+
+
+def test_mcq_samples_keep_their_recorded_verdict(tmp_path: Path) -> None:
+    write_raw_run(tmp_path, "srb_grammar", [(doc(answer_index=1), "B", 1.0)])
+    (run,) = load_runs(str(tmp_path))
+    assert task_stat(run, "srb_grammar").correct == 1
+
+
+def test_table_exact_match_follows_the_rescored_samples(tmp_path: Path) -> None:
+    write_raw_run(
+        tmp_path,
+        "srb_grammar_cloze",
+        [(CLOZE_DOC, "невремена", 0.0), ({**CLOZE_DOC, "id": "c2"}, "nevremena", 1.0)],
+    )
+    runs, _ = collect_results(str(tmp_path))
+    rescored, notes = rescore_table(runs, load_runs(str(tmp_path)))
+    (cloze,) = rescored
+    value, stderr = cloze.metrics["exact_match"]
+    assert value == 1.0
+    assert stderr == 0.0
+    assert notes == ["claude-opus-5-5 / srb_grammar_cloze: exact_match 0.500 -> 1.000"]
+
+
+def test_table_is_untouched_when_rescoring_changes_nothing(tmp_path: Path) -> None:
+    write_raw_run(tmp_path, "srb_grammar_cloze", [(CLOZE_DOC, "nevremena", 1.0)])
+    runs, _ = collect_results(str(tmp_path))
+    rescored, notes = rescore_table(runs, load_runs(str(tmp_path)))
+    assert rescored[0].metrics["exact_match"] == (1.0, 0.05)
+    assert notes == []

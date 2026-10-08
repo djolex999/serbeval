@@ -15,6 +15,12 @@ that the normal interval produces bounds outside [0, 1] and badly wrong coverage
 
 The per-sample rows carry the whole item as ``doc``, so script, difficulty and category
 breakdowns need no join back to the dataset files.
+
+Cloze samples are re-scored with today's rules rather than trusting the ``exact_match`` a run
+recorded: a run stores the verdict of the scoring code it ran with, so a later scoring fix
+(Cyrillic answers to Latin items, answers after a reasoning line) would otherwise leave the
+report quoting stale numbers while `serbeval triage` — which re-scores the same way — shows
+the corrected ones. When per-sample logs exist, the table's ``exact_match`` follows them too.
 """
 
 import json
@@ -24,6 +30,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from math import sqrt
 from pathlib import Path
+
+from serbeval.cloze import matches_any
 
 # lm-eval adapter names that show up in config["model"] / results dirs — never
 # a real model label, so fall through to the directory name instead
@@ -145,6 +153,28 @@ def format_markdown(runs: list[RunResult]) -> str:
     return "\n".join(lines)
 
 
+def sample_response(row: dict[str, object]) -> str:
+    """The raw model response of one per-sample row, or "" when the provider gave none."""
+    resps = row.get("resps")
+    if isinstance(resps, list) and resps and isinstance(resps[0], list) and resps[0]:
+        return str(resps[0][0]).strip()
+    return ""
+
+
+def sample_correct(row: dict[str, object]) -> float:
+    """Verdict for one per-sample row under the CURRENT scoring rules.
+
+    Cloze rows are re-scored from the raw response; MCQ letter extraction has not
+    changed since the first run, so its recorded verdict stands.
+    """
+    doc = row.get("doc")
+    answers = doc.get("answers") if isinstance(doc, dict) else None
+    if isinstance(answers, list):
+        return 1.0 if matches_any(sample_response(row), [str(a) for a in answers]) else 0.0
+    recorded = row.get("exact_match", 0.0)
+    return float(recorded) if isinstance(recorded, int | float) else 0.0
+
+
 # 1.96 => 95%. Fixed rather than configurable: the report's job is one honest default.
 Z = 1.96
 # Below this many items an accuracy estimate is too wide to mean anything.
@@ -223,7 +253,7 @@ def load_run(path: Path | str) -> ModelRun:
                 if not line.strip():
                     continue
                 row = json.loads(line)
-                rows.append((row["doc"], float(row.get("exact_match", 0.0))))
+                rows.append((row["doc"], sample_correct(row)))
         samples[task] = rows
 
     return ModelRun(name=root.name, samples=samples, pair_agreement=pair_agreement)
@@ -260,6 +290,45 @@ def load_runs(results_dir: str) -> list[ModelRun]:
         name = _model_name(config if isinstance(config, dict) else {}, fallback=fallback)
         runs.append(ModelRun(name=name, samples=run.samples, pair_agreement=run.pair_agreement))
     return runs
+
+
+def _mean_stderr(values: Sequence[float]) -> float | None:
+    """Standard error of the mean, computed the way lm-eval does (sample stddev / sqrt n)."""
+    n = len(values)
+    if n < 2:
+        return None
+    mean = sum(values) / n
+    variance = sum((v - mean) ** 2 for v in values) / (n - 1)
+    return sqrt(variance) / sqrt(n)
+
+
+def rescore_table(
+    runs: Sequence[RunResult], sampled: Sequence[ModelRun]
+) -> tuple[list[RunResult], list[str]]:
+    """Replace the table's exact_match wherever re-scored samples say otherwise.
+
+    Returns the updated rows and one note per changed cell, so the report says out loud
+    which numbers differ from the results file lm-eval wrote.
+    """
+    by_name = {run.name: run for run in sampled}
+    out: list[RunResult] = []
+    notes: list[str] = []
+    for run in runs:
+        recorded = run.metrics.get("exact_match")
+        model_run = by_name.get(run.model)
+        rows = model_run.samples.get(run.task) if model_run else None
+        if recorded is None or not rows:
+            out.append(run)
+            continue
+        values = [correct for _, correct in rows]
+        value = sum(values) / len(values)
+        if abs(value - recorded[0]) < 1e-9:
+            out.append(run)
+            continue
+        metrics = {**run.metrics, "exact_match": (value, _mean_stderr(values))}
+        out.append(RunResult(model=run.model, task=run.task, source=run.source, metrics=metrics))
+        notes.append(f"{run.model} / {run.task}: exact_match {recorded[0]:.3f} -> {value:.3f}")
+    return out, notes
 
 
 def task_stat(run: ModelRun, task: str) -> Stat:

@@ -14,8 +14,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from serbeval.cloze import matches_any
-from serbeval.report import _model_name
+from serbeval.report import _model_name, sample_correct, sample_response
 from serbeval.schema import ANSWER_LETTERS
 
 
@@ -36,27 +35,6 @@ def _gold(doc: dict[str, object]) -> str:
         return " / ".join(str(a) for a in answers)
     index = doc.get("answer_index")
     return ANSWER_LETTERS[index] if isinstance(index, int) else "?"
-
-
-def _response(row: dict[str, object]) -> str:
-    resps = row.get("resps")
-    if isinstance(resps, list) and resps and isinstance(resps[0], list) and resps[0]:
-        return str(resps[0][0]).strip()
-    return ""
-
-
-def _correct(doc: dict[str, object], response: str, row: dict[str, object]) -> bool:
-    """Re-score cloze answers with today's rules; trust the recorded verdict for MCQ.
-
-    A run stores exact_match under the scoring rules of its day. Re-scoring cloze here
-    means a fixed scoring bug (such as Cyrillic answers to Latin items) clears stale
-    misses without paying for another run. MCQ letter extraction has not changed, so
-    its recorded verdict stands.
-    """
-    answers = doc.get("answers")
-    if isinstance(answers, list):
-        return matches_any(response, [str(a) for a in answers])
-    return float(row.get("exact_match", 0.0)) >= 1.0  # type: ignore[arg-type]
 
 
 def _runs(root: Path) -> dict[str, Path]:
@@ -100,10 +78,10 @@ def collect_misses(results_dir: str) -> list[Miss]:
                         models=0,
                     ),
                 )
-                response = _response(row)
+                response = sample_response(row)
                 entry.answers[model] = response
                 # No answer at all is a provider failure, not evidence about the item.
-                if response and not _correct(doc, response, row):
+                if response and sample_correct(row) < 1.0:
                     entry.missed_by += 1
 
     result = []
@@ -129,7 +107,7 @@ def collect_unanswered(results_dir: str) -> list[tuple[str, str]]:
             for line in sample_file.read_text(encoding="utf-8").splitlines():
                 if line.strip():
                     row = json.loads(line)
-                    if not _response(row):
+                    if not sample_response(row):
                         out.append((str(row.get("doc", {}).get("id", "?")), model))
     return sorted(out)
 

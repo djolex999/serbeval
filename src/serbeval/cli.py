@@ -564,14 +564,24 @@ def _cmd_report(args: argparse.Namespace) -> int:
     The table alone invites ranking models that the item count cannot separate, so any run
     with `--log_samples` also gets confidence intervals and an explicit rankability verdict.
     """
-    from serbeval.report import collect_results, format_analysis, format_markdown, load_runs
+    from serbeval.report import (
+        collect_results,
+        format_analysis,
+        format_markdown,
+        load_runs,
+        rescore_table,
+    )
 
     runs, warnings = collect_results(args.results_dir)
     for warning in warnings:
         print(f"WARNING: {warning}")
 
-    text = format_markdown(runs)
     sampled = load_runs(args.results_dir)
+    runs, rescored = rescore_table(runs, sampled)
+    text = format_markdown(runs)
+    if rescored:
+        text += "\n\nRe-scored from per-sample logs with the current cloze rules:\n"
+        text += "".join(f"  {note}\n" for note in rescored)
     if sampled:
         text += "\n" + format_analysis(sampled)
     elif runs:
