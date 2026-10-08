@@ -148,3 +148,63 @@ def test_selection_takes_all_core_items_then_tops_up_with_unverified_others() ->
     assert len(picked) == 8
     assert all(not p.verified for p in picked)
     assert len({p.id for p in picked}) == 8
+
+
+# --- HTML worksheet ------------------------------------------------------------------
+
+import json  # noqa: E402
+import re  # noqa: E402
+import shutil  # noqa: E402
+import subprocess  # noqa: E402
+
+from serbeval.verify import build_verification_html  # noqa: E402
+
+
+def _embedded_items(html: str) -> list[dict[str, object]]:
+    match = re.search(r'<script type="application/json" id="items">(.*?)</script>', html, re.S)
+    assert match, "items JSON block missing"
+    return json.loads(match.group(1))  # type: ignore[no-any-return]
+
+
+def test_html_embeds_every_item_with_its_gold() -> None:
+    html = build_verification_html([cloze(), mcq()], title="provera-test")
+    items = _embedded_items(html)
+    assert [i["id"] for i in items] == ["srb-probe-jat-0003", "srb-grammar-padezi-0007"]
+    assert items[0]["gold"] == ["vremena"]
+    assert items[1]["gold"] == ["A"] and items[1]["choices"][0] == "Idem u baštu."
+    assert "<title>provera-test</title>" in html
+
+
+def test_html_cannot_be_broken_out_of_by_item_text() -> None:
+    nasty = cloze(question="Pazi </script><b>____</b> ovde.")
+    html = build_verification_html([nasty], title="t")
+    assert "</script><b>" not in html
+    assert _embedded_items(html)[0]["question"] == "Pazi </script><b>____</b> ovde."
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_the_page_export_is_read_back_by_the_python_parser() -> None:
+    # The browser's download must be exactly what `verify --apply` reads; run the page's
+    # own serializer in node and parse its output with the real parser.
+    html = build_verification_html(
+        [cloze(id=f"srb-probe-jat-{i:04d}") for i in range(1, 6)], title="t"
+    )
+    logic = re.search(r"/\* LOGIC-START \*/(.*?)/\* LOGIC-END \*/", html, re.S)
+    assert logic, "pure logic block missing"
+    program = logic.group(1) + """
+const items = [1,2,3,4,5].map(i => ({id: "srb-probe-jat-000" + i}));
+const marks = {
+  "srb-probe-jat-0001": {kind: "ok"},
+  "srb-probe-jat-0002": {kind: "fix", value: "vrijemena / vremena"},
+  "srb-probe-jat-0003": {kind: "add", value: "vremenâ"},
+  "srb-probe-jat-0004": {kind: "unsure"},
+};
+process.stdout.write(serializeMarks(items, marks));
+"""
+    out = subprocess.run(["node", "-e", program], capture_output=True, text=True, check=True)
+    assert parse_verification_sheet(out.stdout) == {
+        "srb-probe-jat-0001": Verdict("ok"),
+        "srb-probe-jat-0002": Verdict("fix", "vrijemena / vremena"),
+        "srb-probe-jat-0003": Verdict("add", "vremenâ"),
+        "srb-probe-jat-0004": Verdict("unsure"),
+    }

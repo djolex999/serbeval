@@ -271,6 +271,7 @@ def _cmd_verify(args: argparse.Namespace) -> int:
 
     from serbeval.verify import (
         apply_verdict,
+        build_verification_html,
         build_verification_sheet,
         parse_verification_sheet,
         select_for_verification,
@@ -288,6 +289,10 @@ def _cmd_verify(args: argparse.Namespace) -> int:
         items = select_for_verification(core, _load_pool(str(data)), n=args.n, seed=args.seed)
         Path(args.out).write_text(build_verification_sheet(items), encoding="utf-8")
         print(f"OK: {len(items)} item(s) -> {args.out}")
+        if args.html:
+            title = Path(args.out).stem
+            Path(args.html).write_text(build_verification_html(items, title=title), encoding="utf-8")
+            print(f"OK: same items as a page -> {args.html} (its download goes to --apply)")
         print("     upiši oznake na PROVERA linije, pa: serbeval verify --apply " + args.out)
         return 0
 
@@ -615,6 +620,7 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("-n", type=int, default=250, help="items on the sheet")
     verify.add_argument("--seed", type=int, default=0)
     verify.add_argument("--out", default="provera.txt")
+    verify.add_argument("--html", default=None, help="also write the sheet as an HTML page")
     verify.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     verify.set_defaults(func=_cmd_verify)
 

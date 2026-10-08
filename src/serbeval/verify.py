@@ -163,3 +163,10 @@ def apply_verdict(item: Item, verdict: Verdict) -> Item | None:
                                                                    if f not in item.answers)]
     # Re-validate: answers must stay non-blank and unique.
     return ClozeItem.model_validate({**item.model_dump(), "answers": answers, "verified": True})
+
+
+def build_verification_html(items: Sequence[Item], *, title: str) -> str:
+    """The same worksheet as a single offline HTML page; its download feeds `--apply`."""
+    from serbeval.verify_page import build_verification_html as build
+
+    return build(items, title=title)
