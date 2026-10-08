@@ -1,0 +1,1633 @@
+{
+  "results": {
+    "srb_grammar": {
+      "name": "srb_grammar",
+      "alias": "srb_grammar",
+      "sample_len": 50,
+      "exact_match,extract_answer": 0.8,
+      "exact_match_stderr,extract_answer": 0.057142857142857134,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0
+    },
+    "srb_idioms": {
+      "name": "srb_idioms",
+      "alias": "srb_idioms",
+      "sample_len": 30,
+      "exact_match,extract_answer": 0.8333333333333334,
+      "exact_match_stderr,extract_answer": 0.06920456654478331,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0
+    },
+    "srb_cyrillic_agreement": {
+      "name": "srb_cyrillic_agreement",
+      "alias": "srb_cyrillic_agreement",
+      "sample_len": 30,
+      "exact_match,extract_answer": 0.9333333333333333,
+      "exact_match_stderr,extract_answer": 0.04632055558531008,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0,
+      "pair_agreement,extract_answer": 1.0,
+      "pair_agreement_stderr,extract_answer": "N/A"
+    },
+    "srb_grammar_cloze": {
+      "name": "srb_grammar_cloze",
+      "alias": "srb_grammar_cloze",
+      "sample_len": 20,
+      "exact_match,none": 0.8,
+      "exact_match_stderr,none": 0.0917662935482247,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_grammar_cloze_mined": {
+      "name": "srb_grammar_cloze_mined",
+      "alias": "srb_grammar_cloze_mined",
+      "sample_len": 453,
+      "exact_match,none": 0.4746136865342163,
+      "exact_match_stderr,none": 0.023487689069099045,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_grammar_cloze_synth": {
+      "name": "srb_grammar_cloze_synth",
+      "alias": "srb_grammar_cloze_synth",
+      "sample_len": 519,
+      "exact_match,none": 0.5703275529865125,
+      "exact_match_stderr,none": 0.021750339956111656,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_aorist_imperfekat": {
+      "name": "srb_probe_aorist_imperfekat",
+      "alias": "srb_probe_aorist_imperfekat",
+      "sample_len": 20,
+      "exact_match,none": 0.3,
+      "exact_match_stderr,none": 0.10513149660756935,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_broj_pridev_imenica": {
+      "name": "srb_probe_broj_pridev_imenica",
+      "alias": "srb_probe_broj_pridev_imenica",
+      "sample_len": 20,
+      "exact_match,none": 0.15,
+      "exact_match_stderr,none": 0.08191780219091253,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_jat": {
+      "name": "srb_probe_jat",
+      "alias": "srb_probe_jat",
+      "sample_len": 20,
+      "exact_match,none": 0.2,
+      "exact_match_stderr,none": 0.0917662935482247,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_poluslozenice": {
+      "name": "srb_probe_poluslozenice",
+      "alias": "srb_probe_poluslozenice",
+      "sample_len": 20,
+      "exact_match,none": 0.4,
+      "exact_match_stderr,none": 0.11239029738980327,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_sastavljeno_rastavljeno": {
+      "name": "srb_probe_sastavljeno_rastavljeno",
+      "alias": "srb_probe_sastavljeno_rastavljeno",
+      "sample_len": 20,
+      "exact_match,none": 0.6,
+      "exact_match_stderr,none": 0.11239029738980327,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_probe_sibilarizacija": {
+      "name": "srb_probe_sibilarizacija",
+      "alias": "srb_probe_sibilarizacija",
+      "sample_len": 20,
+      "exact_match,none": 0.55,
+      "exact_match_stderr,none": 0.11413288653790232,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_pravopis_poluslozenice": {
+      "name": "srb_pravopis_poluslozenice",
+      "alias": "srb_pravopis_poluslozenice",
+      "sample_len": 19,
+      "exact_match,none": 0.3157894736842105,
+      "exact_match_stderr,none": 0.10956136839295434,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_pravopis_prefiksoidi": {
+      "name": "srb_pravopis_prefiksoidi",
+      "alias": "srb_pravopis_prefiksoidi",
+      "sample_len": 17,
+      "exact_match,none": 0.6470588235294118,
+      "exact_match_stderr,none": 0.11947115300935236,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_pravopis_sastavljeno_rastavljeno": {
+      "name": "srb_pravopis_sastavljeno_rastavljeno",
+      "alias": "srb_pravopis_sastavljeno_rastavljeno",
+      "sample_len": 24,
+      "exact_match,none": 0.4166666666666667,
+      "exact_match_stderr,none": 0.10279899245732686,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_pravopis_slozeni_pridevi": {
+      "name": "srb_pravopis_slozeni_pridevi",
+      "alias": "srb_pravopis_slozeni_pridevi",
+      "sample_len": 22,
+      "exact_match,none": 0.4090909090909091,
+      "exact_match_stderr,none": 0.10729033533674225,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_correction_c_c": {
+      "name": "srb_correction_c_c",
+      "alias": "srb_correction_c_c",
+      "sample_len": 30,
+      "exact_match,none": 0.9333333333333333,
+      "exact_match_stderr,none": 0.04632055558531008,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_correction_ispravno": {
+      "name": "srb_correction_ispravno",
+      "alias": "srb_correction_ispravno",
+      "sample_len": 30,
+      "exact_match,none": 0.7,
+      "exact_match_stderr,none": 0.08509629433967632,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    },
+    "srb_correction_razmak_crtica": {
+      "name": "srb_correction_razmak_crtica",
+      "alias": "srb_correction_razmak_crtica",
+      "sample_len": 30,
+      "exact_match,none": 0.7,
+      "exact_match_stderr,none": 0.08509629433967632,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    }
+  },
+  "group_subtasks": {},
+  "configs": {
+    "srb_correction_c_c": {
+      "task": "srb_correction_c_c",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_correction/c-c.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_correction(doc: dict) -> str:\n    return (\n        \"Sledeća rečenica možda sadrži jednu pravopisnu grešku, a možda je potpuno \"\n        \"ispravna. Ako ima grešku, ispravi je i ne menjaj ništa drugo. Ako je ispravna, \"\n        \"prepiši je bez izmena.\\n\\n\"\n        f\"Rečenica: {doc['text']}\\n\\n\"\n        \"Odgovori jednim redom u obliku:\\n\"\n        \"Ispravljeno: <rečenica>\"\n    )\n",
+      "doc_to_target": "def doc_to_target_correction(doc: dict) -> str:\n    return f\"Ispravljeno: {doc['answers'][0]}\"\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_correction(doc: dict, results: list[str]) -> dict:\n    from serbeval.correction import extract_correction, is_correct\n    from serbeval.schema import CorrectionItem\n\n    item = CorrectionItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        \"unparsed\": 0.0 if extract_correction(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_correction at 0x12a7cf4c0>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_correction at 0x12a7cf060>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n\n"
+        ],
+        "max_gen_toks": 160,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_correction_c_c.yaml"
+      }
+    },
+    "srb_correction_ispravno": {
+      "task": "srb_correction_ispravno",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_correction/ispravno.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_correction(doc: dict) -> str:\n    return (\n        \"Sledeća rečenica možda sadrži jednu pravopisnu grešku, a možda je potpuno \"\n        \"ispravna. Ako ima grešku, ispravi je i ne menjaj ništa drugo. Ako je ispravna, \"\n        \"prepiši je bez izmena.\\n\\n\"\n        f\"Rečenica: {doc['text']}\\n\\n\"\n        \"Odgovori jednim redom u obliku:\\n\"\n        \"Ispravljeno: <rečenica>\"\n    )\n",
+      "doc_to_target": "def doc_to_target_correction(doc: dict) -> str:\n    return f\"Ispravljeno: {doc['answers'][0]}\"\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_correction(doc: dict, results: list[str]) -> dict:\n    from serbeval.correction import extract_correction, is_correct\n    from serbeval.schema import CorrectionItem\n\n    item = CorrectionItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        \"unparsed\": 0.0 if extract_correction(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_correction at 0x12a7cf4c0>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_correction at 0x12a7cf060>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n\n"
+        ],
+        "max_gen_toks": 160,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_correction_ispravno.yaml"
+      }
+    },
+    "srb_correction_razmak_crtica": {
+      "task": "srb_correction_razmak_crtica",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_correction/razmak-crtica.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_correction(doc: dict) -> str:\n    return (\n        \"Sledeća rečenica možda sadrži jednu pravopisnu grešku, a možda je potpuno \"\n        \"ispravna. Ako ima grešku, ispravi je i ne menjaj ništa drugo. Ako je ispravna, \"\n        \"prepiši je bez izmena.\\n\\n\"\n        f\"Rečenica: {doc['text']}\\n\\n\"\n        \"Odgovori jednim redom u obliku:\\n\"\n        \"Ispravljeno: <rečenica>\"\n    )\n",
+      "doc_to_target": "def doc_to_target_correction(doc: dict) -> str:\n    return f\"Ispravljeno: {doc['answers'][0]}\"\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_correction(doc: dict, results: list[str]) -> dict:\n    from serbeval.correction import extract_correction, is_correct\n    from serbeval.schema import CorrectionItem\n\n    item = CorrectionItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        \"unparsed\": 0.0 if extract_correction(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_correction at 0x12a7cf4c0>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_correction at 0x12a7cf060>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n\n"
+        ],
+        "max_gen_toks": 160,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_correction_razmak_crtica.yaml"
+      }
+    },
+    "srb_cyrillic_agreement": {
+      "task": "srb_cyrillic_agreement",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_cyrillic_agreement/items.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_pair(doc: dict, results: list[str]) -> dict:\n    \"\"\"Emit accuracy, an unparsed flag, and a (pair_id, correct) tuple for aggregation.\"\"\"\n    correct = _extracted_correct(doc, results)\n    return {\n        \"exact_match\": correct,\n        \"unparsed\": _unparsed(results),\n        \"pair_agreement\": (doc[\"pair_id\"], correct),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x12ae5a200>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x12ae5be20>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        },
+        {
+          "metric": "pair_agreement",
+          "aggregation": "def pair_agreement(items: Sequence[tuple[str, float]]) -> float:\n    \"\"\"Fraction of pairs whose two scripts produced the SAME correctness outcome.\n\n    A pair \"agrees\" when the model is right on both scripts or wrong on both — i.e. the\n    answer is script-invariant. Mixed outcomes count as disagreement.\n    \"\"\"\n    by_pair: dict[str, list[float]] = {}\n    for pair_id, correct in items:\n        by_pair.setdefault(pair_id, []).append(correct)\n    complete = [vals for vals in by_pair.values() if len(vals) == 2]\n    if not complete:\n        return 0.0\n    agreed = sum(1 for vals in complete if vals[0] == vals[1])\n    return agreed / len(complete)\n",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_cyrillic_agreement.yaml"
+      }
+    },
+    "srb_grammar": {
+      "task": "srb_grammar",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_grammar/items.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_mcq(doc: dict, results: list[str]) -> dict:\n    return {\n        \"exact_match\": _extracted_correct(doc, results),\n        \"unparsed\": _unparsed(results),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x12ae5a200>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x12ae5be20>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_grammar.yaml"
+      }
+    },
+    "srb_grammar_cloze": {
+      "task": "srb_grammar_cloze",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_grammar_cloze/items.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_grammar_cloze.yaml"
+      }
+    },
+    "srb_grammar_cloze_mined": {
+      "task": "srb_grammar_cloze_mined",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_grammar_cloze/candidates.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_grammar_cloze_mined.yaml"
+      }
+    },
+    "srb_grammar_cloze_synth": {
+      "task": "srb_grammar_cloze_synth",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_grammar_cloze/candidates-synth.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_grammar_cloze_synth.yaml"
+      }
+    },
+    "srb_idioms": {
+      "task": "srb_idioms",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_idioms/items.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_mcq(doc: dict, results: list[str]) -> dict:\n    return {\n        \"exact_match\": _extracted_correct(doc, results),\n        \"unparsed\": _unparsed(results),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x12ae5a200>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x12ae5be20>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_idioms.yaml"
+      }
+    },
+    "srb_pravopis_poluslozenice": {
+      "task": "srb_pravopis_poluslozenice",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_pravopis/poluslozenice.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_pravopis_poluslozenice.yaml"
+      }
+    },
+    "srb_pravopis_prefiksoidi": {
+      "task": "srb_pravopis_prefiksoidi",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_pravopis/prefiksoidi.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_pravopis_prefiksoidi.yaml"
+      }
+    },
+    "srb_pravopis_sastavljeno_rastavljeno": {
+      "task": "srb_pravopis_sastavljeno_rastavljeno",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_pravopis/sastavljeno-rastavljeno.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_pravopis_sastavljeno_rastavljeno.yaml"
+      }
+    },
+    "srb_pravopis_slozeni_pridevi": {
+      "task": "srb_pravopis_slozeni_pridevi",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_pravopis/slozeni-pridevi.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_pravopis_slozeni_pridevi.yaml"
+      }
+    },
+    "srb_probe_aorist_imperfekat": {
+      "task": "srb_probe_aorist_imperfekat",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/aorist-imperfekat.jsonl",
+            "data/srb_probe/aorist-imperfekat.synth.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_aorist_imperfekat.yaml"
+      }
+    },
+    "srb_probe_broj_pridev_imenica": {
+      "task": "srb_probe_broj_pridev_imenica",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/broj-pridev-imenica.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_broj_pridev_imenica.yaml"
+      }
+    },
+    "srb_probe_jat": {
+      "task": "srb_probe_jat",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/jat.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_jat.yaml"
+      }
+    },
+    "srb_probe_poluslozenice": {
+      "task": "srb_probe_poluslozenice",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/poluslozenice.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_poluslozenice.yaml"
+      }
+    },
+    "srb_probe_sastavljeno_rastavljeno": {
+      "task": "srb_probe_sastavljeno_rastavljeno",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/sastavljeno-rastavljeno.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_sastavljeno_rastavljeno.yaml"
+      }
+    },
+    "srb_probe_sibilarizacija": {
+      "task": "srb_probe_sibilarizacija",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": [
+            "data/srb_probe/sibilarizacija.synth.jsonl"
+          ]
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x12a7cc900>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x12a7ce5c0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "qwen/qwen3.5-9b",
+        "quantizations": "bf16",
+        "config_source": "lm_eval_tasks/srb_probe_sibilarizacija.yaml"
+      }
+    }
+  },
+  "versions": {
+    "srb_correction_c_c": 0.1,
+    "srb_correction_ispravno": 0.1,
+    "srb_correction_razmak_crtica": 0.1,
+    "srb_cyrillic_agreement": 0.1,
+    "srb_grammar": 0.1,
+    "srb_grammar_cloze": 0.1,
+    "srb_grammar_cloze_mined": 0.1,
+    "srb_grammar_cloze_synth": 0.1,
+    "srb_idioms": 0.1,
+    "srb_pravopis_poluslozenice": 0.1,
+    "srb_pravopis_prefiksoidi": 0.1,
+    "srb_pravopis_sastavljeno_rastavljeno": 0.1,
+    "srb_pravopis_slozeni_pridevi": 0.1,
+    "srb_probe_aorist_imperfekat": 0.1,
+    "srb_probe_broj_pridev_imenica": 0.1,
+    "srb_probe_jat": 0.1,
+    "srb_probe_poluslozenice": 0.1,
+    "srb_probe_sastavljeno_rastavljeno": 0.1,
+    "srb_probe_sibilarizacija": 0.1
+  },
+  "n-shot": {
+    "srb_correction_c_c": 0,
+    "srb_correction_ispravno": 0,
+    "srb_correction_razmak_crtica": 0,
+    "srb_cyrillic_agreement": 0,
+    "srb_grammar": 0,
+    "srb_grammar_cloze": 0,
+    "srb_grammar_cloze_mined": 0,
+    "srb_grammar_cloze_synth": 0,
+    "srb_idioms": 0,
+    "srb_pravopis_poluslozenice": 0,
+    "srb_pravopis_prefiksoidi": 0,
+    "srb_pravopis_sastavljeno_rastavljeno": 0,
+    "srb_pravopis_slozeni_pridevi": 0,
+    "srb_probe_aorist_imperfekat": 0,
+    "srb_probe_broj_pridev_imenica": 0,
+    "srb_probe_jat": 0,
+    "srb_probe_poluslozenice": 0,
+    "srb_probe_sastavljeno_rastavljeno": 0,
+    "srb_probe_sibilarizacija": 0
+  },
+  "higher_is_better": {
+    "srb_correction_c_c": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_correction_ispravno": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_correction_razmak_crtica": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_cyrillic_agreement": {
+      "exact_match": true,
+      "unparsed": false,
+      "pair_agreement": true
+    },
+    "srb_grammar": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_grammar_cloze": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_grammar_cloze_mined": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_grammar_cloze_synth": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_idioms": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_pravopis_poluslozenice": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_pravopis_prefiksoidi": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_pravopis_sastavljeno_rastavljeno": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_pravopis_slozeni_pridevi": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_aorist_imperfekat": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_broj_pridev_imenica": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_jat": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_poluslozenice": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_sastavljeno_rastavljeno": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_probe_sibilarizacija": {
+      "exact_match": true,
+      "unparsed": false
+    }
+  },
+  "n-samples": {
+    "srb_grammar": {
+      "original": 50,
+      "effective": 50
+    },
+    "srb_idioms": {
+      "original": 30,
+      "effective": 30
+    },
+    "srb_cyrillic_agreement": {
+      "original": 30,
+      "effective": 30
+    },
+    "srb_grammar_cloze": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_grammar_cloze_mined": {
+      "original": 453,
+      "effective": 453
+    },
+    "srb_grammar_cloze_synth": {
+      "original": 519,
+      "effective": 519
+    },
+    "srb_probe_aorist_imperfekat": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_probe_broj_pridev_imenica": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_probe_jat": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_probe_poluslozenice": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_probe_sastavljeno_rastavljeno": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_probe_sibilarizacija": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_pravopis_poluslozenice": {
+      "original": 19,
+      "effective": 19
+    },
+    "srb_pravopis_prefiksoidi": {
+      "original": 17,
+      "effective": 17
+    },
+    "srb_pravopis_sastavljeno_rastavljeno": {
+      "original": 24,
+      "effective": 24
+    },
+    "srb_pravopis_slozeni_pridevi": {
+      "original": 22,
+      "effective": 22
+    },
+    "srb_correction_c_c": {
+      "original": 30,
+      "effective": 30
+    },
+    "srb_correction_ispravno": {
+      "original": 30,
+      "effective": 30
+    },
+    "srb_correction_razmak_crtica": {
+      "original": 30,
+      "effective": 30
+    }
+  },
+  "config": {
+    "model": "openrouter-chat",
+    "model_args": {
+      "model": "qwen/qwen3.5-9b",
+      "quantizations": "bf16"
+    },
+    "batch_size": 1,
+    "batch_sizes": [],
+    "device": "cuda:0",
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": {},
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "13b67fa",
+  "date": 1791466890.2802858,
+  "pretty_env_info": "N/A (torch not installed)",
+  "transformers_version": "N/A",
+  "lm_eval_version": "0.4.12",
+  "upper_git_hash": null,
+  "task_hashes": {
+    "srb_grammar": "9e773cbfcf86dca3bbe84f9b51bce9b4fa59a7b35da2da19fb731de267a7d9e7",
+    "srb_idioms": "e53ec5b0dfa1485475906af45c5ac6c9f014678982a30484a3f13c2d2d209ccd",
+    "srb_cyrillic_agreement": "e60d84b6cd7f47a43c563335931ecf7b31efa73ae6c5d8afa46f1e3ff0ec08df",
+    "srb_grammar_cloze": "4f27b8bf0144406e98aa826fb752e17fdbfc0485817ab6143ab2eba64bc45fc9",
+    "srb_grammar_cloze_mined": "599d74d9d8a32005bb0f73e277de1ab054426dbe6afb5774c73cc1512c2d1bd7",
+    "srb_grammar_cloze_synth": "cbbeebb751213614edcf0380acf7cfdf07d5809d7fb37a110202360e5265e261",
+    "srb_probe_aorist_imperfekat": "1094e6477b3b13ac4a43afa6a06103cd47d8590c7f47b9f3f652b10755c93992",
+    "srb_probe_broj_pridev_imenica": "edac3affc54fe8e55de1bc814876fc0af46b277c80d6634bd4a7bc977a30f418",
+    "srb_probe_jat": "ef87752f3f960ab9f516ea821ed9b9bfe59dc49d3302ccfcab6c9c7b57f62c1e",
+    "srb_probe_poluslozenice": "8a3f713cdae65cbe171a7ed0a87a81ec19298c856b8fe5b3d4a444cc74830aad",
+    "srb_probe_sastavljeno_rastavljeno": "bb4ef3b2d36ccc122cbc20fb287e5226b8aa336fceae0ac665cae3f1e9a4562f",
+    "srb_probe_sibilarizacija": "50777957f9bb146061a3a8c5628329aa08d17344b5aa90a969d04e3a830ff513",
+    "srb_pravopis_poluslozenice": "cfbbf82c00b616ba68012066542f61893f02201870651487391bfc67d1ff8a16",
+    "srb_pravopis_prefiksoidi": "46a1988272af5b42018812a4e07fc441abed9725638a7c5ae49b19ef70e05ac7",
+    "srb_pravopis_sastavljeno_rastavljeno": "353cd76cdca65a583fa830be9dc1bd6bf660becdbb1ea236a942b4f40915ede6",
+    "srb_pravopis_slozeni_pridevi": "8d0de85e598b4f8be439541072dbbfce17188982e35af70c835f1a4752213684",
+    "srb_correction_c_c": "2dc9afddc6d2884a60cfaf508eabde9a4904c0e545187bd613b972eee5caf053",
+    "srb_correction_ispravno": "fd83dda30b3c67c38a4b6d91ee0df516a0b5ceec9553f99bc4c10a08ae0dae6b",
+    "srb_correction_razmak_crtica": "2e00d80dd29014dd72063ecbad81a4debd097818ed85c9ef3b3804f85c3bfa92"
+  },
+  "model_source": "openrouter-chat",
+  "model_name": "qwen/qwen3.5-9b",
+  "model_name_sanitized": "qwen__qwen3.5-9b",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": true,
+  "chat_template": "",
+  "chat_template_sha": null,
+  "total_evaluation_time_seconds": "1135.3961269999854"
+}

@@ -1,0 +1,130 @@
+{
+  "results": {
+    "srb_grammar_cloze_synth": {
+      "name": "srb_grammar_cloze_synth",
+      "alias": "srb_grammar_cloze_synth",
+      "sample_len": 519,
+      "exact_match,none": 0.9749518304431599,
+      "exact_match_stderr,none": 0.006866172290874777,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    }
+  },
+  "group_subtasks": {},
+  "configs": {
+    "srb_grammar_cloze_synth": {
+      "task": "srb_grammar_cloze_synth",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/srb_grammar_cloze/candidates-synth.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x1509cf9c0>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x1509cf2e0>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "deepseek/deepseek-v3.2",
+        "quantizations": "fp8",
+        "config_source": "lm_eval_tasks/srb_grammar_cloze_synth.yaml"
+      }
+    }
+  },
+  "versions": {
+    "srb_grammar_cloze_synth": 0.1
+  },
+  "n-shot": {
+    "srb_grammar_cloze_synth": 0
+  },
+  "higher_is_better": {
+    "srb_grammar_cloze_synth": {
+      "exact_match": true,
+      "unparsed": false
+    }
+  },
+  "n-samples": {
+    "srb_grammar_cloze_synth": {
+      "original": 519,
+      "effective": 519
+    }
+  },
+  "config": {
+    "model": "openrouter-chat",
+    "model_args": {
+      "model": "deepseek/deepseek-v3.2",
+      "quantizations": "fp8"
+    },
+    "batch_size": 1,
+    "batch_sizes": [],
+    "device": "cuda:0",
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": {},
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "13b67fa",
+  "date": 1791481407.249644,
+  "pretty_env_info": "N/A (torch not installed)",
+  "transformers_version": "N/A",
+  "lm_eval_version": "0.4.12",
+  "upper_git_hash": null,
+  "task_hashes": {
+    "srb_grammar_cloze_synth": "cbbeebb751213614edcf0380acf7cfdf07d5809d7fb37a110202360e5265e261"
+  },
+  "model_source": "openrouter-chat",
+  "model_name": "deepseek/deepseek-v3.2",
+  "model_name_sanitized": "deepseek__deepseek-v3.2",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": true,
+  "chat_template": "",
+  "chat_template_sha": null,
+  "total_evaluation_time_seconds": "1997.714010457974"
+}
