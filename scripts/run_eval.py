@@ -22,7 +22,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from lm_eval.__main__ import cli_evaluate
 
 import serbeval.lm_eval_anthropic
-import serbeval.lm_eval_kie  # noqa: F401  (import registers kie-responses)
+import serbeval.lm_eval_kie
+import serbeval.lm_eval_openrouter  # noqa: F401  (import registers openrouter-chat)
 
 if __name__ == "__main__":
     cli_evaluate()
