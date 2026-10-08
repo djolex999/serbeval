@@ -1,0 +1,1660 @@
+# serbeval — provera tačnih odgovora
+#
+# Ovde VIDIŠ tačan odgovor. Pitanje je: da li je tačan, i da li je jedini tačan?
+# Na svaku liniju PROVERA upiši jednu oznaku:
+#
+#   ok                 tačno je — item postaje proveren
+#   x <ispravka>       pogrešno je — za ponuđene odgovore slovo (A-D), za dopunu
+#                      ispravan oblik; više tačnih oblika odvoji sa „ / “
+#   + <oblik>          tačno je, ali je tačan i ovaj oblik (samo za dopunu)
+#   ?                  sporno ili nisi siguran — ostaje neprovereno, ne ulazi u zvanični set
+#   -                  loš item (neprirodna ili dvosmislena rečenica) — izbacuje se
+#
+# Komentar posle # se ignoriše. Prazna PROVERA = nisi stigao do tog itema; možeš da
+# radiš u delovima i da primeniš više puta.
+#
+# Kad završiš:  serbeval verify --apply <ovaj fajl>
+
+[1] srb-probe-aorist-imperfekat-0001   (srb_probe · aorist-imperfekat)
+Jednom davno ____ jedan car koji je imao tri sina.  (biti, imperfekat)
+TAČNO: beše / bejaše / bijaše
+Objašnjenje: Imperfekat glagola biti, 3. lice jednine: beše / bejaše (ijek. bijaše).
+PROVERA:
+
+[2] srb-probe-aorist-imperfekat-0002   (srb_probe · aorist-imperfekat)
+Svakog jutra baka ____ hleb za celu porodicu.  (peći, imperfekat)
+TAČNO: pecijaše / pečaše
+Objašnjenje: Imperfekat glagola peći, 3. l. jd.: pecijaše (sibilarizacija ispred -ija-) ili pečaše.
+PROVERA:
+
+[3] srb-probe-aorist-imperfekat-0003   (srb_probe · aorist-imperfekat)
+U to vreme oni nam često ____ pisma.  (pisati, imperfekat)
+TAČNO: pisahu
+Objašnjenje: Imperfekat, 3. lice množine na -hu: pisahu.
+PROVERA:
+
+[4] srb-probe-aorist-imperfekat-0004   (srb_probe · aorist-imperfekat)
+Dok je ona spremala ručak, on ____ kroz prozor.  (gledati, imperfekat)
+TAČNO: gledaše
+Objašnjenje: Imperfekat, 3. lice jednine: gledaše.
+PROVERA:
+
+[5] srb-probe-aorist-imperfekat-0005   (srb_probe · aorist-imperfekat)
+Celu noć ja ____ na stanici, a voz ne dođe.  (čekati, imperfekat)
+TAČNO: čekah
+Objašnjenje: Imperfekat, 1. lice jednine: čekah.
+PROVERA:
+
+[6] srb-probe-aorist-imperfekat-0006   (srb_probe · aorist-imperfekat)
+Vojnici ____ teške rance preko planine.  (nositi, imperfekat)
+TAČNO: nošahu / nosijahu
+Objašnjenje: Imperfekat, 3. lice množine; kod -iti glagola s jotovanjem: nošahu.
+PROVERA:
+
+[7] srb-probe-aorist-imperfekat-0007   (srb_probe · aorist-imperfekat)
+Svakog jutra on ____ peške do škole.  (ići, imperfekat)
+TAČNO: iđaše
+Objašnjenje: Imperfekat glagola ići, 3. lice jednine: iđaše.
+PROVERA:
+
+[8] srb-probe-aorist-imperfekat-0008   (srb_probe · aorist-imperfekat)
+Tada on ____ mnogo novca i malo briga.  (imati, imperfekat)
+TAČNO: imaše
+Objašnjenje: Imperfekat, 3. lice jednine: imaše.
+PROVERA:
+
+[9] srb-probe-aorist-imperfekat-syn-0001   (srb_probe · aorist-imperfekat)
+Ja ____ kući tek pred ponoć.  (doći, aorist)
+TAČNO: dođoh
+Objašnjenje: Aorist, 1. lice jednine.
+PROVERA:
+
+[10] srb-probe-aorist-imperfekat-syn-0002   (srb_probe · aorist-imperfekat)
+Ja ____ kući tek pred ponoć.  (stići, aorist)
+TAČNO: stigoh
+Objašnjenje: Aorist, 1. lice jednine.
+PROVERA:
+
+[11] srb-probe-aorist-imperfekat-syn-0003   (srb_probe · aorist-imperfekat)
+Gosti ____ bez pozdrava i više se nisu vratili.  (otići, aorist)
+TAČNO: odoše / otiđoše
+Objašnjenje: Aorist, 3. lice množine.
+PROVERA:
+
+[12] srb-probe-aorist-imperfekat-syn-0004   (srb_probe · aorist-imperfekat)
+Gosti ____ bez pozdrava i više se nisu vratili.  (pobeći, aorist)
+TAČNO: pobegoše
+Objašnjenje: Aorist, 3. lice množine.
+PROVERA:
+
+[13] srb-probe-aorist-imperfekat-syn-0005   (srb_probe · aorist-imperfekat)
+Mi ____ na stanicu u poslednji čas.  (stići, aorist)
+TAČNO: stigosmo
+Objašnjenje: Aorist, 1. lice množine.
+PROVERA:
+
+[14] srb-probe-aorist-imperfekat-syn-0006   (srb_probe · aorist-imperfekat)
+Ja ____ ključ sa stola i izađoh.  (uzeti, aorist)
+TAČNO: uzeh
+Objašnjenje: Aorist, 1. lice jednine.
+PROVERA:
+
+[15] srb-probe-aorist-imperfekat-syn-0007   (srb_probe · aorist-imperfekat)
+Ja ____ ključ sa stola i izađoh.  (podići, aorist)
+TAČNO: podigoh
+Objašnjenje: Aorist, 1. lice jednine.
+PROVERA:
+
+[16] srb-probe-aorist-imperfekat-syn-0008   (srb_probe · aorist-imperfekat)
+Kad je pala noć, deca ____ kao zaklana.  (zaspati, aorist)
+TAČNO: zaspaše
+Objašnjenje: Aorist, 3. lice množine; zbirna imenica „deca“ traži glagol u množini.
+PROVERA:
+
+[17] srb-probe-aorist-imperfekat-syn-0009   (srb_probe · aorist-imperfekat)
+On mi tada ____ da više ne dolazim.  (reći, aorist)
+TAČNO: reče
+Objašnjenje: Aorist, 3. lice jednine.
+PROVERA:
+
+[18] srb-probe-aorist-imperfekat-syn-0010   (srb_probe · aorist-imperfekat)
+Starac polako ____ sa klupe i ode.  (ustati, aorist)
+TAČNO: ustade
+Objašnjenje: Aorist, 3. lice jednine.
+PROVERA:
+
+[19] srb-probe-aorist-imperfekat-syn-0011   (srb_probe · aorist-imperfekat)
+Na pijaci ja ____ starog prijatelja.  (sresti, aorist)
+TAČNO: sretoh
+Objašnjenje: Aorist, 1. lice jednine.
+PROVERA:
+
+[20] srb-probe-aorist-imperfekat-syn-0012   (srb_probe · aorist-imperfekat)
+Susedi nam ____ hleb i vino.  (doneti, aorist)
+TAČNO: donesoše / doneše / doniješe
+Objašnjenje: Aorist, 3. lice množine.
+PROVERA:
+
+[21] srb-probe-broj-pridev-imenica-0001   (srb_probe · broj-pridev-imenica)
+U učionici su postavljena dva ____.  (nov + sto)
+TAČNO: nova stola
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: dva nova stola.
+PROVERA:
+
+[22] srb-probe-broj-pridev-imenica-0002   (srb_probe · broj-pridev-imenica)
+Na ulici su stajala tri ____.  (crn + automobil)
+TAČNO: crna automobila
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: tri crna automobila.
+PROVERA:
+
+[23] srb-probe-broj-pridev-imenica-0003   (srb_probe · broj-pridev-imenica)
+U dvorištu su četiri ____.  (velik + pas)
+TAČNO: velika psa
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: četiri velika psa.
+PROVERA:
+
+[24] srb-probe-broj-pridev-imenica-0004   (srb_probe · broj-pridev-imenica)
+Kupili smo dve ____.  (nov + kuća)
+TAČNO: nove kuće
+Objašnjenje: Uz dve imenica ž. roda i pridev stoje u obliku na -e: dve nove kuće.
+PROVERA:
+
+[25] srb-probe-broj-pridev-imenica-0005   (srb_probe · broj-pridev-imenica)
+Videli smo tri ____.  (mali + selo)
+TAČNO: mala sela
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: tri mala sela.
+PROVERA:
+
+[26] srb-probe-broj-pridev-imenica-0006   (srb_probe · broj-pridev-imenica)
+U sali je bilo pet ____.  (nov + sto)
+TAČNO: novih stolova
+Objašnjenje: Uz brojeve od pet naviše: genitiv množine: pet novih stolova.
+PROVERA:
+
+[27] srb-probe-broj-pridev-imenica-0007   (srb_probe · broj-pridev-imenica)
+Pročitao je jedanaest ____.  (debeo + knjiga)
+TAČNO: debelih knjiga
+Objašnjenje: Uz brojeve od pet naviše (i 11–19): genitiv množine: jedanaest debelih knjiga.
+PROVERA:
+
+[28] srb-probe-broj-pridev-imenica-0008   (srb_probe · broj-pridev-imenica)
+Na stolu je dvadeset jedan ____.  (crven + karanfil)
+TAČNO: crveni karanfil / crven karanfil
+Objašnjenje: Složeni broj koji se završava na jedan slaže se u jednini: dvadeset jedan crveni karanfil.
+PROVERA:
+
+[29] srb-probe-broj-pridev-imenica-0009   (srb_probe · broj-pridev-imenica)
+U razredu je dvadeset jedna ____.  (vredan + učenica)
+TAČNO: vredna učenica
+Objašnjenje: Složeni broj koji se završava na jedna slaže se u jednini: dvadeset jedna vredna učenica.
+PROVERA:
+
+[30] srb-probe-broj-pridev-imenica-0010   (srb_probe · broj-pridev-imenica)
+Na parkingu su dvadeset dva ____.  (stran + automobil)
+TAČNO: strana automobila
+Objašnjenje: Odlučuje poslednja reč broja; Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: dvadeset dva strana automobila.
+PROVERA:
+
+[31] srb-probe-broj-pridev-imenica-0011   (srb_probe · broj-pridev-imenica)
+Na ispitu je palo trideset četiri ____.  (lenj + student)
+TAČNO: lenja studenta
+Objašnjenje: Odlučuje poslednja reč broja; Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: trideset četiri lenja studenta.
+PROVERA:
+
+[32] srb-probe-broj-pridev-imenica-0012   (srb_probe · broj-pridev-imenica)
+Otvorili su dva ____.  (nov + prozor)
+TAČNO: nova prozora
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: dva nova prozora.
+PROVERA:
+
+[33] srb-probe-broj-pridev-imenica-0013   (srb_probe · broj-pridev-imenica)
+Oba ____ su došla na slavlje.  (stariji + brat)
+TAČNO: starija brata
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: oba starija brata.
+PROVERA:
+
+[34] srb-probe-broj-pridev-imenica-0014   (srb_probe · broj-pridev-imenica)
+Obe ____ su došle na slavlje.  (mlađi + sestra)
+TAČNO: mlađe sestre
+Objašnjenje: Uz obe imenica ž. roda i pridev stoje u obliku na -e: obe mlađe sestre.
+PROVERA:
+
+[35] srb-probe-broj-pridev-imenica-0015   (srb_probe · broj-pridev-imenica)
+U zoološkom vrtu ima četrnaest ____.  (mlad + lav)
+TAČNO: mladih lavova
+Objašnjenje: Brojevi 11–19 traže genitiv množine: četrnaest mladih lavova.
+PROVERA:
+
+[36] srb-probe-broj-pridev-imenica-0016   (srb_probe · broj-pridev-imenica)
+Imali su dvoje ____.  (mali + dete)
+TAČNO: male dece
+Objašnjenje: Zbirni broj dvoje traži genitiv množine: dvoje male dece.
+PROVERA:
+
+[37] srb-probe-broj-pridev-imenica-0017   (srb_probe · broj-pridev-imenica)
+Došla su četiri ____.  (mlad + čovek)
+TAČNO: mlada čoveka
+Objašnjenje: Uz brojeve dva, tri, četiri (i oba/obe) imenice m. i s. roda stoje u obliku na -a, a pridev u slaganju s njim: četiri mlada čoveka.
+PROVERA:
+
+[38] srb-probe-broj-pridev-imenica-0018   (srb_probe · broj-pridev-imenica)
+Prošao je sto jedan ____.  (dug + dan)
+TAČNO: dug dan / dugi dan
+Objašnjenje: Složeni broj koji se završava na jedan slaže se u jednini: sto jedan dug dan.
+PROVERA:
+
+[39] srb-probe-broj-pridev-imenica-0019   (srb_probe · broj-pridev-imenica)
+Na zidu su visile dve ____.  (star + slika)
+TAČNO: stare slike
+Objašnjenje: Uz dve imenica ž. roda i pridev stoje u obliku na -e: dve stare slike.
+PROVERA:
+
+[40] srb-probe-broj-pridev-imenica-0020   (srb_probe · broj-pridev-imenica)
+Stiglo je dvadeset pet ____.  (nov + pismo)
+TAČNO: novih pisama
+Objašnjenje: Odlučuje poslednja reč broja; uz pet: genitiv množine: dvadeset pet novih pisama.
+PROVERA:
+
+[41] srb-probe-jat-0001   (srb_probe · jat)
+Ova ____ teče kroz cijeli grad.  (reka → ijekavski)
+TAČNO: rijeka
+Objašnjenje: Dugi jat daje ije (dugi jat → ije, kratki → je).
+PROVERA:
+
+[42] srb-probe-jat-0002   (srb_probe · jat)
+Potražio je tu riječ u ____.  (rečniku → ijekavski)
+TAČNO: rječniku
+Objašnjenje: Kratki jat daje je: rječnik (prema riječ).
+PROVERA:
+
+[43] srb-probe-jat-0003   (srb_probe · jat)
+U ovoj kući nikad nije bilo ____ za odmor.  (vremena → ijekavski)
+TAČNO: vremena
+Objašnjenje: Kratki jat iza r daje e: vremena (ali vrijeme).
+PROVERA:
+
+[44] srb-probe-jat-0004   (srb_probe · jat)
+Za doručak je popio čašu ____.  (mleka → ijekavski)
+TAČNO: mlijeka
+Objašnjenje: Dugi jat daje ije: mlijeko, mlijeka.
+PROVERA:
+
+[45] srb-probe-jat-0005   (srb_probe · jat)
+U prodavnici smo kupili ____ proizvode.  (mlečne → ijekavski)
+TAČNO: mliječne
+Objašnjenje: Jat je dug: mliječni (ne „mlječni“).
+PROVERA:
+
+[46] srb-probe-jat-0006   (srb_probe · jat)
+On je cijelo popodne ____ ispred kuće.  (sedeo → ijekavski)
+TAČNO: sjedio
+Objašnjenje: Kratki jat → je; ispred o jat daje i u nastavku: sjedio.
+PROVERA:
+
+[47] srb-probe-jat-0007   (srb_probe · jat)
+Nije ____ da dođe na sastanak.  (hteo → ijekavski)
+TAČNO: htio
+Objašnjenje: Jat ispred o daje i: htio.
+PROVERA:
+
+[48] srb-probe-jat-0008   (srb_probe · jat)
+Dobio je samo jedan ____ očevog imanja.  (deo → ijekavski)
+TAČNO: dio
+Objašnjenje: Jat ispred o daje i: dio (ali djela).
+PROVERA:
+
+[49] srb-probe-jat-0009   (srb_probe · jat)
+Ova knjiga je ____ od prethodne.  (lepša → ijekavski)
+TAČNO: ljepša
+Objašnjenje: Kratki jat daje je, a l + je daje lj: ljepša (ali lijep).
+PROVERA:
+
+[50] srb-probe-jat-0010   (srb_probe · jat)
+Na pijaci je kupio ____ i sir.  (hleb → ijekavski)
+TAČNO: hljeb
+Objašnjenje: Kratki jat daje je, a l + je daje lj: hljeb.
+PROVERA:
+
+[51] srb-probe-jat-0011   (srb_probe · jat)
+Tekst je preveden, a ____ je odličan.  (prevod → ijekavski)
+TAČNO: prijevod
+Objašnjenje: Dugi jat daje ije: prijevod.
+PROVERA:
+
+[52] srb-probe-jat-0012   (srb_probe · jat)
+Treba ____ ovu rečenicu na engleski.  (prevesti → ijekavski)
+TAČNO: prevesti
+Objašnjenje: Prefiks pre- ima kratki jat iza r, pa ostaje e: prevesti.
+PROVERA:
+
+[53] srb-probe-jat-0013   (srb_probe · jat)
+U njegovom radu nije bilo nijedne ____.  (greške → ijekavski)
+TAČNO: greške
+Objašnjenje: Kratki jat iza r daje e: greška.
+PROVERA:
+
+[54] srb-probe-jat-0014   (srb_probe · jat)
+Dječak je bio previše ____ da bi učio.  (lenj → ijekavski)
+TAČNO: lijen
+Objašnjenje: Ijekavski parnjak ekavskog „lenj“ je „lijen“.
+PROVERA:
+
+[55] srb-probe-jat-0015   (srb_probe · jat)
+Djeca su se cijeli dan igrala u ____.  (pesku → ijekavski)
+TAČNO: pijesku
+Objašnjenje: Dugi jat daje ije: pijesak, pijesku.
+PROVERA:
+
+[56] srb-probe-jat-0016   (srb_probe · jat)
+Najviše voli ____ i višnje.  (trešnje → ijekavski)
+TAČNO: trešnje
+Objašnjenje: Kratki jat iza r daje e: trešnja.
+PROVERA:
+
+[57] srb-probe-jat-0017   (srb_probe · jat)
+Dobio je dobru ____ iz matematike.  (ocenu → ijekavski)
+TAČNO: ocjenu
+Objašnjenje: Kratki jat daje je: ocjena.
+PROVERA:
+
+[58] srb-probe-jat-0018   (srb_probe · jat)
+Zbog jakog ____ nismo isplovili.  (vetra → ijekavski)
+TAČNO: vjetra
+Objašnjenje: Kratki jat daje je: vjetar, vjetra.
+PROVERA:
+
+[59] srb-probe-jat-0019   (srb_probe · jat)
+Ta šala uopšte nije bila ____.  (smešna → ijekavski)
+TAČNO: smiješna
+Objašnjenje: Dugi jat daje ije: smiješan, smiješna.
+PROVERA:
+
+[60] srb-probe-jat-0020   (srb_probe · jat)
+Na izborima su odnijeli veliku ____.  (pobedu → ijekavski)
+TAČNO: pobjedu
+Objašnjenje: Kratki jat daje je: pobjeda.
+PROVERA:
+
+[61] srb-probe-poluslozenice-0001   (srb_probe · poluslozenice)
+Na zgradi je postavljena ____ posvećena piscu.  (spomen + ploča)
+TAČNO: spomen-ploča
+Objašnjenje: Polusloženica: spomen-ploča se piše s crticom.
+PROVERA:
+
+[62] srb-probe-poluslozenice-0002   (srb_probe · poluslozenice)
+Za sva pitanja obratite se našoj ____.  (kontakt + osoba)
+TAČNO: kontakt-osobi
+Objašnjenje: Polusloženica: kontakt-osoba se piše s crticom.
+PROVERA:
+
+[63] srb-probe-poluslozenice-0003   (srb_probe · poluslozenice)
+Vest je prvo objavila lokalna ____.  (radio + stanica)
+TAČNO: radio-stanica
+Objašnjenje: Polusloženica: radio-stanica se piše s crticom.
+PROVERA:
+
+[64] srb-probe-poluslozenice-0004   (srb_probe · poluslozenice)
+Kupili smo novi ____ za kuhinju.  (ekspres + lonac)
+TAČNO: ekspres-lonac
+Objašnjenje: Polusloženica: ekspres-lonac se piše s crticom.
+PROVERA:
+
+[65] srb-probe-poluslozenice-0005   (srb_probe · poluslozenice)
+Leto su proveli u jednom ____ na obali.  (vikend + naselje)
+TAČNO: vikend-naselju
+Objašnjenje: Polusloženica: vikend-naselje se piše s crticom.
+PROVERA:
+
+[66] srb-probe-poluslozenice-0006   (srb_probe · poluslozenice)
+Navijači su nosili ____ zastave.  (crven + beo)
+TAČNO: crveno-bele
+Objašnjenje: Dve ravnopravne boje: crveno-beli, s crticom.
+PROVERA:
+
+[67] srb-probe-poluslozenice-0007   (srb_probe · poluslozenice)
+Kupila je ____ haljinu.  (svetao + plav)
+TAČNO: svetloplavu
+Objašnjenje: Nijansa jedne boje piše se sastavljeno: svetloplav.
+PROVERA:
+
+[68] srb-probe-poluslozenice-0008   (srb_probe · poluslozenice)
+Profesor je vodio veliki ____ projekat.  (naučni + istraživački)
+TAČNO: naučnoistraživački
+Objašnjenje: Složeni pridev koji označava jedan pojam piše se sastavljeno: naučnoistraživački.
+PROVERA:
+
+[69] srb-probe-poluslozenice-0009   (srb_probe · poluslozenice)
+Kod Horgoša smo prešli ____ granicu.  (srpski + mađarski)
+TAČNO: srpsko-mađarsku
+Objašnjenje: Odnos dva ravnopravna pojma: srpsko-mađarski, s crticom.
+PROVERA:
+
+[70] srb-probe-poluslozenice-0010   (srb_probe · poluslozenice)
+Kupio je nov ____.  (foto + aparat)
+TAČNO: fotoaparat
+Objašnjenje: Foto- se piše sastavljeno: fotoaparat.
+PROVERA:
+
+[71] srb-probe-poluslozenice-0011   (srb_probe · poluslozenice)
+Vozili smo se ____ do Niša.  (auto + put)
+TAČNO: autoputem
+Objašnjenje: Auto- se piše sastavljeno: autoput.
+PROVERA:
+
+[72] srb-probe-poluslozenice-0012   (srb_probe · poluslozenice)
+Uveče smo otišli u jedan ____ u centru.  (kafe + bar)
+TAČNO: kafe-bar
+Objašnjenje: Polusloženica: kafe-bar se piše s crticom.
+PROVERA:
+
+[73] srb-probe-poluslozenice-0013   (srb_probe · poluslozenice)
+Doći ću za ____ dana.  (dva + tri)
+TAČNO: dva-tri
+Objašnjenje: Približan broj od dva broja piše se s crticom: dva-tri.
+PROVERA:
+
+[74] srb-probe-poluslozenice-0014   (srb_probe · poluslozenice)
+U ____ delu zemlje padala je kiša.  (jug + istočni)
+TAČNO: jugoistočnom
+Objašnjenje: Strane sveta u složenom pridevu pišu se sastavljeno: jugoistočni.
+PROVERA:
+
+[75] srb-probe-poluslozenice-0015   (srb_probe · poluslozenice)
+Na granici su nam tražili ____ dokumenta.  (bosanski + hercegovački)
+TAČNO: bosanskohercegovačka
+Objašnjenje: Pridev od složenog imena države piše se sastavljeno: bosanskohercegovački.
+PROVERA:
+
+[76] srb-probe-poluslozenice-0016   (srb_probe · poluslozenice)
+Granice ____ monarhije menjale su se više puta.  (austrijski + ugarski)
+TAČNO: austrougarske
+Objašnjenje: Pridev austrougarski piše se sastavljeno (ime Austro-Ugarska s crticom).
+PROVERA:
+
+[77] srb-probe-poluslozenice-0017   (srb_probe · poluslozenice)
+U selu su otvorili novi ____.  (spomen + dom)
+TAČNO: spomen-dom
+Objašnjenje: Polusloženica: spomen-dom se piše s crticom.
+PROVERA:
+
+[78] srb-probe-poluslozenice-0018   (srb_probe · poluslozenice)
+Naš tim je ove godine postao ____ Evrope.  (vice + šampion)
+TAČNO: vicešampion
+Objašnjenje: Vice- se piše sastavljeno: vicešampion.
+PROVERA:
+
+[79] srb-probe-poluslozenice-0019   (srb_probe · poluslozenice)
+Lekar je uradio ____ srca.  (ultra + zvuk)
+TAČNO: ultrazvuk
+Objašnjenje: Ultra- se piše sastavljeno: ultrazvuk.
+PROVERA:
+
+[80] srb-probe-poluslozenice-0020   (srb_probe · poluslozenice)
+Na mestu bitke podignuto je ____.  (spomen + obeležje)
+TAČNO: spomen-obeležje
+Objašnjenje: Polusloženica: spomen-obeležje se piše s crticom.
+PROVERA:
+
+[81] srb-probe-sastavljeno-rastavljeno-0001   (srb_probe · sastavljeno-rastavljeno)
+Ja stvarno ____ gde je on otišao.  (ne + znati)
+TAČNO: ne znam
+Objašnjenje: Odrična rečca ne piše se odvojeno od glagola: ne znam.
+PROVERA:
+
+[82] srb-probe-sastavljeno-rastavljeno-0002   (srb_probe · sastavljeno-rastavljeno)
+____ to više da radiš!  (ne + moj)
+TAČNO: nemoj
+Objašnjenje: Nemoj se piše sastavljeno (kao neću, nemam, nisam).
+PROVERA:
+
+[83] srb-probe-sastavljeno-rastavljeno-0003   (srb_probe · sastavljeno-rastavljeno)
+Ja ____ vremena za to.  (ne + imati)
+TAČNO: nemam
+Objašnjenje: Nemam se piše sastavljeno, kao i neću i nisam.
+PROVERA:
+
+[84] srb-probe-sastavljeno-rastavljeno-0004   (srb_probe · sastavljeno-rastavljeno)
+On ____ da dođe sutra.  (ne + hteti)
+TAČNO: neće
+Objašnjenje: Neće se piše sastavljeno.
+PROVERA:
+
+[85] srb-probe-sastavljeno-rastavljeno-0005   (srb_probe · sastavljeno-rastavljeno)
+Njegovo ____ ga je skupo koštalo.  (ne + znanje)
+TAČNO: neznanje
+Objašnjenje: Ne se uz imenice piše sastavljeno: neznanje.
+PROVERA:
+
+[86] srb-probe-sastavljeno-rastavljeno-0006   (srb_probe · sastavljeno-rastavljeno)
+Nije se plašio ____.  (ni + od + ko)
+TAČNO: ni od koga
+Objašnjenje: Kad se između ni i zamenice nađe predlog, piše se rastavljeno: ni od koga.
+PROVERA:
+
+[87] srb-probe-sastavljeno-rastavljeno-0007   (srb_probe · sastavljeno-rastavljeno)
+Ne bih to uradio ____ na svetu.  (ni + za + šta)
+TAČNO: ni za šta
+Objašnjenje: Kad se između ni i zamenice nađe predlog, piše se rastavljeno: ni za šta.
+PROVERA:
+
+[88] srb-probe-sastavljeno-rastavljeno-0008   (srb_probe · sastavljeno-rastavljeno)
+Možeš to da pitaš ____.  (bilo + ko)
+TAČNO: bilo koga
+Objašnjenje: Bilo ko (bilo koga) piše se rastavljeno.
+PROVERA:
+
+[89] srb-probe-sastavljeno-rastavljeno-0009   (srb_probe · sastavljeno-rastavljeno)
+____ je bilo kasno, ostali su još malo.  (i + ako)
+TAČNO: iako
+Objašnjenje: Veznik iako piše se sastavljeno.
+PROVERA:
+
+[90] srb-probe-sastavljeno-rastavljeno-0010   (srb_probe · sastavljeno-rastavljeno)
+____ budeš hteo, javi mi se.  (kad + god)
+TAČNO: kad god
+Objašnjenje: Kad god piše se rastavljeno.
+PROVERA:
+
+[91] srb-probe-sastavljeno-rastavljeno-0011   (srb_probe · sastavljeno-rastavljeno)
+To ____ nije tačno.  (u + opšte)
+TAČNO: uopšte
+Objašnjenje: Prilog uopšte piše se sastavljeno.
+PROVERA:
+
+[92] srb-probe-sastavljeno-rastavljeno-0012   (srb_probe · sastavljeno-rastavljeno)
+Voli voće, ____ jabuke i kruške.  (na + primer)
+TAČNO: na primer
+Objašnjenje: Na primer piše se rastavljeno.
+PROVERA:
+
+[93] srb-probe-sastavljeno-rastavljeno-0013   (srb_probe · sastavljeno-rastavljeno)
+Rekao je ____ i izašao.  (do + viđenja)
+TAČNO: do viđenja
+Objašnjenje: Do viđenja piše se rastavljeno.
+PROVERA:
+
+[94] srb-probe-sastavljeno-rastavljeno-0014   (srb_probe · sastavljeno-rastavljeno)
+Ta odluka je bila potpuno ____.  (ne + pravedan)
+TAČNO: nepravedna
+Objašnjenje: Ne se uz prideve piše sastavljeno: nepravedna.
+PROVERA:
+
+[95] srb-probe-sastavljeno-rastavljeno-0015   (srb_probe · sastavljeno-rastavljeno)
+Svi znaju da je on veliki ____.  (ne + radnik)
+TAČNO: neradnik
+Objašnjenje: Ne se uz imenice piše sastavljeno: neradnik.
+PROVERA:
+
+[96] srb-probe-sastavljeno-rastavljeno-0016   (srb_probe · sastavljeno-rastavljeno)
+Ti mi mnogo ____.  (ne + dostajati)
+TAČNO: nedostaješ
+Objašnjenje: Glagol nedostajati ne postoji bez ne-, pa se piše sastavljeno: nedostaješ.
+PROVERA:
+
+[97] srb-probe-sastavljeno-rastavljeno-0017   (srb_probe · sastavljeno-rastavljeno)
+Učitelj je ____ zbog buke u razredu.  (ne + godovati)
+TAČNO: negodovao
+Objašnjenje: Glagol negodovati ne postoji bez ne-, pa se piše sastavljeno.
+PROVERA:
+
+[98] srb-probe-sastavljeno-rastavljeno-0018   (srb_probe · sastavljeno-rastavljeno)
+Nikada se nije žalio ____.  (ni + na + šta)
+TAČNO: ni na šta
+Objašnjenje: Kad se između ni i zamenice nađe predlog, piše se rastavljeno: ni na šta.
+PROVERA:
+
+[99] srb-probe-sastavljeno-rastavljeno-0019   (srb_probe · sastavljeno-rastavljeno)
+Ostao je kod kuće ____ je bio bolestan.  (zato + što)
+TAČNO: zato što
+Objašnjenje: Zato što piše se rastavljeno.
+PROVERA:
+
+[100] srb-probe-sastavljeno-rastavljeno-0020   (srb_probe · sastavljeno-rastavljeno)
+Krenuli su ____ na kišu.  (bez + obzira)
+TAČNO: bez obzira
+Objašnjenje: Bez obzira piše se rastavljeno (ali pridev bezobziran sastavljeno).
+PROVERA:
+
+[101] srb-probe-sibilarizacija-syn-0001   (srb_probe · sibilarizacija)
+Na trgu su se okupili ____ iz celog kraja.  (junak, množina)
+TAČNO: junaci
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[102] srb-probe-sibilarizacija-syn-0002   (srb_probe · sibilarizacija)
+Na trgu su se okupili ____ iz celog kraja.  (đak, množina)
+TAČNO: đaci
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[103] srb-probe-sibilarizacija-syn-0003   (srb_probe · sibilarizacija)
+Na trgu su se okupili ____ iz celog kraja.  (siromah, množina)
+TAČNO: siromasi
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[104] srb-probe-sibilarizacija-syn-0004   (srb_probe · sibilarizacija)
+Na trgu su se okupili ____ iz celog kraja.  (momak, množina)
+TAČNO: momci
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[105] srb-probe-sibilarizacija-syn-0005   (srb_probe · sibilarizacija)
+Ovogodišnji ____ bili su mnogo teži od prošlogodišnjih.  (zadatak, množina)
+TAČNO: zadaci / zadatci
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[106] srb-probe-sibilarizacija-syn-0006   (srb_probe · sibilarizacija)
+Lekar je rekao da su mu ____ potpuno zdravi.  (bubreg, množina)
+TAČNO: bubrezi
+Objašnjenje: Nominativ množine na -i: ispred -i velar k, g, h prelazi u c, z, s (sibilarizacija).
+PROVERA:
+
+[107] srb-probe-sibilarizacija-syn-0007   (srb_probe · sibilarizacija)
+Po staroj kući noću su lutali ____.  (duh, množina)
+TAČNO: duhovi / dusi
+Objašnjenje: Jednosložne imenice dobijaju umetak -ov-, pa sibilarizacije nema: duhovi.
+PROVERA:
+
+[108] srb-probe-sibilarizacija-syn-0008   (srb_probe · sibilarizacija)
+Za praznik je kupila poklon ____.  (majka, jednina)
+TAČNO: majci
+Objašnjenje: Dativ jednine na -i; sibilarizacija izostaje kod hipokoristika i ispred suglasničke grupe (baki, tetki), a sprovodi se u ostalim slučajevima (majci).
+PROVERA:
+
+[109] srb-probe-sibilarizacija-syn-0009   (srb_probe · sibilarizacija)
+Za praznik je kupila poklon ____.  (tetka, jednina)
+TAČNO: tetki
+Objašnjenje: Dativ jednine na -i; sibilarizacija izostaje kod hipokoristika i ispred suglasničke grupe (baki, tetki), a sprovodi se u ostalim slučajevima (majci).
+PROVERA:
+
+[110] srb-probe-sibilarizacija-syn-0010   (srb_probe · sibilarizacija)
+Za praznik je kupila poklon ____.  (baka, jednina)
+TAČNO: baki
+Objašnjenje: Dativ jednine na -i; sibilarizacija izostaje kod hipokoristika i ispred suglasničke grupe (baki, tetki), a sprovodi se u ostalim slučajevima (majci).
+PROVERA:
+
+[111] srb-probe-sibilarizacija-syn-0011   (srb_probe · sibilarizacija)
+Za praznik je kupila poklon ____.  (snaha, jednina)
+TAČNO: snahi
+Objašnjenje: Dativ jednine na -i; sibilarizacija izostaje kod hipokoristika i ispred suglasničke grupe (baki, tetki), a sprovodi se u ostalim slučajevima (majci).
+PROVERA:
+
+[112] srb-probe-sibilarizacija-syn-0012   (srb_probe · sibilarizacija)
+Dugo je pričala o svojoj ____.  (mačka, jednina)
+TAČNO: mački
+Objašnjenje: Lokativ jednine na -i; sibilarizacija se sprovodi (knjizi, nozi), osim u grupama kao -čk- (mački).
+PROVERA:
+
+[113] srb-probe-sibilarizacija-syn-0013   (srb_probe · sibilarizacija)
+Dugo je pričala o svojoj ____.  (knjiga, jednina)
+TAČNO: knjizi
+Objašnjenje: Lokativ jednine na -i; sibilarizacija se sprovodi (knjizi, nozi), osim u grupama kao -čk- (mački).
+PROVERA:
+
+[114] srb-probe-sibilarizacija-syn-0014   (srb_probe · sibilarizacija)
+Dugo je pričala o svojoj ____.  (noga, jednina)
+TAČNO: nozi
+Objašnjenje: Lokativ jednine na -i; sibilarizacija se sprovodi (knjizi, nozi), osim u grupama kao -čk- (mački).
+PROVERA:
+
+[115] srb-probe-sibilarizacija-syn-0015   (srb_probe · sibilarizacija)
+____, sačuvaj nas od nevolje!  (bog, jednina)
+TAČNO: bože
+Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija): Bože.
+PROVERA:
+
+[116] srb-probe-sibilarizacija-syn-0016   (srb_probe · sibilarizacija)
+Hajde, ____, pomozi mi da podignem ovo!  (drug, jednina)
+TAČNO: druže
+Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).
+PROVERA:
+
+[117] srb-probe-sibilarizacija-syn-0017   (srb_probe · sibilarizacija)
+Hajde, ____, pomozi mi da podignem ovo!  (junak, jednina)
+TAČNO: junače
+Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).
+PROVERA:
+
+[118] srb-probe-sibilarizacija-syn-0018   (srb_probe · sibilarizacija)
+Hajde, ____, pomozi mi da podignem ovo!  (momak, jednina)
+TAČNO: momče
+Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).
+PROVERA:
+
+[119] srb-probe-sibilarizacija-syn-0019   (srb_probe · sibilarizacija)
+Hajde, ____, pomozi mi da podignem ovo!  (čovek, jednina)
+TAČNO: čoveče
+Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).
+PROVERA:
+
+[120] srb-probe-sibilarizacija-syn-0020   (srb_probe · sibilarizacija)
+Ne boj se, mali ____, ništa ti neće biti.  (vuk, jednina)
+TAČNO: vuče
+Objašnjenje: Vokativ na -e: velar k prelazi u č (palatalizacija): vuče.
+PROVERA:
+
+[121] srb-pravopis-poluslozenice-0001   (srb_pravopis · poluslozenice)
+U parku je obnovljena stara ____.  (spomen + česma)
+TAČNO: spomen-česma
+Objašnjenje: Polusloženica sa spomen-: spomen-česma.
+PROVERA:
+
+[122] srb-pravopis-poluslozenice-0002   (srb_pravopis · poluslozenice)
+Zapišite naš ____ za hitne slučajeve.  (kontakt + telefon)
+TAČNO: kontakt-telefon
+Objašnjenje: Polusloženica: kontakt-telefon.
+PROVERA:
+
+[123] srb-pravopis-poluslozenice-0003   (srb_pravopis · poluslozenice)
+Leto provode u ____ na Tari.  (vikend + kuća)
+TAČNO: vikend-kući
+Objašnjenje: Polusloženica: vikend-kuća.
+PROVERA:
+
+[124] srb-pravopis-poluslozenice-0005   (srb_pravopis · poluslozenice)
+Unapređen je u čin ____.  (general + major)
+TAČNO: general-majora
+Objašnjenje: Polusloženica od dve imenice: general-major.
+PROVERA:
+
+[125] srb-pravopis-poluslozenice-0006   (srb_pravopis · poluslozenice)
+Doći će ____ prijatelja.  (pet ili šest, približno)
+TAČNO: pet-šest
+Objašnjenje: Približan broj: pet-šest, s crticom.
+PROVERA:
+
+[126] srb-pravopis-poluslozenice-0007   (srb_pravopis · poluslozenice)
+Ceo dan je šetao ____ po sobi.  (tamo + amo)
+TAČNO: tamo-amo
+Objašnjenje: Spoj priloga suprotnog značenja: tamo-amo.
+PROVERA:
+
+[127] srb-pravopis-poluslozenice-0008   (srb_pravopis · poluslozenice)
+____, posao je ipak završen.  (malo + pomalo)
+TAČNO: malo-pomalo
+Objašnjenje: Udvojen izraz: malo-pomalo.
+PROVERA:
+
+[128] srb-pravopis-poluslozenice-0009   (srb_pravopis · poluslozenice)
+Snašli smo se ____.  (kako + tako)
+TAČNO: kako-tako
+Objašnjenje: Udvojen izraz: kako-tako.
+PROVERA:
+
+[129] srb-pravopis-poluslozenice-0010   (srb_pravopis · poluslozenice)
+Svi su ____ zadovoljni.  (manje + više)
+TAČNO: manje-više
+Objašnjenje: Spoj suprotnih priloga: manje-više.
+PROVERA:
+
+[130] srb-pravopis-poluslozenice-0011   (srb_pravopis · poluslozenice)
+Kad-tad će se saznati; ____ ćemo se svi preseliti.  (danas + sutra)
+TAČNO: danas-sutra
+Objašnjenje: Spoj priloga: danas-sutra.
+PROVERA:
+
+[131] srb-pravopis-poluslozenice-0012   (srb_pravopis · poluslozenice)
+____, moraćeš da pođeš s nama.  (hteo + ne hteo)
+TAČNO: hteo-ne hteo
+Objašnjenje: Ustaljen izraz: hteo-ne hteo.
+PROVERA:
+
+[132] srb-pravopis-poluslozenice-0013   (srb_pravopis · poluslozenice)
+Mladi u kraju slušaju samo ____.  (hip + hop)
+TAČNO: hip-hop
+Objašnjenje: Hip-hop se piše s crticom.
+PROVERA:
+
+[133] srb-pravopis-poluslozenice-0014   (srb_pravopis · poluslozenice)
+Na ulazu u grad postavljen je veliki ____.  (bil + bord)
+TAČNO: bilbord
+Objašnjenje: Bilbord se piše sastavljeno.
+PROVERA:
+
+[134] srb-pravopis-poluslozenice-0015   (srb_pravopis · poluslozenice)
+Pevao je pesme iz zlatnog doba ____.  (rok + en + rol)
+TAČNO: rokenrola
+Objašnjenje: Rokenrol se piše sastavljeno.
+PROVERA:
+
+[135] srb-pravopis-poluslozenice-0016   (srb_pravopis · poluslozenice)
+Za vikend su obišli ____ na Kosančićevom vencu.  (spomen + park)
+TAČNO: spomen-park
+Objašnjenje: Polusloženica: spomen-park.
+PROVERA:
+
+[136] srb-pravopis-poluslozenice-0017   (srb_pravopis · poluslozenice)
+Na mitingu je govorio ____ Petrović.  (general + pukovnik)
+TAČNO: general-pukovnik
+Objašnjenje: Polusloženica: general-pukovnik.
+PROVERA:
+
+[137] srb-pravopis-poluslozenice-0018   (srb_pravopis · poluslozenice)
+Pošiljku su poslali kao ____.  (ekspres + pošiljka)
+TAČNO: ekspres-pošiljku
+Objašnjenje: Polusloženica: ekspres-pošiljka.
+PROVERA:
+
+[138] srb-pravopis-poluslozenice-0019   (srb_pravopis · poluslozenice)
+Taj ____ traje već dvadeset godina.  (šou + program)
+TAČNO: šou-program
+Objašnjenje: Polusloženica: šou-program.
+PROVERA:
+
+[139] srb-pravopis-poluslozenice-0020   (srb_pravopis · poluslozenice)
+Grupa je svirala ____ do jutra.  (džez + muzika)
+TAČNO: džez-muziku / džez muziku
+Objašnjenje: Džez-muzika / džez muzika.
+PROVERA:
+
+[140] srb-pravopis-prefiksoidi-0001   (srb_pravopis · prefiksoidi)
+Vlada je dobila novog ____.  (vice + premijer)
+TAČNO: vicepremijera
+Objašnjenje: Vice- se piše sastavljeno: vicepremijer.
+PROVERA:
+
+[141] srb-pravopis-prefiksoidi-0002   (srb_pravopis · prefiksoidi)
+Hleb smo kupili u ____ preko puta.  (super + market)
+TAČNO: supermarketu
+Objašnjenje: Super- se piše sastavljeno: supermarket.
+PROVERA:
+
+[142] srb-pravopis-prefiksoidi-0003   (srb_pravopis · prefiksoidi)
+Zagađenje reke ugrožava ceo ____.  (eko + sistem)
+TAČNO: ekosistem
+Objašnjenje: Eko- se piše sastavljeno: ekosistem.
+PROVERA:
+
+[143] srb-pravopis-prefiksoidi-0004   (srb_pravopis · prefiksoidi)
+Na fakultetu je studirala ____.  (bio + hemija)
+TAČNO: biohemiju
+Objašnjenje: Bio- se piše sastavljeno: biohemija.
+PROVERA:
+
+[144] srb-pravopis-prefiksoidi-0005   (srb_pravopis · prefiksoidi)
+Nova ____ snabdeva ceo region strujom.  (hidro + centrala)
+TAČNO: hidrocentrala
+Objašnjenje: Hidro- se piše sastavljeno: hidrocentrala.
+PROVERA:
+
+[145] srb-pravopis-prefiksoidi-0006   (srb_pravopis · prefiksoidi)
+Podgrejao je ručak u ____ rerni.  (mikro + talasni)
+TAČNO: mikrotalasnoj
+Objašnjenje: Mikro- se piše sastavljeno: mikrotalasni.
+PROVERA:
+
+[146] srb-pravopis-prefiksoidi-0007   (srb_pravopis · prefiksoidi)
+Upisao je ____ studije.  (post + diplomski)
+TAČNO: postdiplomske
+Objašnjenje: Post- se piše sastavljeno: postdiplomski.
+PROVERA:
+
+[147] srb-pravopis-prefiksoidi-0008   (srb_pravopis · prefiksoidi)
+Gol je pao posle brzog ____.  (kontra + napad)
+TAČNO: kontranapada
+Objašnjenje: Kontra- se piše sastavljeno: kontranapad.
+PROVERA:
+
+[148] srb-pravopis-prefiksoidi-0009   (srb_pravopis · prefiksoidi)
+Njegov deda je bio poznati ____ borac.  (anti + fašistički)
+TAČNO: antifašistički
+Objašnjenje: Anti- se piše sastavljeno: antifašistički.
+PROVERA:
+
+[149] srb-pravopis-prefiksoidi-0010   (srb_pravopis · prefiksoidi)
+To što on priča je obična ____.  (pseudo + nauka)
+TAČNO: pseudonauka
+Objašnjenje: Pseudo- se piše sastavljeno: pseudonauka.
+PROVERA:
+
+[150] srb-pravopis-prefiksoidi-0011   (srb_pravopis · prefiksoidi)
+Ona predaje ____ na fakultetu.  (geo + politika)
+TAČNO: geopolitiku
+Objašnjenje: Geo- se piše sastavljeno: geopolitika.
+PROVERA:
+
+[151] srb-pravopis-prefiksoidi-0012   (srb_pravopis · prefiksoidi)
+Klub je ove sezone ušao u ____.  (super + liga)
+TAČNO: superligu
+Objašnjenje: Super- se piše sastavljeno: superliga.
+PROVERA:
+
+[152] srb-pravopis-prefiksoidi-0013   (srb_pravopis · prefiksoidi)
+Brod je krenuo na ____ putovanje.  (trans + atlantski)
+TAČNO: transatlantsko
+Objašnjenje: Trans- se piše sastavljeno: transatlantski.
+PROVERA:
+
+[153] srb-pravopis-prefiksoidi-0014   (srb_pravopis · prefiksoidi)
+Okružio se raznim ____.  (kvazi + intelektualac)
+TAČNO: kvaziintelektualcima
+Objašnjenje: Kvazi- se piše sastavljeno, i kad se sretnu dva i: kvaziintelektualac.
+PROVERA:
+
+[154] srb-pravopis-prefiksoidi-0015   (srb_pravopis · prefiksoidi)
+Na fakultetu predaje ____.  (makro + ekonomija)
+TAČNO: makroekonomiju
+Objašnjenje: Makro- se piše sastavljeno: makroekonomija.
+PROVERA:
+
+[155] srb-pravopis-prefiksoidi-0016   (srb_pravopis · prefiksoidi)
+Naš tim je prošao u ____.  (polu + finale)
+TAČNO: polufinale
+Objašnjenje: Polu- se piše sastavljeno: polufinale.
+PROVERA:
+
+[156] srb-pravopis-prefiksoidi-0017   (srb_pravopis · prefiksoidi)
+U ____ restoranu nema konobara.  (samo + uslužni)
+TAČNO: samouslužnom
+Objašnjenje: Samo- se piše sastavljeno: samouslužni.
+PROVERA:
+
+[157] srb-pravopis-sastavljeno-rastavljeno-0001   (srb_pravopis · sastavljeno-rastavljeno)
+Na stolu je ostala ____ knjiga.  (ne + pročitan)
+TAČNO: nepročitana
+Objašnjenje: Ne se uz glagolski pridev trpni u službi prideva piše sastavljeno.
+PROVERA:
+
+[158] srb-pravopis-sastavljeno-rastavljeno-0002   (srb_pravopis · sastavljeno-rastavljeno)
+Izašao je, ____ šta da kaže.  (ne + znajući)
+TAČNO: ne znajući
+Objašnjenje: Ne se uz glagolski prilog piše odvojeno.
+PROVERA:
+
+[159] srb-pravopis-sastavljeno-rastavljeno-0003   (srb_pravopis · sastavljeno-rastavljeno)
+Otišao je ____ nikoga.  (ne + pozdravivši)
+TAČNO: ne pozdravivši
+Objašnjenje: Ne se uz glagolski prilog piše odvojeno.
+PROVERA:
+
+[160] srb-pravopis-sastavljeno-rastavljeno-0004   (srb_pravopis · sastavljeno-rastavljeno)
+Nije razgovarao ____.  (ni + s + kim)
+TAČNO: ni s kim / ni sa kim
+Objašnjenje: Kad je predlog između ni i zamenice, piše se rastavljeno.
+PROVERA:
+
+[161] srb-pravopis-sastavljeno-rastavljeno-0005   (srb_pravopis · sastavljeno-rastavljeno)
+Nije pogrešio ____.  (ni + u + čemu)
+TAČNO: ni u čemu
+Objašnjenje: Kad je predlog između ni i zamenice, piše se rastavljeno.
+PROVERA:
+
+[162] srb-pravopis-sastavljeno-rastavljeno-0006   (srb_pravopis · sastavljeno-rastavljeno)
+Da li je ____ video moj ključ?  (i + ko)
+TAČNO: iko
+Objašnjenje: Zamenica iko piše se sastavljeno.
+PROVERA:
+
+[163] srb-pravopis-sastavljeno-rastavljeno-0007   (srb_pravopis · sastavljeno-rastavljeno)
+____ da dođe, neće ga pustiti.  (ma + ko)
+TAČNO: ma ko
+Objašnjenje: Ma ko piše se rastavljeno.
+PROVERA:
+
+[164] srb-pravopis-sastavljeno-rastavljeno-0008   (srb_pravopis · sastavljeno-rastavljeno)
+Uzmi ____ hoćeš.  (koji + god)
+TAČNO: koji god
+Objašnjenje: Koji god piše se rastavljeno.
+PROVERA:
+
+[165] srb-pravopis-sastavljeno-rastavljeno-0009   (srb_pravopis · sastavljeno-rastavljeno)
+Javi mi se ____.  (što + pre)
+TAČNO: što pre
+Objašnjenje: Što pre piše se rastavljeno.
+PROVERA:
+
+[166] srb-pravopis-sastavljeno-rastavljeno-0010   (srb_pravopis · sastavljeno-rastavljeno)
+Spremio je večeru ____.  (na + brzinu)
+TAČNO: na brzinu
+Objašnjenje: Na brzinu piše se rastavljeno.
+PROVERA:
+
+[167] srb-pravopis-sastavljeno-rastavljeno-0011   (srb_pravopis · sastavljeno-rastavljeno)
+Naučio je pesmu ____.  (na + pamet)
+TAČNO: napamet
+Objašnjenje: Prilog napamet piše se sastavljeno.
+PROVERA:
+
+[168] srb-pravopis-sastavljeno-rastavljeno-0012   (srb_pravopis · sastavljeno-rastavljeno)
+Obukao je džemper ____.  (na + opako)
+TAČNO: naopako
+Objašnjenje: Prilog naopako piše se sastavljeno.
+PROVERA:
+
+[169] srb-pravopis-sastavljeno-rastavljeno-0013   (srb_pravopis · sastavljeno-rastavljeno)
+Sve je bilo ____.  (u + zalud)
+TAČNO: uzalud
+Objašnjenje: Prilog uzalud piše se sastavljeno.
+PROVERA:
+
+[170] srb-pravopis-sastavljeno-rastavljeno-0014   (srb_pravopis · sastavljeno-rastavljeno)
+Ispit je ____ prošao dobro.  (u + glavnom)
+TAČNO: uglavnom
+Objašnjenje: Prilog uglavnom piše se sastavljeno.
+PROVERA:
+
+[171] srb-pravopis-sastavljeno-rastavljeno-0015   (srb_pravopis · sastavljeno-rastavljeno)
+On je, ____, bio u pravu.  (do + duše)
+TAČNO: doduše
+Objašnjenje: Rečca doduše piše se sastavljeno.
+PROVERA:
+
+[172] srb-pravopis-sastavljeno-rastavljeno-0016   (srb_pravopis · sastavljeno-rastavljeno)
+Zvao sam te ____ puta.  (bez + broj)
+TAČNO: bezbroj
+Objašnjenje: Bezbroj se piše sastavljeno.
+PROVERA:
+
+[173] srb-pravopis-sastavljeno-rastavljeno-0017   (srb_pravopis · sastavljeno-rastavljeno)
+Kupi mi hleb ____.  (uz + put)
+TAČNO: usput
+Objašnjenje: Prilog usput piše se sastavljeno (uz + put, z ispred p prelazi u s).
+PROVERA:
+
+[174] srb-pravopis-sastavljeno-rastavljeno-0018   (srb_pravopis · sastavljeno-rastavljeno)
+Kiša je počela ____.  (iz + nenada)
+TAČNO: iznenada
+Objašnjenje: Prilog iznenada piše se sastavljeno.
+PROVERA:
+
+[175] srb-pravopis-sastavljeno-rastavljeno-0019   (srb_pravopis · sastavljeno-rastavljeno)
+Problem je jednostavan: ____, nema dovoljno novca.  (na + ime)
+TAČNO: naime
+Objašnjenje: Rečca naime piše se sastavljeno.
+PROVERA:
+
+[176] srb-pravopis-sastavljeno-rastavljeno-0020   (srb_pravopis · sastavljeno-rastavljeno)
+Možeš da sedneš ____.  (bilo + gde)
+TAČNO: bilo gde
+Objašnjenje: Bilo gde piše se rastavljeno.
+PROVERA:
+
+[177] srb-pravopis-sastavljeno-rastavljeno-0021   (srb_pravopis · sastavljeno-rastavljeno)
+____ od njih nije došao.  (ni + jedan)
+TAČNO: nijedan / ni jedan
+Objašnjenje: Nijedan (dopušteno i ni jedan).
+PROVERA:
+
+[178] srb-pravopis-sastavljeno-rastavljeno-0022   (srb_pravopis · sastavljeno-rastavljeno)
+Mnogo mladih je i dalje ____.  (ne + zaposlen)
+TAČNO: nezaposleno
+Objašnjenje: Ne se uz pridev piše sastavljeno.
+PROVERA:
+
+[179] srb-pravopis-sastavljeno-rastavljeno-0023   (srb_pravopis · sastavljeno-rastavljeno)
+Ja to nikada ____ uradio.  (ne + bih)
+TAČNO: ne bih
+Objašnjenje: Ne se uz pomoćni glagol piše odvojeno: ne bih.
+PROVERA:
+
+[180] srb-pravopis-sastavljeno-rastavljeno-0024   (srb_pravopis · sastavljeno-rastavljeno)
+Nije bio ____ umoran.  (ni + malo)
+TAČNO: nimalo
+Objašnjenje: Prilog nimalo piše se sastavljeno.
+PROVERA:
+
+[181] srb-pravopis-slozeni-pridevi-0001   (srb_pravopis · slozeni-pridevi)
+Proučavao je ____ istoriju.  (južni + afrički)
+TAČNO: južnoafričku
+Objašnjenje: Pridev od dvočlanog imena (Južna Afrika) piše se sastavljeno.
+PROVERA:
+
+[182] srb-pravopis-slozeni-pridevi-0002   (srb_pravopis · slozeni-pridevi)
+Mnoge ____ zemlje uvele su evro.  (zapadni + evropski)
+TAČNO: zapadnoevropske
+Objašnjenje: Pridev od dvočlanog naziva (Zapadna Evropa) piše se sastavljeno.
+PROVERA:
+
+[183] srb-pravopis-slozeni-pridevi-0003   (srb_pravopis · slozeni-pridevi)
+Snimljen je film o ____ vitezovima.  (srednji + vekovni)
+TAČNO: srednjovekovnim
+Objašnjenje: Pridev od sveze srednji vek piše se sastavljeno.
+PROVERA:
+
+[184] srb-pravopis-slozeni-pridevi-0004   (srb_pravopis · slozeni-pridevi)
+Na ispitu je prevodila tekst sa ____ jezika.  (stari + slovenski)
+TAČNO: staroslovenskog
+Objašnjenje: Staroslovenski se piše sastavljeno.
+PROVERA:
+
+[185] srb-pravopis-slozeni-pridevi-0005   (srb_pravopis · slozeni-pridevi)
+Kupio je ____ rečnik.  (srpski + engleski)
+TAČNO: srpsko-engleski
+Objašnjenje: Dva ravnopravna pojma (srpski i engleski): s crticom.
+PROVERA:
+
+[186] srb-pravopis-slozeni-pridevi-0006   (srb_pravopis · slozeni-pridevi)
+Čitali smo o ____ ratu.  (ruski + japanski)
+TAČNO: rusko-japanskom
+Objašnjenje: Odnos dve strane: rusko-japanski, s crticom.
+PROVERA:
+
+[187] srb-pravopis-slozeni-pridevi-0007   (srb_pravopis · slozeni-pridevi)
+Gledali smo stari ____ film.  (crn + beo)
+TAČNO: crno-beli
+Objašnjenje: Dve ravnopravne boje: crno-beli.
+PROVERA:
+
+[188] srb-pravopis-slozeni-pridevi-0008   (srb_pravopis · slozeni-pridevi)
+Zidovi su bili ____ boje.  (taman + zelen)
+TAČNO: tamnozelene
+Objašnjenje: Nijansa jedne boje: tamnozelen, sastavljeno.
+PROVERA:
+
+[189] srb-pravopis-slozeni-pridevi-0009   (srb_pravopis · slozeni-pridevi)
+Igrali su u ____ dresovima.  (plav + žut)
+TAČNO: plavo-žutim
+Objašnjenje: Dve boje: plavo-žuti, s crticom.
+PROVERA:
+
+[190] srb-pravopis-slozeni-pridevi-0010   (srb_pravopis · slozeni-pridevi)
+Sukob na ____ prostoru traje decenijama.  (bliski + istočni)
+TAČNO: bliskoistočnom
+Objašnjenje: Pridev od sveze Bliski istok piše se sastavljeno.
+PROVERA:
+
+[191] srb-pravopis-slozeni-pridevi-0011   (srb_pravopis · slozeni-pridevi)
+Prevodi ____ književnost.  (latinski + američki)
+TAČNO: latinoameričku
+Objašnjenje: Pridev od Latinska Amerika: latinoamerički, sastavljeno.
+PROVERA:
+
+[192] srb-pravopis-slozeni-pridevi-0012   (srb_pravopis · slozeni-pridevi)
+U ____ pravu presedan ima veliku težinu.  (anglo + saksonski)
+TAČNO: anglosaksonskom
+Objašnjenje: Anglosaksonski se piše sastavljeno.
+PROVERA:
+
+[193] srb-pravopis-slozeni-pridevi-0013   (srb_pravopis · slozeni-pridevi)
+Pregovori o ____ odnosima su nastavljeni.  (francuski + nemački)
+TAČNO: francusko-nemačkim
+Objašnjenje: Odnos dve strane: francusko-nemački, s crticom.
+PROVERA:
+
+[194] srb-pravopis-slozeni-pridevi-0014   (srb_pravopis · slozeni-pridevi)
+Iznajmili su ____ stan u centru.  (tri + soban)
+TAČNO: trosoban
+Objašnjenje: Pridev sa brojem kao prvim delom piše se sastavljeno: trosoban.
+PROVERA:
+
+[195] srb-pravopis-slozeni-pridevi-0015   (srb_pravopis · slozeni-pridevi)
+Na konkurs se javio jedan ____ mladić.  (dvadeset + godišnji)
+TAČNO: dvadesetogodišnji
+Objašnjenje: Složeni pridev sa brojem piše se sastavljeno: dvadesetogodišnji.
+PROVERA:
+
+[196] srb-pravopis-slozeni-pridevi-0016   (srb_pravopis · slozeni-pridevi)
+Voli da čita ____ romane.  (naučni + fantastični)
+TAČNO: naučnofantastične
+Objašnjenje: Pridev od sveze naučna fantastika piše se sastavljeno.
+PROVERA:
+
+[197] srb-pravopis-slozeni-pridevi-0017   (srb_pravopis · slozeni-pridevi)
+To je bilo ____ pitanje, a ne ekonomsko.  (spoljni + politički)
+TAČNO: spoljnopolitičko
+Objašnjenje: Pridev od sveze spoljna politika piše se sastavljeno.
+PROVERA:
+
+[198] srb-pravopis-slozeni-pridevi-0018   (srb_pravopis · slozeni-pridevi)
+Dobio je ____ diplomu.  (visoki + školski)
+TAČNO: visokoškolsku
+Objašnjenje: Pridev od sveze visoka škola piše se sastavljeno.
+PROVERA:
+
+[199] srb-pravopis-slozeni-pridevi-0019   (srb_pravopis · slozeni-pridevi)
+Južni Sloveni govore ____ jezicima.  (južni + slovenski)
+TAČNO: južnoslovenskim
+Objašnjenje: Pridev od Južni Sloveni: južnoslovenski, sastavljeno.
+PROVERA:
+
+[200] srb-pravopis-slozeni-pridevi-0020   (srb_pravopis · slozeni-pridevi)
+Haljina je bila ____.  (svetao + siv)
+TAČNO: svetlosiva
+Objašnjenje: Nijansa jedne boje: svetlosiv, sastavljeno.
+PROVERA:
+
+[201] srb-pravopis-slozeni-pridevi-0021   (srb_pravopis · slozeni-pridevi)
+U gradu je izgrađena ____ zgrada.  (pet + spratni)
+TAČNO: petospratna
+Objašnjenje: Pridev sa brojem kao prvim delom piše se sastavljeno.
+PROVERA:
+
+[202] srb-pravopis-slozeni-pridevi-0022   (srb_pravopis · slozeni-pridevi)
+Proučava ____ odnose na Balkanu.  (srpski + hrvatski)
+TAČNO: srpsko-hrvatske
+Objašnjenje: Odnos dve strane: srpsko-hrvatski, s crticom.
+PROVERA:
+
+[203] srb-cyrillic-agreement-geografija-0007-cyr   (srb_cyrillic_agreement · geografija)
+У којој се држави налази град Париз?
+  A) Италија
+  B) Шпанија
+  C) Француска
+  D) Немачка
+TAČNO: C) Француска
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[204] srb-grammar-padezi-0002   (srb_grammar · padezi)
+Dopuni rečenicu pravilnim oblikom: „Celo popodne sedeli smo ____ i razgovarali.“
+  A) u baštu
+  B) na baštu
+  C) u baštom
+  D) u bašti
+TAČNO: D) u bašti
+Objašnjenje: Glagol „sedeti“ označava mirovanje, pa posle predloga „u“ dolazi lokativ („u bašti“); akuzativ „u baštu“ tražio bi glagol kretanja.
+PROVERA:
+
+[205] srb-cloze-padezi-0003   (srb_grammar_cloze · padezi)
+Svi su se divili njenoj ____.  (hrabrost)
+TAČNO: hrabrosti
+Objašnjenje: Glagol „diviti se“ ima dativnu rekciju.
+PROVERA:
+
+[206] srb-idioms-idiomi-c-0008   (srb_idioms · idiomi-c)
+Kada kažemo da neka tvrdnja ili izgovor „ne drži vodu", mislimo da je ta tvrdnja:
+  A) tajna i poverljiva
+  B) potpuno tačna i dokazana
+  C) previše dugačka i zamorna
+  D) neuverljiva i logički neodrživa
+TAČNO: D) neuverljiva i logički neodrživa
+Objašnjenje: „Ne drži vodu" znači da je nešto neutemeljeno, da ne može da izdrži proveru i da je neodrživo.
+PROVERA:
+
+[207] srb-cyrillic-agreement-geografija-0009-lat   (srb_cyrillic_agreement · geografija)
+Koji je najveći okean na Zemlji?
+  A) Atlantski
+  B) Indijski
+  C) Severni ledeni
+  D) Tihi
+TAČNO: D) Tihi
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[208] srb-grammar-pravopis-0003   (srb_grammar · pravopis)
+Koja rečenica sadrži pravopisno ispravno napisanu upitnu rečcu?
+  A) Dali ćeš doći na sastanak sutra ujutru?
+  B) Da li ćeš doći na sastanak sutra ujutru?
+  C) Da-li ćeš doći na sastanak sutra ujutru?
+  D) Dal' ćeš doći na sastanak sutra ujutru?
+TAČNO: B) Da li ćeš doći na sastanak sutra ujutru?
+Objašnjenje: Upitna rečca "li" piše se odvojeno, pa je pravilno "da li"; spojeno "dali" je glagolski oblik, a "dal'" je nestandardna skraćenica.
+PROVERA:
+
+[209] srb-cloze-brojevi-0010   (srb_grammar_cloze · brojevi)
+U sobi je bilo dvadeset i jedan ____.  (student)
+TAČNO: student
+Objašnjenje: Brojevi koji se završavaju na 1 (osim 11) traže nominativ jednine.
+PROVERA:
+
+[210] srb-idioms-idiomi-a-0009   (srb_idioms · idiomi-a)
+Šta znači izraz „praviti se Tošo"?
+  A) Ponašati se otmeno i uzdržano u društvu
+  B) Pretvarati se da se ništa ne događa, glumiti neznanje
+  C) Govoriti na izveštačen, kitnjast način
+  D) Truditi se da se uklopi u strano okruženje
+TAČNO: B) Pretvarati se da se ništa ne događa, glumiti neznanje
+Objašnjenje: Izraz „praviti se Tošo" znači praviti se nevešt, glumiti da nešto ne primećujemo ili ne razumemo. Ostala tumačenja su pogrešna.
+PROVERA:
+
+[211] srb-cyrillic-agreement-geografija-0007-lat   (srb_cyrillic_agreement · geografija)
+U kojoj se državi nalazi grad Pariz?
+  A) Italija
+  B) Španija
+  C) Francuska
+  D) Nemačka
+TAČNO: C) Francuska
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[212] srb-grammar-standard-0002   (srb_grammar · standard)
+U kojoj je rečenici pravilno upotrebljen izraz uz reč 'veza'?
+  A) Javiću ti se u vezi toga sutra.
+  B) Javiću ti se u vezi tog sutra.
+  C) Javiću ti se vezano toga sutra.
+  D) Javiću ti se u vezi s tim sutra.
+TAČNO: D) Javiću ti se u vezi s tim sutra.
+Objašnjenje: Pravilno je 'u vezi s tim' (predlog 's' + instrumental), a ne 'u vezi toga'.
+PROVERA:
+
+[213] srb-cloze-glagolski-oblici-0020   (srb_grammar_cloze · glagolski-oblici)
+Ona je ____ kolače celo popodne.  (peći)
+TAČNO: pekla
+Objašnjenje: Radni glagolski pridev od „peći“ je „pekao/pekla“ (k se čuva).
+PROVERA:
+
+[214] srb-idioms-idiomi-b-0001   (srb_idioms · idiomi-b)
+Koja je rečenica pravopisno i gramatički ispravna?
+  A) Nemoj da doljevaš ulje na vatru, dosta je svađe za danas.
+  B) Nemoj da dolivaš ulje na vatru, dosta je svađe za danas.
+  C) Nemoj da dolivaš ulje na vatri, dosta je svađe za danas.
+  D) Nemoj da do livaš ulje na vatru, dosta je svađe za danas.
+TAČNO: B) Nemoj da dolivaš ulje na vatru, dosta je svađe za danas.
+Objašnjenje: Ekavski oblik glagola je „dolivati“ (dolivaš), izraz traži akuzativ pravca „na vatru“, a glagol se piše spojeno.
+PROVERA:
+
+[215] srb-cyrillic-agreement-priroda-0011-lat   (srb_cyrillic_agreement · priroda)
+Koja boja nastaje mešanjem plave i žute boje?
+  A) zelena
+  B) ljubičasta
+  C) narandžasta
+  D) braon
+TAČNO: A) zelena
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[216] srb-grammar-standard-0007   (srb_grammar · standard)
+U kojoj je rečenici glagol 'trebati' upotrebljen bezlično, kako tradicionalna norma savetuje, s imeničkom dopunom 'pomoć'?
+  A) Trebam pomoć oko selidbe.
+  B) Trebam pomoći oko selidbe.
+  C) Treba mi pomoć oko selidbe.
+  D) Treba da mi pomoć oko selidbe.
+TAČNO: C) Treba mi pomoć oko selidbe.
+Objašnjenje: Po tradicionalnoj normi glagol 'trebati' s imeničkom dopunom upotrebljava se bezlično u dativu: 'treba mi pomoć', a ne lično 'trebam pomoć'.
+PROVERA:
+
+[217] srb-cloze-padezi-0004   (srb_grammar_cloze · padezi)
+Bavi se ____ već deset godina.  (fudbal)
+TAČNO: fudbalom
+Objašnjenje: Glagol „baviti se“ traži instrumental bez predloga.
+PROVERA:
+
+[218] srb-idioms-idiomi-c-0001   (srb_idioms · idiomi-c)
+Šta znači izraz „doći na zelenu granu"?
+  A) postići uspeh, materijalno se oporaviti i osigurati
+  B) naglo se razboleti
+  C) otići u prirodu na odmor
+  D) ostariti i otići u penziju
+TAČNO: A) postići uspeh, materijalno se oporaviti i osigurati
+Objašnjenje: Frazeologizam „doći (izaći) na zelenu granu" znači postići napredak, finansijski se osoviti na noge i steći sigurnost.
+PROVERA:
+
+[219] srb-cyrillic-agreement-matematika-0002-lat   (srb_cyrillic_agreement · matematika)
+Koliko iznosi zbir brojeva 25 i 17?
+  A) 42
+  B) 32
+  C) 43
+  D) 52
+TAČNO: A) 42
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[220] srb-grammar-pravopis-0007   (srb_grammar · pravopis)
+U kojoj je rečenici negacija uz glagol napisana pravopisno ispravno?
+  A) Ja ne znam te ljude i neću da idem tamo.
+  B) Ja nezvam te ljude i nehhoću da idem tamo.
+  C) Ja neznam te ljude i ne ću da idem tamo.
+  D) Ja ne znam te ljude i ne ću da idem tamo.
+TAČNO: A) Ja ne znam te ljude i neću da idem tamo.
+Objašnjenje: Rečca "ne" piše se odvojeno od glagola (ne znam), izuzev kod oblika glagola "hteti" gde je negacija srasla: "neću" se piše sastavljeno.
+PROVERA:
+
+[221] srb-cloze-komparacija-0015   (srb_grammar_cloze · komparacija)
+On je ____ od svog brata.  (visok)
+TAČNO: viši
+Objašnjenje: Komparativ od „visok“ je „viši“, ne „visokiji“.
+PROVERA:
+
+[222] srb-idioms-idiomi-a-0006   (srb_idioms · idiomi-a)
+Šta znači izraz „nositi glavu u torbi"?
+  A) Stalno biti rasejan i zaboravan
+  B) Donositi odluke brzopleto, bez razmišljanja
+  C) Izlagati se velikoj, smrtnoj opasnosti
+  D) Brinuti istovremeno o previše stvari
+TAČNO: C) Izlagati se velikoj, smrtnoj opasnosti
+Objašnjenje: Izraz znači dovoditi sopstveni život u opasnost, rizikovati glavu. Distraktori nude uverljiva ali netačna tumačenja.
+PROVERA:
+
+[223] srb-cyrillic-agreement-priroda-0012-cyr   (srb_cyrillic_agreement · priroda)
+Колико ногу има одрасли паук?
+  A) шест
+  B) осам
+  C) десет
+  D) дванаест
+TAČNO: B) осам
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[224] srb-grammar-enklitike-0004   (srb_grammar · enklitike)
+Koja rečenica ima pravilan redosled kada se jave i rečca „li“ i glagolska enklitika?
+  A) Da li mi ćeš pomoći oko selidbe?
+  B) Da li ćeš mi pomoći oko selidbe?
+  C) Da ćeš li mi pomoći oko selidbe?
+  D) Da li ćeš pomoći mi oko selidbe?
+TAČNO: B) Da li ćeš mi pomoći oko selidbe?
+Objašnjenje: Redosled je „li“ pre glagolske enklitike, pa pre dativske: „li ćeš mi“, dakle „Da li ćeš mi pomoći“.
+PROVERA:
+
+[225] srb-cloze-brojevi-0008   (srb_grammar_cloze · brojevi)
+U štali smo videli pet ____.  (konj)
+TAČNO: konja
+Objašnjenje: Uz brojeve od 5 naviše imenica ide u genitivu množine.
+PROVERA:
+
+[226] srb-idioms-idiomi-b-0004   (srb_idioms · idiomi-b)
+U kojoj je rečenici izraz pravilno upotrebljen?
+  A) Tom izjavom je našem timu bacio rukavicu u lice.
+  B) Tom izjavom je našem timu bacio rukavice u lice.
+  C) Tom izjavom je našem timu bacao rukavicu u lice.
+  D) Tom izjavom je našem timu frljnuo rukavicu u lice.
+TAČNO: A) Tom izjavom je našem timu bacio rukavicu u lice.
+Objašnjenje: Frazeologizam glasi „baciti rukavicu“ (jednina, svršeno), pa je pravilno „bacio rukavicu“; množina i nesvršeno „bacao“ ne odgovaraju ustaljenom obliku.
+PROVERA:
+
+[227] srb-cyrillic-agreement-matematika-0003-lat   (srb_cyrillic_agreement · matematika)
+Koliko iznosi sto podeljeno sa četiri?
+  A) dvadeset
+  B) trideset
+  C) dvadeset pet
+  D) pedeset
+TAČNO: C) dvadeset pet
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[228] srb-grammar-pravopis-0002   (srb_grammar · pravopis)
+U kojoj je rečenici futur I napisan pravopisno ispravno?
+  A) Ja ću da radim, a ti ćeš da pišeš ceo dan.
+  B) Ja radiću, a ti ćeš pisati ceo dan jer ce biti vremena.
+  C) Ja ću raditi, a ti ćeš pisati ceo dan.
+  D) Ja ću radit, a ti ćeš pisat ceo dan.
+TAČNO: C) Ja ću raditi, a ti ćeš pisati ceo dan.
+Objašnjenje: Kad infinitiv stoji ispred pomoćnog glagola gubi se krajnje -i i piše se sastavljeno (radiću), ali kad pomoćni glagol stoji ispred, piše se rastavljeno: "ću raditi". Oblici "radit/pisat" bez krajnjeg -i nisu standardni.
+PROVERA:
+
+[229] srb-cloze-komparacija-0013   (srb_grammar_cloze · komparacija)
+Ona je ____ učenica u razredu.  (dobar)
+TAČNO: najbolja
+Objašnjenje: Superlativ od „dobar“ je supletivan: „najbolji“, ovde u ženskom rodu.
+PROVERA:
+
+[230] srb-idioms-idiomi-a-0008   (srb_idioms · idiomi-a)
+Šta znači izraz „praviti od muve slona"?
+  A) Mnogo preuveličavati sitan problem ili događaj
+  B) Stvarati nešto veliko i vredno ni od čega
+  C) Baviti se beskorisnim, sitničavim poslom
+  D) Spajati nespojive stvari u jednu celinu
+TAČNO: A) Mnogo preuveličavati sitan problem ili događaj
+Objašnjenje: Izraz znači preterano uveličavati beznačajnu, sitnu stvar. Distraktori nude izvrnuto ili doslovno tumačenje.
+PROVERA:
+
+[231] srb-cyrillic-agreement-opste-0014-cyr   (srb_cyrillic_agreement · opste)
+Колико месеци има једна година?
+  A) десет
+  B) дванаест
+  C) једанаест
+  D) тринаест
+TAČNO: B) дванаест
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[232] srb-grammar-padezi-0003   (srb_grammar · padezi)
+U kojoj je rečenici padež posle predloga upotrebljen pravilno?
+  A) Posle ručka odlazimo u pozorište.
+  B) Posle ručka odlazimo u pozorištu.
+  C) Posle ručka odlazimo na pozorištu.
+  D) Posle ručka odlazimo u pozorištem.
+TAČNO: A) Posle ručka odlazimo u pozorište.
+Objašnjenje: Glagol „odlaziti“ označava kretanje ka cilju, pa posle „u“ ide akuzativ „u pozorište“; lokativ „u pozorištu“ označavao bi mirovanje na tom mestu.
+PROVERA:
+
+[233] srb-cloze-glagolski-oblici-0017   (srb_grammar_cloze · glagolski-oblici)
+Kada ____, javi mi se.  (stići)
+TAČNO: stigneš / budeš stigao
+Objašnjenje: Uz vremensku klauzu za budućnost ide prezent svršenog glagola ili futur drugi.
+PROVERA:
+
+[234] srb-idioms-idiomi-b-0002   (srb_idioms · idiomi-b)
+Dopunite frazeologizam: „Ceo dan je samo ____ praznu slamu i ništa korisno nije uradio.“
+  A) mlatijo
+  B) mljatio
+  C) mlatil
+  D) mlatio
+TAČNO: D) mlatio
+Objašnjenje: Radni glagolski pridev muškog roda glasi „mlatio“; oblici „mlatijo“ i „mlatil“ su nestandardni, a „mljatio“ je nepostojeća jotovana varijanta.
+PROVERA:
+
+[235] srb-cyrillic-agreement-geografija-0006-cyr   (srb_cyrillic_agreement · geografija)
+Који је главни град Србије?
+  A) Београд
+  B) Нови Сад
+  C) Ниш
+  D) Крагујевац
+TAČNO: A) Београд
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[236] srb-grammar-enklitike-0006   (srb_grammar · enklitike)
+Dopunite prazninu pravilnim redosledom enklitika: „Marko ____ predstavio na sastanku.“
+  A) mi je ga
+  B) je mi ga
+  C) ga mi je
+  D) mi ga je
+TAČNO: D) mi ga je
+Objašnjenje: U nizu enklitika dativska zamenica (mi) prethodi akuzativskoj (ga), a pomoćni glagol „je“ kao jedini izuzetak ide na kraj niza, pa je pravilan redosled „mi ga je“.
+PROVERA:
+
+[237] srb-cloze-brojevi-0011   (srb_grammar_cloze · brojevi)
+Stigla su tri ____ iz inostranstva.  (pismo)
+TAČNO: pisma
+Objašnjenje: Paukal uz broj 3 za imenice srednjeg roda.
+PROVERA:
+
+[238] srb-idioms-idiomi-c-0011   (srb_idioms · idiomi-c)
+Šta znači izraz „trla baba lan da joj prođe dan"?
+  A) naporno raditi od jutra do mraka
+  B) obavljati važan posao na vreme
+  C) brižljivo se starati o domaćinstvu
+  D) baviti se beskorisnim poslom samo da bi vreme prošlo
+TAČNO: D) baviti se beskorisnim poslom samo da bi vreme prošlo
+Objašnjenje: Izreka označava bavljenje nekorisnim, beznačajnim poslom samo da bi vreme prošlo, bez stvarne svrhe ili koristi.
+PROVERA:
+
+[239] srb-cyrillic-agreement-geografija-0008-cyr   (srb_cyrillic_agreement · geografija)
+Која је најдужа река у Европи?
+  A) Дунав
+  B) Рајна
+  C) Волга
+  D) Сена
+TAČNO: C) Волга
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[240] srb-grammar-glagolski-vid-0001   (srb_grammar · glagolski-vid)
+U kojoj rečenici je glagolski vid upotrebljen pravilno?
+  A) Juče sam najzad rešavao taj jedan zadatak i predao test.
+  B) Juče sam najzad rešio taj jedan zadatak i predao test.
+  C) Juče sam najzad rešavao taj jedan zadatak i predavao test.
+  D) Juče sam najzad rešavati taj jedan zadatak i predao test.
+TAČNO: B) Juče sam najzad rešio taj jedan zadatak i predao test.
+Objašnjenje: Jednokratna, dovršena radnja („najzad“, jedan zadatak) traži svršeni vid „rešio“; nesvršeno „rešavao“ označava trajanje ili ponavljanje, što ovde ne odgovara.
+PROVERA:
+
+[241] srb-cloze-padezi-0005   (srb_grammar_cloze · padezi)
+U kući nema više ____.  (hleb)
+TAČNO: hleba
+Objašnjenje: Odrična egzistencijalna konstrukcija „nema“ traži genitiv.
+PROVERA:
+
+[242] srb-idioms-idiomi-b-0007   (srb_idioms · idiomi-b)
+U kojoj rečenici je izraz pravilno napisan?
+  A) Nije fer da ja stalno vadim kestenje iz vatre umesto njega.
+  B) Nije fer da ja stalno vadim kostenje iz vatre umesto njega.
+  C) Nije fer da ja stalno vadijem kestenje iz vatre umesto njega.
+  D) Nije fer da ja stalno vadim kestenje iz vatri umesto njega.
+TAČNO: A) Nije fer da ja stalno vadim kestenje iz vatre umesto njega.
+Objašnjenje: Frazeologizam glasi „vaditi kestenje iz vatre“; „kostenje“ je pogrešan oblik imenice, „vadijem“ je nepravilan prezent, a „iz vatri“ ima pogrešan padežni nastavak.
+PROVERA:
+
+[243] srb-cyrillic-agreement-priroda-0011-cyr   (srb_cyrillic_agreement · priroda)
+Која боја настаје мешањем плаве и жуте боје?
+  A) зелена
+  B) љубичаста
+  C) наранџаста
+  D) браон
+TAČNO: A) зелена
+Objašnjenje: Чињенично питање; тачан одговор је независан од писма.
+PROVERA:
+
+[244] srb-grammar-padezi-0001   (srb_grammar · padezi)
+Koja je rečenica gramatički ispravna prema normi standardnog srpskog jezika?
+  A) Pišem pismo sa olovkom koju si mi poklonio.
+  B) Pišem pismo sa olovku koju si mi poklonio.
+  C) Pišem pismo o olovkom koju si mi poklonio.
+  D) Pišem pismo olovkom koju si mi poklonio.
+TAČNO: D) Pišem pismo olovkom koju si mi poklonio.
+Objašnjenje: Sredstvo (oruđe) kojim se vrši radnja iskazuje se golim instrumentalom bez predloga „sa“, pa je pravilno „pišem olovkom“; predlog „sa“ uz instrumental označava društvo, a ne sredstvo.
+PROVERA:
+
+[245] srb-cloze-padezi-0001   (srb_grammar_cloze · padezi)
+Celo popodne sedeli smo u ____ i razgovarali.  (bašta)
+TAČNO: bašti
+Objašnjenje: Glagol „sedeti“ označava mirovanje, pa posle predloga „u“ ide lokativ.
+PROVERA:
+
+[246] srb-idioms-idiomi-c-0003   (srb_idioms · idiomi-c)
+Kada za nekoga kažemo da „ko o čemu, baba o uštipcima", mislimo da taj čovek:
+  A) voli da kuva i priprema jela
+  B) stalno menja mišljenje o svemu
+  C) uporno svodi svaki razgovor na svoju omiljenu temu
+  D) ćuti i ne uključuje se u razgovor
+TAČNO: C) uporno svodi svaki razgovor na svoju omiljenu temu
+Objašnjenje: Izrekom se ismeva onaj ko, o čemu god se govorilo, neprestano provlači svoju opsesivnu temu.
+PROVERA:
+
+[247] srb-cyrillic-agreement-matematika-0005-lat   (srb_cyrillic_agreement · matematika)
+Koliko strana ima kvadrat?
+  A) tri
+  B) pet
+  C) šest
+  D) četiri
+TAČNO: D) četiri
+Objašnjenje: Činjenično pitanje; tačan odgovor je nezavisan od pisma.
+PROVERA:
+
+[248] srb-grammar-padezi-0008   (srb_grammar · padezi)
+U kojoj je rečenici padež posle predloga „prema“ upotrebljen pravilno?
+  A) Bila je ljubazna prema svojih gostiju.
+  B) Bila je ljubazna prema svoje goste.
+  C) Bila je ljubazna prema svojim goste.
+  D) Bila je ljubazna prema svojim gostima.
+TAČNO: D) Bila je ljubazna prema svojim gostima.
+Objašnjenje: U značenju odnosa/ophođenja predlog „prema“ slaže se s dativom, pa je pravilno „prema svojim gostima“.
+PROVERA:
+
+[249] srb-cloze-glagolski-oblici-0016   (srb_grammar_cloze · glagolski-oblici)
+Da sam znao, ____ bih ranije.  (doći)
+TAČNO: došao
+Objašnjenje: Potencijal se gradi od radnog glagolskog prideva: „došao bih“.
+PROVERA:
+
+[250] srb-idioms-idiomi-b-0005   (srb_idioms · idiomi-b)
+Koja rečenica je pravopisno ispravna?
+  A) Posle te investicije je definitivno obrao zelen boštan.
+  B) Posle te investicije je definitivno obrao zelen bostan.
+  C) Posle te investicije je definitivno obro zelen bostan.
+  D) Posle te investicije je definitivno obrao zeleni bostan.
+TAČNO: B) Posle te investicije je definitivno obrao zelen bostan.
+Objašnjenje: Ustaljeni oblik je „obrati zelen bostan“; „boštan“ je pogrešno napisano, „obro“ je nestandardni sažeti oblik, a „zeleni“ narušava izraz s neodređenim pridevom.
+PROVERA:

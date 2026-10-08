@@ -252,6 +252,96 @@ def _cmd_correction(args: argparse.Namespace) -> int:
     return 0
 
 
+# The official set's core: the sets that discriminate models best. Everything they hold
+# goes on the sheet; hand-written MCQ/cloze items top it up to -n.
+_VERIFY_CORE = ("srb_probe", "srb_pravopis")
+
+
+def _load_any(path: str) -> "list[EvalItem | ClozeItem]":
+    from serbeval.data import load_cloze_items, load_items
+
+    return list(load_cloze_items(path)) if _is_cloze_file(str(path)) else list(load_items(path))
+
+
+def _cmd_verify(args: argparse.Namespace) -> int:
+    """Gold-verification worksheet: build it (--new) or write the marks back (--apply)."""
+    import json
+    from collections import Counter
+    from pathlib import Path
+
+    from serbeval.verify import (
+        apply_verdict,
+        build_verification_sheet,
+        parse_verification_sheet,
+        select_for_verification,
+    )
+
+    data = Path(args.data_dir)
+    if args.new:
+        core = [
+            item
+            for task in _VERIFY_CORE
+            for path in sorted((data / task).glob("*.jsonl"))
+            if path.name != "discarded.jsonl"
+            for item in _load_any(str(path))
+        ]
+        items = select_for_verification(core, _load_pool(str(data)), n=args.n, seed=args.seed)
+        Path(args.out).write_text(build_verification_sheet(items), encoding="utf-8")
+        print(f"OK: {len(items)} item(s) -> {args.out}")
+        print("     upiši oznake na PROVERA linije, pa: serbeval verify --apply " + args.out)
+        return 0
+
+    try:
+        verdicts = parse_verification_sheet(Path(args.apply).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    counts: Counter[str] = Counter()
+    found: set[str] = set()
+    for path in sorted(data.rglob("*.jsonl")):
+        if path.name == "discarded.jsonl":
+            continue
+        rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
+                if line.strip()]
+        if not any(row.get("id") in verdicts for row in rows):
+            continue
+        kept: list[dict[str, object]] = []
+        dropped: list[dict[str, object]] = []
+        for row in rows:
+            verdict = verdicts.get(row.get("id", ""))
+            if verdict is None:
+                kept.append(row)
+                continue
+            found.add(row["id"])
+            item = (ClozeItem if "answers" in row else EvalItem).model_validate(row)
+            try:
+                applied = apply_verdict(item, verdict)
+            except ValueError as exc:
+                print(f"FAIL: {exc}")
+                return 1
+            counts[verdict.kind] += 1
+            if applied is None:
+                dropped.append({**row, "discard_reason": "verify: marked bad (-)"})
+            else:
+                kept.append(applied.model_dump())
+        path.write_text(
+            "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in kept), encoding="utf-8"
+        )
+        if dropped:
+            with open(path.parent / "discarded.jsonl", "a", encoding="utf-8") as fh:
+                for row in dropped:
+                    fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    missing = sorted(set(verdicts) - found)
+    verified = counts["ok"] + counts["fix"] + counts["add"]
+    print(f"OK: {verified} verified ({counts['fix']} fixed, {counts['add']} with an added form), "
+          f"{counts['unsure']} left unverified (?), {counts['drop']} dropped (-)")
+    if missing:
+        print(f"WARNING: {len(missing)} id(s) on the sheet not found: {', '.join(missing[:10])}")
+    return 0
+
+
 def _cmd_index(args: argparse.Namespace) -> int:
     """Condense a full lexicon into the one column `check` needs."""
     from serbeval.check import forms_from_lexicon, write_form_index
@@ -517,6 +607,16 @@ def build_parser() -> argparse.ArgumentParser:
     correction.add_argument("-n", type=int, default=30, help="items per category")
     correction.add_argument("--seed", type=int, default=0)
     correction.set_defaults(func=_cmd_correction)
+
+    verify = sub.add_parser("verify", help="gold-verification worksheet: build or apply")
+    mode = verify.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--new", action="store_true", help="write a fresh worksheet")
+    mode.add_argument("--apply", metavar="SHEET", help="write a marked worksheet back")
+    verify.add_argument("-n", type=int, default=250, help="items on the sheet")
+    verify.add_argument("--seed", type=int, default=0)
+    verify.add_argument("--out", default="provera.txt")
+    verify.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    verify.set_defaults(func=_cmd_verify)
 
     index = sub.add_parser("index", help="build the form index `check` uses")
     index.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")

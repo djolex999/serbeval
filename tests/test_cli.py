@@ -381,3 +381,54 @@ def test_correction_builds_one_file_per_category_from_the_data_dir(
         "c-c.jsonl", "ispravno.jsonl", "razmak-crtica.jsonl",
     ]
     assert "OK" in capsys.readouterr().out
+
+
+def _write_rows(path: Path, rows: list[dict[str, object]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
+                    encoding="utf-8")
+
+
+def _cloze_row(item_id: str, task: str, answer: str) -> dict[str, object]:
+    return {"id": item_id, "task": task, "category": "c", "question": f"{item_id} ____.",
+            "cue": "x", "answers": [answer], "explanation": "e", "script": "latin",
+            "source": "s"}
+
+
+def test_verify_builds_a_sheet_and_applies_marks_back_to_the_data(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    data = tmp_path / "data"
+    _write_rows(data / "srb_probe" / "jat.jsonl",
+                [_cloze_row(f"p{i}", "srb_probe", "vremena") for i in range(3)])
+    _write_rows(data / "srb_pravopis" / "poluslozenice.jsonl",
+                [_cloze_row("q1", "srb_pravopis", "kontakt-osoba")])
+    _write_rows(data / "srb_grammar_cloze" / "items.jsonl",
+                [_cloze_row(f"g{i}", "srb_grammar_cloze", "bašti") for i in range(4)])
+    sheet = tmp_path / "provera.txt"
+
+    assert main(["verify", "--new", "-n", "6", "--data-dir", str(data),
+                 "--out", str(sheet)]) == 0
+    text = sheet.read_text(encoding="utf-8")
+    assert text.count("PROVERA:") == 6
+    for item_id in ("p0", "p1", "p2", "q1"):
+        assert f"] {item_id} " in text
+
+    marks = iter(["ok", "x vrijemena / vremena", "-", "?", "+ baštu", "ok"])
+    text = "\n".join(
+        f"PROVERA: {next(marks)}" if line == "PROVERA:" else line for line in text.splitlines()
+    )
+    sheet.write_text(text, encoding="utf-8")
+    assert main(["verify", "--apply", str(sheet), "--data-dir", str(data)]) == 0
+
+    jat = {r["id"]: r for r in map(json.loads,
+           (data / "srb_probe" / "jat.jsonl").read_text(encoding="utf-8").splitlines())}
+    assert jat["p0"]["verified"] is True
+    assert jat["p1"]["answers"] == ["vrijemena", "vremena"] and jat["p1"]["verified"]
+    assert "p2" not in jat
+    discarded = (data / "srb_probe" / "discarded.jsonl").read_text(encoding="utf-8")
+    assert '"p2"' in discarded
+    pravopis = json.loads((data / "srb_pravopis" / "poluslozenice.jsonl").read_text())
+    assert pravopis["verified"] is False
+    out = capsys.readouterr().out
+    assert "verified" in out and "dropped" in out
