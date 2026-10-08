@@ -2,48 +2,26 @@
 
 Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [HANDOFF.md](../HANDOFF.md).
 
-## Next — difficulty probe set (agreed 2026-10-07, start in a new session)
+## Next — official verified set + public leaderboard (agreed 2026-10-08)
 
-The benchmark is correct but too easy: Opus 5.5 230/230, GPT 6.1 Sol 98% on the Kie triage run.
-Measure before building — only phenomena where models drop below ~90% get a full set.
+- [ ] Select ~250 items for the official set (all probe + pravopis + correction, sample of MCQ/cloze)
+- [ ] Maintainer verifies them (`serbeval review` / `baseline`); fix or drop failures
+- [ ] Re-run the 12 OpenRouter models on it IN PARALLEL; `scripts/leaderboard.py`
+- [ ] Re-send items that got empty provider responses (qwen3-235b, gemma-4-31b)
+- [ ] README: leaderboard table + chart + methodology (srLex-attested gold, contested norm, unparsed)
+- [ ] Publish: GitHub public, Hugging Face dataset card; optional PR to lm-evaluation-harness
+- [ ] Optional: Opus 5.5 via OpenRouter (~$3-10, mandatory thinking) as the reportable ceiling
 
-Session plan (2026-10-07, all probe items are CLOZE — MCQ is already at ceiling):
-- [x] srLex check: aorist YES (attested, e.g. rekoh/donesoše); imperfect present but ~all freq 0
-  (generated); freq-0 forms include generator errors (mačci, tetci, mlječni) → only freq>0 is gold
-- [x] cloze.normalize keeps intra-word hyphens (else kontakt osoba == kontakt-osoba)
-- [x] lexicon: `min_frequency` on forms(); verb paradigms (tense × person × number)
-- [x] serbeval.probe: synth aorist + sibilarization/palatalization from srLex (freq>0 only)
-- [x] hand-written: jat, imperfect, numeral agreement, together/apart, polusloženice
-- [x] data/srb_probe/<phenomenon>.jsonl + one lm_eval task per phenomenon; kie_triage.sh `probe` mode
-- [x] Kie run (Opus only; GPT stopped at 7/120 — Kie 500s, low credits): morphology + jat 100%,
-  sastavljeno-rastavljeno 95%, polusloženice 90% → only pravopis shows any give
-- [ ] Maintainer: judge „doviđenja“ (do viđenja item) against Pravopis 2010; verify polusloženice +
-  sastavljeno-rastavljeno items (40) before building them out
-- [x] Built srb_pravopis (83 source-checked items) and ran Opus: ~97.5% clean → also ceiling
-- [x] Built srb_correction (cue-free, 90 items) and ran Opus: 84/84 answered correct → ceiling
-- [ ] Next (open): measure mid-tier/open models on the existing sets (needs a non-Kie endpoint), or a new construct (multi-error texts, register/style)
-- [ ] (superseded) Next lever: (b) cue-free format — error detection/correction in running text — or
-  test whether current sets discriminate mid-tier/open models (needs a working non-Kie endpoint)
-- [ ] (superseded) Decide next lever, since phenomenon choice alone does not beat the ceiling: bigger, harder
-  pravopis set (polusloženice with prefixoids foto-/auto-/radio-, adjective compounds) vs. format
-  changes (no cue parts, free rewriting/error detection in running text)
+## Done 2026-10-07/08 — difficulty work and first leaderboard
 
-- [ ] 6 phenomena x 20 items = 120:
-  - [ ] ijekavian jat reflex (rijeka / rječnik, mlijeko / mlječni) — synth from srLex
-  - [ ] aorist & imperfect (rekoh, bijaše, donesoše) — synth, check srLex has these verb forms first
-  - [ ] sibilarization / palatalization (junak→junaci, ruka→ruci, Bog→Bože) — synth from srLex
-  - [ ] numeral + adjective + noun agreement (dva nova stola, dvadeset i jedan novi sto) — synth
-  - [ ] pravopis together/apart (ne znam / neznanje, nemoj) — hand-written
-  - [ ] polusloženice with a hyphen (kontakt-osoba, spomen-ploča, radio-stanica) — hand-written; the maintainer AND GPT missed kontakt-osoba
-- [ ] Run both models through Kie: `KIE_API_KEY=... scripts/kie_triage.sh` (budget: under $1; GPT ~40 min)
-- [ ] Keep only phenomena below ~90%; maintainer verifies only those
-- [ ] Then: synth with RARE lemmas (srLex frequency column); then adversarial filtering through two model families
-- Don't: remove the number hint from cues (ambiguous, not harder); trick questions
+- [x] Probe set (6 phenomena), srb_pravopis (82, source-checked), srb_correction (90, cue-free): Opus at ceiling on all
+- [x] srLex: aorist attested, imperfect generated (hand-written); gold only from freq>0 forms
+- [x] Hyphen-aware cloze scoring; slot read from a repeated sentence; request timeouts
+- [x] openrouter-chat adapter + scripts; 12-model preliminary leaderboard (36-94%), $1.21
 
 ## Open — maintainer
 
-- [ ] **Rotate the Kie key** — pasted into a terminal, printed in run logs
-- [ ] **Add a git remote** — every commit lives only on this disk; a private repo is fine
+- [ ] **Revoke keys** — Kie (terminal/logs) and OpenRouter `serbeval` (pasted in chat)
 - [ ] Judge the remaining review-queue items: standard-0003 („da se ponesu“), idiomi-b-0008 (luk jeo), cloze-ud-0027 (date in parentheses)
 - [ ] Verify more items: `serbeval review --task <task>` (30 / 1102 verified so far)
 - [ ] First-party run for reportable numbers (needs ANTHROPIC_API_KEY; `pip install -e ".[dev]"` already done)

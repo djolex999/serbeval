@@ -5,15 +5,13 @@ the summary JSON that lm-eval writes at the top level of each `--output_path` ru
 
 ## Status
 
-⚠️ **No real numbers yet.** The benchmark items are all `verified: false` (awaiting a human pass),
-and this dev machine has no `ANTHROPIC_API_KEY`, so no eval has been run. The commands below are the
-exact ones to run once a key is available and the seed items are verified.
+**Preliminary leaderboard: [LEADERBOARD.md](LEADERBOARD.md)** — 12 models via OpenRouter
+(2026-10-08), rebuilt by `scripts/leaderboard.py`. Items are not yet human-verified, so the
+numbers are not citable. Kie runs (`triage-*/`, gitignored) are triage only, never reported.
 
-All commands run from the **repo root** (the task YAMLs use root-relative `data_files`):
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-```
+Run one model: `OPENROUTER_API_KEY=... scripts/openrouter_eval.sh <model> [model_args]`.
+Run different models in parallel, one process each. The sections below date from before
+any API key and are kept for the dummy-model pipeline check.
 
 ## Pipeline validation (no API key needed)
 
