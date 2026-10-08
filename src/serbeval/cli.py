@@ -291,7 +291,8 @@ def _cmd_verify(args: argparse.Namespace) -> int:
         print(f"OK: {len(items)} item(s) -> {args.out}")
         if args.html:
             title = Path(args.out).stem
-            Path(args.html).write_text(build_verification_html(items, title=title), encoding="utf-8")
+            page = build_verification_html(items, title=title)
+            Path(args.html).write_text(page, encoding="utf-8")
             print(f"OK: same items as a page -> {args.html} (its download goes to --apply)")
         print("     upiši oznake na PROVERA linije, pa: serbeval verify --apply " + args.out)
         return 0
