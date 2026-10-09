@@ -20,249 +20,249 @@ Svakog jutra baka ____ hleb za celu porodicu.  (peći, imperfekat)
 TAČNO: pecijaše / pečaše
 Objašnjenje: Imperfekat glagola peći, 3. l. jd.: pecijaše (sibilarizacija ispred -ija-) ili pečaše.
 Modeli umesto toga: pekaše (google_gemini-3.5-flash-lite), pekla (deepseek_deepseek-v3.2), pekla je (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [2] srb-probe-aorist-imperfekat-0006   (srb_probe · aorist-imperfekat)
 Vojnici ____ teške rance preko planine.  (nositi, imperfekat)
 TAČNO: nošahu / nosijahu
 Objašnjenje: Imperfekat, 3. lice množine; kod -iti glagola s jotovanjem: nošahu.
 Modeli umesto toga: nose (google_gemini-3.5-flash-lite), nosili (deepseek_deepseek-v3.2), nosili su (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [3] srb-probe-aorist-imperfekat-0007   (srb_probe · aorist-imperfekat)
 Svakog jutra on ____ peške do škole.  (ići, imperfekat)
 TAČNO: iđaše
 Objašnjenje: Imperfekat glagola ići, 3. lice jednine: iđaše.
 Modeli umesto toga: ilađa (google_gemini-3.5-flash-lite), išao (deepseek_deepseek-v3.2), iše (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [4] srb-probe-aorist-imperfekat-syn-0002   (srb_probe · aorist-imperfekat)
 Ja ____ kući tek pred ponoć.  (stići, aorist)
 TAČNO: stigoh
 Objašnjenje: Aorist, 1. lice jednine.
 Modeli umesto toga: stizoh (google_gemini-3.5-flash-lite), stižem (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [5] srb-probe-aorist-imperfekat-syn-0003   (srb_probe · aorist-imperfekat)
 Gosti ____ bez pozdrava i više se nisu vratili.  (otići, aorist)
 TAČNO: odoše / otiđoše
 Objašnjenje: Aorist, 3. lice množine.
 Modeli umesto toga: otiodoše (google_gemini-3.5-flash-lite), otišli (deepseek_deepseek-v3.2), otišča (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: + otidoše
 
 [6] srb-probe-aorist-imperfekat-syn-0008   (srb_probe · aorist-imperfekat)
 Kad je pala noć, deca ____ kao zaklana.  (zaspati, aorist)
 TAČNO: zaspaše
 Objašnjenje: Aorist, 3. lice množine; zbirna imenica „deca“ traži glagol u množini.
 Modeli umesto toga: zaspala su (google_gemini-3.5-flash-lite), zaspala (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [7] srb-probe-aorist-imperfekat-syn-0010   (srb_probe · aorist-imperfekat)
 Starac polako ____ sa klupe i ode.  (ustati, aorist)
 TAČNO: ustade
 Objašnjenje: Aorist, 3. lice jednine.
 Modeli umesto toga: usta (anthropic_claude-sonnet-5.5), usta (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: + usta
 
 [8] srb-probe-aorist-imperfekat-syn-0011   (srb_probe · aorist-imperfekat)
 Na pijaci ja ____ starog prijatelja.  (sresti, aorist)
 TAČNO: sretoh
 Objašnjenje: Aorist, 1. lice jednine.
 Modeli umesto toga: srestoh (deepseek_deepseek-v3.2), sreteh (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [9] srb-probe-aorist-imperfekat-syn-0012   (srb_probe · aorist-imperfekat)
 Susedi nam ____ hleb i vino.  (doneti, aorist)
 TAČNO: donesoše / doneše / doniješe
 Objašnjenje: Aorist, 3. lice množine.
 Modeli umesto toga: doniše (google_gemini-3.5-flash-lite), donese (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [10] srb-probe-broj-pridev-imenica-0008   (srb_probe · broj-pridev-imenica)
 Na stolu je dvadeset jedan ____.  (crven + karanfil)
 TAČNO: crveni karanfil / crven karanfil
 Objašnjenje: Složeni broj koji se završava na jedan slaže se u jednini: dvadeset jedan crveni karanfil.
 Modeli umesto toga: crvenih karanfila (deepseek_deepseek-v3.2), crvenih karanfila (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [11] srb-probe-broj-pridev-imenica-0018   (srb_probe · broj-pridev-imenica)
 Prošao je sto jedan ____.  (dug + dan)
 TAČNO: dug dan / dugi dan
 Objašnjenje: Složeni broj koji se završava na jedan slaže se u jednini: sto jedan dug dan.
 Modeli umesto toga: dugodnevicu (anthropic_claude-sonnet-5.5), dan (google_gemini-3.5-flash-lite), dugih dana (deepseek_deepseek-v3.2), dugih dana (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [12] srb-probe-jat-0003   (srb_probe · jat)
 U ovoj kući nikad nije bilo ____ za odmor.  (vremena → ijekavski)
 TAČNO: vremena
 Objašnjenje: Kratki jat iza r daje e: vremena (ali vrijeme).
 Modeli umesto toga: Dakle, ijekavski: **vremena (anthropic_claude-sonnet-5.5), vrimena (google_gemini-3.5-flash-lite)
-PROVERA:
+PROVERA: ok
 
 [13] srb-probe-jat-0011   (srb_probe · jat)
 Tekst je preveden, a ____ je odličan.  (prevod → ijekavski)
 TAČNO: prijevod
 Objašnjenje: Dugi jat daje ije: prijevod.
 Modeli umesto toga: prevod (deepseek_deepseek-v3.2), prevod (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ?
 
 [14] srb-probe-jat-0019   (srb_probe · jat)
 Ta šala uopšte nije bila ____.  (smešna → ijekavski)
 TAČNO: smiješna
 Objašnjenje: Dugi jat daje ije: smiješan, smiješna.
 Modeli umesto toga: smešna (deepseek_deepseek-v3.2), smešna (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [15] srb-probe-poluslozenice-0002   (srb_probe · poluslozenice)
 Za sva pitanja obratite se našoj ____.  (kontakt + osoba)
 TAČNO: kontakt-osobi
 Objašnjenje: Polusloženica: kontakt-osoba se piše s crticom.
 Modeli umesto toga: kontakt osobi (anthropic_claude-sonnet-5.5), kontakt osobi (deepseek_deepseek-v3.2), kontakt osobi (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: x kontakt osobi
 
 [16] srb-probe-poluslozenice-0008   (srb_probe · poluslozenice)
 Profesor je vodio veliki ____ projekat.  (naučni + istraživački)
 TAČNO: naučnoistraživački
 Objašnjenje: Složeni pridev koji označava jedan pojam piše se sastavljeno: naučnoistraživački.
 Modeli umesto toga: naučno-istraživački (google_gemini-3.5-flash-lite), naučno-istraživački (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [17] srb-probe-poluslozenice-0013   (srb_probe · poluslozenice)
 Doći ću za ____ dana.  (dva + tri)
 TAČNO: dva-tri
 Objašnjenje: Približan broj od dva broja piše se s crticom: dva-tri.
 Modeli umesto toga: pet (google_gemini-3.5-flash-lite), pet (deepseek_deepseek-v3.2), pet (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [18] srb-probe-sastavljeno-rastavljeno-0006   (srb_probe · sastavljeno-rastavljeno)
 Nije se plašio ____.  (ni + od + ko)
 TAČNO: ni od koga
 Objašnjenje: Kad se između ni i zamenice nađe predlog, piše se rastavljeno: ni od koga.
 Modeli umesto toga: nikoga (google_gemini-3.5-flash-lite), nikoga (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: -
 
 [19] srb-probe-sastavljeno-rastavljeno-0012   (srb_probe · sastavljeno-rastavljeno)
 Voli voće, ____ jabuke i kruške.  (na + primer)
 TAČNO: na primer
 Objašnjenje: Na primer piše se rastavljeno.
 Modeli umesto toga: naprimer (anthropic_claude-sonnet-5.5), naprimer (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [20] srb-probe-sastavljeno-rastavljeno-0013   (srb_probe · sastavljeno-rastavljeno)
 Rekao je ____ i izašao.  (do + viđenja)
 TAČNO: do viđenja
 Objašnjenje: Do viđenja piše se rastavljeno.
 Modeli umesto toga: doviđenja (google_gemini-3.5-flash-lite), doviđenja (deepseek_deepseek-v3.2), doviđenja (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: x doviđenja
 
 [21] srb-probe-sibilarizacija-syn-0014   (srb_probe · sibilarizacija)
 Dugo je pričala o svojoj ____.  (noga, jednina)
 TAČNO: nozi
 Objašnjenje: Lokativ jednine na -i; sibilarizacija se sprovodi (knjizi, nozi), osim u grupama kao -čk- (mački).
 Modeli umesto toga: nogi (google_gemini-3.5-flash-lite), nogi (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [22] srb-probe-sibilarizacija-syn-0017   (srb_probe · sibilarizacija)
 Hajde, ____, pomozi mi da podignem ovo!  (junak, jednina)
 TAČNO: junače
 Objašnjenje: Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).
 Modeli umesto toga: junace (deepseek_deepseek-v3.2), junaku (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [23] srb-pravopis-poluslozenice-0003   (srb_pravopis · poluslozenice)
 Leto provode u ____ na Tari.  (vikend + kuća)
 TAČNO: vikend-kući
 Objašnjenje: Polusloženica: vikend-kuća.
 Modeli umesto toga: vikendici (anthropic_claude-sonnet-5.5), vikendici (deepseek_deepseek-v3.2), vikend kućama (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [24] srb-pravopis-poluslozenice-0008   (srb_pravopis · poluslozenice)
 ____, posao je ipak završen.  (malo + pomalo)
 TAČNO: malo-pomalo
 Objašnjenje: Udvojen izraz: malo-pomalo.
 Modeli umesto toga: Malopomalo (deepseek_deepseek-v3.2), Pomalo po pomalo (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [25] srb-pravopis-poluslozenice-0012   (srb_pravopis · poluslozenice)
 ____, moraćeš da pođeš s nama.  (hteo + ne hteo)
 TAČNO: hteo-ne hteo
 Objašnjenje: Ustaljen izraz: hteo-ne hteo.
 Modeli umesto toga: Htео ne htео, moraćeš da pođeš s nama (anthropic_claude-sonnet-5.5), Hteo ne hteo (google_gemini-3.5-flash-lite), Hteo ne hteo (deepseek_deepseek-v3.2), Hteo ne hteo (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: x hteo — ne hteo
 
 [26] srb-pravopis-poluslozenice-0018   (srb_pravopis · poluslozenice)
 Pošiljku su poslali kao ____.  (ekspres + pošiljka)
 TAČNO: ekspres-pošiljku
 Objašnjenje: Polusloženica: ekspres-pošiljka.
 Modeli umesto toga: ekspres pošiljku (anthropic_claude-sonnet-5.5), eksprespošiljku (deepseek_deepseek-v3.2), ekspres pošiljku (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: x ekspres pošiljku
 
 [27] srb-pravopis-prefiksoidi-0015   (srb_pravopis · prefiksoidi)
 Na fakultetu predaje ____.  (makro + ekonomija)
 TAČNO: makroekonomiju
 Objašnjenje: Makro- se piše sastavljeno: makroekonomija.
 Modeli umesto toga: makroekonomija (google_gemini-3.5-flash-lite), makroekonomija (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [28] srb-pravopis-sastavljeno-rastavljeno-0002   (srb_pravopis · sastavljeno-rastavljeno)
 Izašao je, ____ šta da kaže.  (ne + znajući)
 TAČNO: ne znajući
 Objašnjenje: Ne se uz glagolski prilog piše odvojeno.
 Modeli umesto toga: neznajući (anthropic_claude-sonnet-5.5), neznajući (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [29] srb-pravopis-sastavljeno-rastavljeno-0003   (srb_pravopis · sastavljeno-rastavljeno)
 Otišao je ____ nikoga.  (ne + pozdravivši)
 TAČNO: ne pozdravivši
 Objašnjenje: Ne se uz glagolski prilog piše odvojeno.
 Modeli umesto toga: Nepozdravivši (anthropic_claude-sonnet-5.5), nepozdravivši (google_gemini-3.5-flash-lite), nepozdravivši (deepseek_deepseek-v3.2), nepozdravivši (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [30] srb-pravopis-sastavljeno-rastavljeno-0008   (srb_pravopis · sastavljeno-rastavljeno)
 Uzmi ____ hoćeš.  (koji + god)
 TAČNO: koji god
 Objašnjenje: Koji god piše se rastavljeno.
 Modeli umesto toga: kogod (google_gemini-3.5-flash-lite), kogod (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [31] srb-pravopis-sastavljeno-rastavljeno-0010   (srb_pravopis · sastavljeno-rastavljeno)
 Spremio je večeru ____.  (na + brzinu)
 TAČNO: na brzinu
 Objašnjenje: Na brzinu piše se rastavljeno.
 Modeli umesto toga: nabrzinu (google_gemini-3.5-flash-lite), nabrzinu (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [32] srb-pravopis-sastavljeno-rastavljeno-0012   (srb_pravopis · sastavljeno-rastavljeno)
 Obukao je džemper ____.  (na + opako)
 TAČNO: naopako
 Objašnjenje: Prilog naopako piše se sastavljeno.
 Modeli umesto toga: naopačke (google_gemini-3.5-flash-lite), napako (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [33] srb-pravopis-sastavljeno-rastavljeno-0017   (srb_pravopis · sastavljeno-rastavljeno)
 Kupi mi hleb ____.  (uz + put)
 TAČNO: usput
 Objašnjenje: Prilog usput piše se sastavljeno (uz + put, z ispred p prelazi u s).
 Modeli umesto toga: uzput (anthropic_claude-sonnet-5.5), uzput (deepseek_deepseek-v3.2)
-PROVERA:
+PROVERA: ok
 
 [34] srb-pravopis-sastavljeno-rastavljeno-0019   (srb_pravopis · sastavljeno-rastavljeno)
 Problem je jednostavan: ____, nema dovoljno novca.  (na + ime)
 TAČNO: naime
 Objašnjenje: Rečca naime piše se sastavljeno.
 Modeli umesto toga: nazime (deepseek_deepseek-v3.2), na imenu (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: ok
 
 [35] srb-pravopis-slozeni-pridevi-0011   (srb_pravopis · slozeni-pridevi)
 Prevodi ____ književnost.  (latinski + američki)
 TAČNO: latinoameričku
 Objašnjenje: Pridev od Latinska Amerika: latinoamerički, sastavljeno.
 Modeli umesto toga: latinsku i američku (anthropic_claude-sonnet-5.5), latinskoameričku (google_gemini-3.5-flash-lite), latinskoameričku (deepseek_deepseek-v3.2), latinsku i američku (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: + latinskoameričku
 
 [36] srb-cloze-brojevi-0010   (srb_grammar_cloze · brojevi)
 U sobi je bilo dvadeset i jedan ____.  (student)
 TAČNO: student
 Objašnjenje: Brojevi koji se završavaju na 1 (osim 11) traže nominativ jednine.
 Modeli umesto toga: studenata (anthropic_claude-sonnet-5.5), studenta (google_gemma-4-31b-it)
-PROVERA:
+PROVERA: -

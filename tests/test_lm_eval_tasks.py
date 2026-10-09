@@ -173,13 +173,14 @@ PROBE_TASKS = {
     "srb_probe_aorist_imperfekat": 20,
     "srb_probe_sibilarizacija": 20,
     "srb_probe_broj_pridev_imenica": 20,
-    "srb_probe_sastavljeno_rastavljeno": 20,
+    # 19: „ni od koga“ was dropped in the 2026-10-09 verification (unnatural sentence).
+    "srb_probe_sastavljeno_rastavljeno": 19,
     "srb_probe_poluslozenice": 20,
 }
 
 
 @pytest.mark.slow
-def test_probe_tasks_load_one_per_phenomenon_with_twenty_items() -> None:
+def test_probe_tasks_load_one_per_phenomenon() -> None:
     # One task per phenomenon so the results table reads off per-phenomenon accuracy
     # directly: the probe's only question is which phenomena fall below ~90%.
     from lm_eval.tasks import TaskManager
