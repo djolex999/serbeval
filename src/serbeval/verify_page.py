@@ -7,10 +7,14 @@ network, no build step); marks autosave in the browser's localStorage.
 """
 
 import json
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from html import escape
+from typing import TYPE_CHECKING
 
 from serbeval.schema import ANSWER_LETTERS, BLANK, ClozeItem, EvalItem
+
+if TYPE_CHECKING:
+    from serbeval.verify import Dissent
 
 Item = EvalItem | ClozeItem
 
@@ -30,8 +34,20 @@ def _payload(item: Item) -> dict[str, object]:
     }
 
 
-def build_verification_html(items: Sequence[Item], *, title: str) -> str:
-    data = json.dumps([_payload(item) for item in items], ensure_ascii=False)
+def build_verification_html(
+    items: Sequence[Item],
+    *,
+    title: str,
+    dissent: "Mapping[str, Sequence[Dissent]] | None" = None,
+) -> str:
+    payload = []
+    for item in items:
+        row = _payload(item)
+        row["dissent"] = [
+            {"model": d.model, "answer": d.answer} for d in (dissent or {}).get(item.id, [])
+        ]
+        payload.append(row)
+    data = json.dumps(payload, ensure_ascii=False)
     # Inside <script>, "</" could close the block early; JSON allows "<" for "<".
     data = data.replace("<", "\\u003c")
     return _TEMPLATE.replace("__TITLE__", escape(title)).replace("__ITEMS__", data)
@@ -87,6 +103,8 @@ main { max-width: 900px; margin: 0 auto; padding: 16px; }
 .gold-box { background: var(--gold-bg); border: 1px solid var(--gold-line); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
 .gold-box b { font-size: 18px; }
 .explain { color: var(--muted); }
+.dissent { margin-top: 10px; padding: 8px 12px; border-left: 3px solid var(--fix); background: var(--bg); border-radius: 6px; }
+.dissent i { color: var(--muted); font-style: normal; font-size: 13px; }
 .actions { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
 .actions button { padding: 10px 6px; font-weight: 600; }
 .actions kbd { display: block; font: 12px ui-monospace, monospace; color: var(--muted); font-weight: 400; }
@@ -240,6 +258,10 @@ function render() {
       '">' + "ABCD"[i] + ") " + esc(c) + "</li>").join("") + "</ol>";
   }
   body += '<div class="explain">' + esc(it.explanation) + "</div>";
+  if (it.dissent && it.dissent.length) {
+    body += '<div class="dissent"><b>Modeli su odgovorili drugačije:</b> ' + it.dissent.map((d) =>
+      "<span>" + esc(d.answer) + ' <i>' + esc(d.model) + "</i></span>").join(" · ") + "</div>";
+  }
   body += '<div class="actions">' + Object.entries(KINDS).map(([k, v]) =>
     '<button class="a-' + k + (m && m.kind === k ? " on" : "") + '" data-kind="' + k + '">' + v.label +
     "<kbd>" + v.key + "</kbd></button>").join("") + "</div>";

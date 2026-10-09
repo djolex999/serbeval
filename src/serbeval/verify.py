@@ -15,10 +15,12 @@ and the maintainer only marks each item on its check line:
 Anything after `#` on the line is a comment. A blank check line means "not reviewed".
 """
 
+import json
 import random
 import re
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Literal
 
 from serbeval.schema import ANSWER_LETTERS, ClozeItem, EvalItem
@@ -56,6 +58,41 @@ class Verdict:
     value: str = ""
 
 
+@dataclass(frozen=True)
+class Dissent:
+    """What one model answered on an item where it disagreed with the gold."""
+
+    model: str
+    answer: str
+
+
+def disputed_items(
+    results_dir: Path | str, *, models: Sequence[str], min_dissent: int
+) -> dict[str, list[Dissent]]:
+    """Items at least `min_dissent` of `models` got wrong, with what each answered.
+
+    Where several strong models agree with the gold, a gold error is unlikely; where they
+    disagree is where every gold error found so far was hiding (foto-aparat, doviđenja).
+    So a human checks only these, and the rest is labelled model-consensus, not human.
+    """
+    from serbeval.cloze import extract_answer
+
+    root = Path(results_dir)
+    dissent: dict[str, list[Dissent]] = {}
+    for model in models:
+        for path in sorted((root / model).rglob("samples_*.jsonl")):
+            for line in path.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                if row.get("exact_match", 1.0) >= 1.0:
+                    continue
+                raw = row["resps"][0][0] if row.get("resps") else ""
+                answer = extract_answer(raw) or "(prazno)"
+                dissent.setdefault(row["doc"]["id"], []).append(Dissent(model, answer))
+    return {item_id: found for item_id, found in dissent.items() if len(found) >= min_dissent}
+
+
 def select_for_verification(
     core: Sequence[Item], others: Sequence[Item], *, n: int, seed: int = 0
 ) -> list[Item]:
@@ -77,7 +114,9 @@ def select_for_verification(
     return picked
 
 
-def build_verification_sheet(items: Sequence[Item]) -> str:
+def build_verification_sheet(
+    items: Sequence[Item], *, dissent: Mapping[str, Sequence[Dissent]] | None = None
+) -> str:
     lines = [_HEADER]
     for number, item in enumerate(items, start=1):
         lines.append(f"[{number}] {item.id}   ({item.task} · {item.category})")
@@ -90,6 +129,9 @@ def build_verification_sheet(items: Sequence[Item]) -> str:
                 lines.append(f"  {letter}) {choice}")
             lines.append(f"TAČNO: {item.answer_letter}) {item.choices[item.answer_index]}")
         lines.append(f"Objašnjenje: {item.explanation}")
+        if dissent and item.id in dissent:
+            others = ", ".join(f"{d.answer} ({d.model})" for d in dissent[item.id])
+            lines.append(f"Modeli umesto toga: {others}")
         lines.append(_CHECK)
         lines.append("")
     return "\n".join(lines)
@@ -165,8 +207,10 @@ def apply_verdict(item: Item, verdict: Verdict) -> Item | None:
     return ClozeItem.model_validate({**item.model_dump(), "answers": answers, "verified": True})
 
 
-def build_verification_html(items: Sequence[Item], *, title: str) -> str:
+def build_verification_html(
+    items: Sequence[Item], *, title: str, dissent: Mapping[str, Sequence[Dissent]] | None = None
+) -> str:
     """The same worksheet as a single offline HTML page; its download feeds `--apply`."""
     from serbeval.verify_page import build_verification_html as build
 
-    return build(items, title=title)
+    return build(items, title=title, dissent=dissent)

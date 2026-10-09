@@ -208,3 +208,41 @@ process.stdout.write(serializeMarks(items, marks));
         "srb-probe-jat-0003": Verdict("add", "vremenâ"),
         "srb-probe-jat-0004": Verdict("unsure"),
     }
+
+
+# --- disputed items: verify only where strong models disagree with the gold ------
+
+from pathlib import Path  # noqa: E402
+
+from serbeval.verify import Dissent, disputed_items  # noqa: E402
+
+
+def _write_samples(root: Path, model: str, rows: list[tuple[str, float, str]]) -> None:
+    out = root / model / "x" / "samples_srb_probe_jat_2026.jsonl"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("".join(
+        json.dumps({"doc": {"id": i}, "exact_match": em, "resps": [[raw]]}) + "\n"
+        for i, em, raw in rows), encoding="utf-8")
+
+
+def test_disputed_keeps_items_enough_models_got_wrong_with_their_answers(tmp_path: Path) -> None:
+    _write_samples(tmp_path, "m1", [("a", 1.0, "vremena"), ("b", 0.0, "vrijemena")])
+    _write_samples(tmp_path, "m2", [("a", 0.0, "vrijemena"), ("b", 0.0, "Odgovor: vrjemena")])
+    _write_samples(tmp_path, "m3", [("a", 1.0, "vremena"), ("b", 1.0, "vremena")])
+    found = disputed_items(tmp_path, models=["m1", "m2", "m3"], min_dissent=2)
+    assert list(found) == ["b"]
+    assert found["b"] == [Dissent("m1", "vrijemena"), Dissent("m2", "vrjemena")]
+
+
+def test_disputed_ignores_models_not_asked_for(tmp_path: Path) -> None:
+    _write_samples(tmp_path, "m1", [("a", 0.0, "x")])
+    _write_samples(tmp_path, "weak", [("a", 0.0, "y")])
+    assert disputed_items(tmp_path, models=["m1"], min_dissent=2) == {}
+
+
+def test_sheet_and_page_show_what_the_models_answered_instead() -> None:
+    dissent = {"srb-probe-jat-0003": [Dissent("sonnet", "vrijemena")]}
+    sheet = build_verification_sheet([cloze()], dissent=dissent)
+    assert "Modeli umesto toga: vrijemena (sonnet)" in sheet
+    page = build_verification_html([cloze()], title="t", dissent=dissent)
+    assert _embedded_items(page)[0]["dissent"] == [{"model": "sonnet", "answer": "vrijemena"}]

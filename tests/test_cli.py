@@ -432,3 +432,22 @@ def test_verify_builds_a_sheet_and_applies_marks_back_to_the_data(
     assert pravopis["verified"] is False
     out = capsys.readouterr().out
     assert "verified" in out and "dropped" in out
+
+
+def test_verify_disputed_puts_only_contested_items_on_the_sheet(tmp_path: Path) -> None:
+    data = tmp_path / "data"
+    _write_rows(data / "srb_probe" / "jat.jsonl",
+                [_cloze_row(f"p{i}", "srb_probe", "vremena") for i in range(3)])
+    results = tmp_path / "results"
+    for model, wrong in (("m1", {"p1"}), ("m2", {"p1", "p2"})):
+        out = results / model / "x" / "samples_srb_probe_jat.jsonl"
+        out.parent.mkdir(parents=True)
+        out.write_text("".join(
+            json.dumps({"doc": {"id": f"p{i}"}, "exact_match": 0.0 if f"p{i}" in wrong else 1.0,
+                        "resps": [["vrijemena"]]}) + "\n" for i in range(3)), encoding="utf-8")
+    sheet = tmp_path / "sporni.txt"
+    assert main(["verify", "--new", "--data-dir", str(data), "--out", str(sheet),
+                 "--disputed", str(results), "--models", "m1,m2", "--min-dissent", "2"]) == 0
+    text = sheet.read_text(encoding="utf-8")
+    assert "] p1 " in text and "] p0 " not in text and "] p2 " not in text
+    assert "Modeli umesto toga: vrijemena (m1), vrijemena (m2)" in text

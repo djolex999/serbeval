@@ -5,7 +5,7 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 ## Next — official verified set + public leaderboard (agreed 2026-10-08)
 
 - [ ] Select ~250 items for the official set (all probe + pravopis + correction, sample of MCQ/cloze)
-- [ ] Maintainer verifies them (`serbeval review` / `baseline`); fix or drop failures
+- [ ] Maintainer checks the 36 DISPUTED items: open tasks/provera-sporni.html, „Preuzmi“, then `verify --apply` (other 214 = model consensus)
 - [ ] Re-run the 12 OpenRouter models on it IN PARALLEL; `scripts/leaderboard.py`
 - [ ] Re-send items that got empty provider responses (qwen3-235b, gemma-4-31b)
 - [ ] README: leaderboard table + chart + methodology (srLex-attested gold, contested norm, unparsed)

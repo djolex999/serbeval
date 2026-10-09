@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>provera-sporni</title>
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1c1a; --muted: #6b6860; --line: #e3e0d8;
+  --accent: #2f5d50; --accent-ink: #ffffff; --gold-bg: #eaf3ee; --gold-line: #9cc4b0;
+  --ok: #2f7d4f; --fix: #b4542d; --add: #2d6fb4; --unsure: #a07a12; --drop: #8a2d3b;
+  --blank: #fff3c4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161614; --panel: #1f1f1c; --ink: #ecebe6; --muted: #a29f95; --line: #34332e;
+    --accent: #7fbfa6; --accent-ink: #10201a; --gold-bg: #1d2e26; --gold-line: #3f6b57;
+    --ok: #6fcf97; --fix: #f0936a; --add: #7db4f0; --unsure: #e8c35a; --drop: #e58a9a;
+    --blank: #4a3f12;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { position: sticky; top: 0; z-index: 2; background: var(--panel);
+  border-bottom: 1px solid var(--line); padding: 12px 16px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; max-width: 900px; margin: 0 auto; }
+h1 { font-size: 16px; margin: 0; font-weight: 650; }
+.progress { flex: 1 1 200px; height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+.counts { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+select, button, input { font: inherit; color: inherit; }
+select, input[type=text] { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; max-width: 100%; min-width: 0; }
+button { cursor: pointer; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 12px; }
+button:hover { border-color: var(--muted); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+main { max-width: 900px; margin: 0 auto; padding: 16px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.meta { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+.status { font-weight: 650; }
+.sentence { font-size: 22px; line-height: 1.45; margin: 14px 0 6px; }
+.sentence mark { background: var(--blank); color: inherit; border-radius: 4px; padding: 0 4px; }
+.original { color: var(--muted); font-size: 14px; }
+.cue { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 1px 10px; margin-left: 6px; }
+.choices { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 6px; }
+.choices li { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.choices li.gold { background: var(--gold-bg); border-color: var(--gold-line); font-weight: 600; }
+.gold-box { background: var(--gold-bg); border: 1px solid var(--gold-line); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+.gold-box b { font-size: 18px; }
+.explain { color: var(--muted); }
+.dissent { margin-top: 10px; padding: 8px 12px; border-left: 3px solid var(--fix); background: var(--bg); border-radius: 6px; }
+.dissent i { color: var(--muted); font-style: normal; font-size: 13px; }
+.actions { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.actions button { padding: 10px 6px; font-weight: 600; }
+.actions kbd { display: block; font: 12px ui-monospace, monospace; color: var(--muted); font-weight: 400; }
+.a-ok { color: var(--ok); } .a-fix { color: var(--fix); } .a-add { color: var(--add); }
+.a-unsure { color: var(--unsure); } .a-drop { color: var(--drop); }
+.actions button.on { outline: 2px solid currentColor; }
+.editor { display: none; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
+.editor.open { display: flex; }
+.editor input { flex: 1 1 240px; }
+.letters button { min-width: 44px; }
+.nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }
+.dots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 18px; }
+.dots button { width: 14px; height: 14px; padding: 0; border-radius: 4px; background: var(--line); border: 0; }
+.dots button.cur { outline: 2px solid var(--ink); }
+.dots .k-ok { background: var(--ok); } .dots .k-fix { background: var(--fix); } .dots .k-add { background: var(--add); }
+.dots .k-unsure { background: var(--unsure); } .dots .k-drop { background: var(--drop); }
+.help { font-size: 13px; color: var(--muted); margin-top: 14px; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg);
+  padding: 8px 14px; border-radius: 8px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+@media (max-width: 560px) {
+  .actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sentence { font-size: 19px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>Provera tačnih odgovora</h1>
+    <div class="progress" aria-hidden="true"><div id="progress"></div></div>
+    <span class="counts" id="counts"></span>
+  </div>
+  <div class="bar" style="margin-top:8px">
+    <select id="filter" aria-label="Kategorija"></select>
+    <label class="counts"><input type="checkbox" id="onlyOpen"> samo neoznačeni</label>
+    <span style="flex:1"></span>
+    <button id="importBtn">Učitaj fajl</button>
+    <button id="exportBtn" class="primary">Preuzmi za --apply</button>
+    <input type="file" id="importFile" accept=".txt" hidden>
+  </div>
+</header>
+<main>
+  <div class="card" id="card"></div>
+  <div class="nav">
+    <button id="prev">← Prethodni</button>
+    <button id="nextOpen">Sledeći neoznačen</button>
+    <button id="next">Sledeći →</button>
+  </div>
+  <div class="dots" id="dots" aria-label="Svi itemi"></div>
+  <p class="help">Tastatura: <b>1</b> ok · <b>2</b> ispravka · <b>3</b> dodaj oblik · <b>4</b> sporno · <b>5</b> loš item ·
+    <b>0</b> poništi · <b>←/→</b> kretanje · <b>Enter</b> potvrdi unos. Sve se čuva automatski u ovom browseru.</p>
+</main>
+<div class="toast" id="toast"></div>
+<script type="application/json" id="items">[{"id": "srb-probe-aorist-imperfekat-0002", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Svakog jutra baka ____ hleb za celu porodicu.", "cue": "peći, imperfekat", "gold": ["pecijaše", "pečaše"], "filled": "Svakog jutra baka pecijaše hleb za celu porodicu.", "explanation": "Imperfekat glagola peći, 3. l. jd.: pecijaše (sibilarizacija ispred -ija-) ili pečaše.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "pekaše"}, {"model": "deepseek_deepseek-v3.2", "answer": "pekla"}, {"model": "google_gemma-4-31b-it", "answer": "pekla je"}]}, {"id": "srb-probe-aorist-imperfekat-0006", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Vojnici ____ teške rance preko planine.", "cue": "nositi, imperfekat", "gold": ["nošahu", "nosijahu"], "filled": "Vojnici nošahu teške rance preko planine.", "explanation": "Imperfekat, 3. lice množine; kod -iti glagola s jotovanjem: nošahu.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "nose"}, {"model": "deepseek_deepseek-v3.2", "answer": "nosili"}, {"model": "google_gemma-4-31b-it", "answer": "nosili su"}]}, {"id": "srb-probe-aorist-imperfekat-0007", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Svakog jutra on ____ peške do škole.", "cue": "ići, imperfekat", "gold": ["iđaše"], "filled": "Svakog jutra on iđaše peške do škole.", "explanation": "Imperfekat glagola ići, 3. lice jednine: iđaše.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "ilađa"}, {"model": "deepseek_deepseek-v3.2", "answer": "išao"}, {"model": "google_gemma-4-31b-it", "answer": "iše"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0002", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Ja ____ kući tek pred ponoć.", "cue": "stići, aorist", "gold": ["stigoh"], "filled": "Ja stigoh kući tek pred ponoć.", "explanation": "Aorist, 1. lice jednine.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "stizoh"}, {"model": "deepseek_deepseek-v3.2", "answer": "stižem"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0003", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Gosti ____ bez pozdrava i više se nisu vratili.", "cue": "otići, aorist", "gold": ["odoše", "otiđoše"], "filled": "Gosti odoše bez pozdrava i više se nisu vratili.", "explanation": "Aorist, 3. lice množine.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "otiodoše"}, {"model": "deepseek_deepseek-v3.2", "answer": "otišli"}, {"model": "google_gemma-4-31b-it", "answer": "otišča"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0008", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Kad je pala noć, deca ____ kao zaklana.", "cue": "zaspati, aorist", "gold": ["zaspaše"], "filled": "Kad je pala noć, deca zaspaše kao zaklana.", "explanation": "Aorist, 3. lice množine; zbirna imenica „deca“ traži glagol u množini.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "zaspala su"}, {"model": "deepseek_deepseek-v3.2", "answer": "zaspala"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0010", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Starac polako ____ sa klupe i ode.", "cue": "ustati, aorist", "gold": ["ustade"], "filled": "Starac polako ustade sa klupe i ode.", "explanation": "Aorist, 3. lice jednine.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "usta"}, {"model": "deepseek_deepseek-v3.2", "answer": "usta"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0011", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Na pijaci ja ____ starog prijatelja.", "cue": "sresti, aorist", "gold": ["sretoh"], "filled": "Na pijaci ja sretoh starog prijatelja.", "explanation": "Aorist, 1. lice jednine.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "srestoh"}, {"model": "google_gemma-4-31b-it", "answer": "sreteh"}]}, {"id": "srb-probe-aorist-imperfekat-syn-0012", "task": "srb_probe", "category": "aorist-imperfekat", "kind": "cloze", "question": "Susedi nam ____ hleb i vino.", "cue": "doneti, aorist", "gold": ["donesoše", "doneše", "doniješe"], "filled": "Susedi nam donesoše hleb i vino.", "explanation": "Aorist, 3. lice množine.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "doniše"}, {"model": "google_gemma-4-31b-it", "answer": "donese"}]}, {"id": "srb-probe-broj-pridev-imenica-0008", "task": "srb_probe", "category": "broj-pridev-imenica", "kind": "cloze", "question": "Na stolu je dvadeset jedan ____.", "cue": "crven + karanfil", "gold": ["crveni karanfil", "crven karanfil"], "filled": "Na stolu je dvadeset jedan crveni karanfil.", "explanation": "Složeni broj koji se završava na jedan slaže se u jednini: dvadeset jedan crveni karanfil.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "crvenih karanfila"}, {"model": "google_gemma-4-31b-it", "answer": "crvenih karanfila"}]}, {"id": "srb-probe-broj-pridev-imenica-0018", "task": "srb_probe", "category": "broj-pridev-imenica", "kind": "cloze", "question": "Prošao je sto jedan ____.", "cue": "dug + dan", "gold": ["dug dan", "dugi dan"], "filled": "Prošao je sto jedan dug dan.", "explanation": "Složeni broj koji se završava na jedan slaže se u jednini: sto jedan dug dan.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "dugodnevicu"}, {"model": "google_gemini-3.5-flash-lite", "answer": "dan"}, {"model": "deepseek_deepseek-v3.2", "answer": "dugih dana"}, {"model": "google_gemma-4-31b-it", "answer": "dugih dana"}]}, {"id": "srb-probe-jat-0003", "task": "srb_probe", "category": "jat", "kind": "cloze", "question": "U ovoj kući nikad nije bilo ____ za odmor.", "cue": "vremena → ijekavski", "gold": ["vremena"], "filled": "U ovoj kući nikad nije bilo vremena za odmor.", "explanation": "Kratki jat iza r daje e: vremena (ali vrijeme).", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "Dakle, ijekavski: **vremena"}, {"model": "google_gemini-3.5-flash-lite", "answer": "vrimena"}]}, {"id": "srb-probe-jat-0011", "task": "srb_probe", "category": "jat", "kind": "cloze", "question": "Tekst je preveden, a ____ je odličan.", "cue": "prevod → ijekavski", "gold": ["prijevod"], "filled": "Tekst je preveden, a prijevod je odličan.", "explanation": "Dugi jat daje ije: prijevod.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "prevod"}, {"model": "google_gemma-4-31b-it", "answer": "prevod"}]}, {"id": "srb-probe-jat-0019", "task": "srb_probe", "category": "jat", "kind": "cloze", "question": "Ta šala uopšte nije bila ____.", "cue": "smešna → ijekavski", "gold": ["smiješna"], "filled": "Ta šala uopšte nije bila smiješna.", "explanation": "Dugi jat daje ije: smiješan, smiješna.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "smešna"}, {"model": "google_gemma-4-31b-it", "answer": "smešna"}]}, {"id": "srb-probe-poluslozenice-0002", "task": "srb_probe", "category": "poluslozenice", "kind": "cloze", "question": "Za sva pitanja obratite se našoj ____.", "cue": "kontakt + osoba", "gold": ["kontakt-osobi"], "filled": "Za sva pitanja obratite se našoj kontakt-osobi.", "explanation": "Polusloženica: kontakt-osoba se piše s crticom.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "kontakt osobi"}, {"model": "deepseek_deepseek-v3.2", "answer": "kontakt osobi"}, {"model": "google_gemma-4-31b-it", "answer": "kontakt osobi"}]}, {"id": "srb-probe-poluslozenice-0008", "task": "srb_probe", "category": "poluslozenice", "kind": "cloze", "question": "Profesor je vodio veliki ____ projekat.", "cue": "naučni + istraživački", "gold": ["naučnoistraživački"], "filled": "Profesor je vodio veliki naučnoistraživački projekat.", "explanation": "Složeni pridev koji označava jedan pojam piše se sastavljeno: naučnoistraživački.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "naučno-istraživački"}, {"model": "google_gemma-4-31b-it", "answer": "naučno-istraživački"}]}, {"id": "srb-probe-poluslozenice-0013", "task": "srb_probe", "category": "poluslozenice", "kind": "cloze", "question": "Doći ću za ____ dana.", "cue": "dva + tri", "gold": ["dva-tri"], "filled": "Doći ću za dva-tri dana.", "explanation": "Približan broj od dva broja piše se s crticom: dva-tri.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "pet"}, {"model": "deepseek_deepseek-v3.2", "answer": "pet"}, {"model": "google_gemma-4-31b-it", "answer": "pet"}]}, {"id": "srb-probe-sastavljeno-rastavljeno-0006", "task": "srb_probe", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Nije se plašio ____.", "cue": "ni + od + ko", "gold": ["ni od koga"], "filled": "Nije se plašio ni od koga.", "explanation": "Kad se između ni i zamenice nađe predlog, piše se rastavljeno: ni od koga.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "nikoga"}, {"model": "google_gemma-4-31b-it", "answer": "nikoga"}]}, {"id": "srb-probe-sastavljeno-rastavljeno-0012", "task": "srb_probe", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Voli voće, ____ jabuke i kruške.", "cue": "na + primer", "gold": ["na primer"], "filled": "Voli voće, na primer jabuke i kruške.", "explanation": "Na primer piše se rastavljeno.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "naprimer"}, {"model": "deepseek_deepseek-v3.2", "answer": "naprimer"}]}, {"id": "srb-probe-sastavljeno-rastavljeno-0013", "task": "srb_probe", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Rekao je ____ i izašao.", "cue": "do + viđenja", "gold": ["do viđenja"], "filled": "Rekao je do viđenja i izašao.", "explanation": "Do viđenja piše se rastavljeno.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "doviđenja"}, {"model": "deepseek_deepseek-v3.2", "answer": "doviđenja"}, {"model": "google_gemma-4-31b-it", "answer": "doviđenja"}]}, {"id": "srb-probe-sibilarizacija-syn-0014", "task": "srb_probe", "category": "sibilarizacija", "kind": "cloze", "question": "Dugo je pričala o svojoj ____.", "cue": "noga, jednina", "gold": ["nozi"], "filled": "Dugo je pričala o svojoj nozi.", "explanation": "Lokativ jednine na -i; sibilarizacija se sprovodi (knjizi, nozi), osim u grupama kao -čk- (mački).", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "nogi"}, {"model": "deepseek_deepseek-v3.2", "answer": "nogi"}]}, {"id": "srb-probe-sibilarizacija-syn-0017", "task": "srb_probe", "category": "sibilarizacija", "kind": "cloze", "question": "Hajde, ____, pomozi mi da podignem ovo!", "cue": "junak, jednina", "gold": ["junače"], "filled": "Hajde, junače, pomozi mi da podignem ovo!", "explanation": "Vokativ na -e: velar k, g, h prelazi u č, ž, š (palatalizacija).", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "junace"}, {"model": "google_gemma-4-31b-it", "answer": "junaku"}]}, {"id": "srb-pravopis-poluslozenice-0003", "task": "srb_pravopis", "category": "poluslozenice", "kind": "cloze", "question": "Leto provode u ____ na Tari.", "cue": "vikend + kuća", "gold": ["vikend-kući"], "filled": "Leto provode u vikend-kući na Tari.", "explanation": "Polusloženica: vikend-kuća.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "vikendici"}, {"model": "deepseek_deepseek-v3.2", "answer": "vikendici"}, {"model": "google_gemma-4-31b-it", "answer": "vikend kućama"}]}, {"id": "srb-pravopis-poluslozenice-0008", "task": "srb_pravopis", "category": "poluslozenice", "kind": "cloze", "question": "____, posao je ipak završen.", "cue": "malo + pomalo", "gold": ["malo-pomalo"], "filled": "malo-pomalo, posao je ipak završen.", "explanation": "Udvojen izraz: malo-pomalo.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "Malopomalo"}, {"model": "google_gemma-4-31b-it", "answer": "Pomalo po pomalo"}]}, {"id": "srb-pravopis-poluslozenice-0012", "task": "srb_pravopis", "category": "poluslozenice", "kind": "cloze", "question": "____, moraćeš da pođeš s nama.", "cue": "hteo + ne hteo", "gold": ["hteo-ne hteo"], "filled": "hteo-ne hteo, moraćeš da pođeš s nama.", "explanation": "Ustaljen izraz: hteo-ne hteo.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "Htео ne htео, moraćeš da pođeš s nama"}, {"model": "google_gemini-3.5-flash-lite", "answer": "Hteo ne hteo"}, {"model": "deepseek_deepseek-v3.2", "answer": "Hteo ne hteo"}, {"model": "google_gemma-4-31b-it", "answer": "Hteo ne hteo"}]}, {"id": "srb-pravopis-poluslozenice-0018", "task": "srb_pravopis", "category": "poluslozenice", "kind": "cloze", "question": "Pošiljku su poslali kao ____.", "cue": "ekspres + pošiljka", "gold": ["ekspres-pošiljku"], "filled": "Pošiljku su poslali kao ekspres-pošiljku.", "explanation": "Polusloženica: ekspres-pošiljka.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "ekspres pošiljku"}, {"model": "deepseek_deepseek-v3.2", "answer": "eksprespošiljku"}, {"model": "google_gemma-4-31b-it", "answer": "ekspres pošiljku"}]}, {"id": "srb-pravopis-prefiksoidi-0015", "task": "srb_pravopis", "category": "prefiksoidi", "kind": "cloze", "question": "Na fakultetu predaje ____.", "cue": "makro + ekonomija", "gold": ["makroekonomiju"], "filled": "Na fakultetu predaje makroekonomiju.", "explanation": "Makro- se piše sastavljeno: makroekonomija.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "makroekonomija"}, {"model": "google_gemma-4-31b-it", "answer": "makroekonomija"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0002", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Izašao je, ____ šta da kaže.", "cue": "ne + znajući", "gold": ["ne znajući"], "filled": "Izašao je, ne znajući šta da kaže.", "explanation": "Ne se uz glagolski prilog piše odvojeno.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "neznajući"}, {"model": "deepseek_deepseek-v3.2", "answer": "neznajući"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0003", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Otišao je ____ nikoga.", "cue": "ne + pozdravivši", "gold": ["ne pozdravivši"], "filled": "Otišao je ne pozdravivši nikoga.", "explanation": "Ne se uz glagolski prilog piše odvojeno.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "Nepozdravivši"}, {"model": "google_gemini-3.5-flash-lite", "answer": "nepozdravivši"}, {"model": "deepseek_deepseek-v3.2", "answer": "nepozdravivši"}, {"model": "google_gemma-4-31b-it", "answer": "nepozdravivši"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0008", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Uzmi ____ hoćeš.", "cue": "koji + god", "gold": ["koji god"], "filled": "Uzmi koji god hoćeš.", "explanation": "Koji god piše se rastavljeno.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "kogod"}, {"model": "google_gemma-4-31b-it", "answer": "kogod"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0010", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Spremio je večeru ____.", "cue": "na + brzinu", "gold": ["na brzinu"], "filled": "Spremio je večeru na brzinu.", "explanation": "Na brzinu piše se rastavljeno.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "nabrzinu"}, {"model": "google_gemma-4-31b-it", "answer": "nabrzinu"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0012", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Obukao je džemper ____.", "cue": "na + opako", "gold": ["naopako"], "filled": "Obukao je džemper naopako.", "explanation": "Prilog naopako piše se sastavljeno.", "dissent": [{"model": "google_gemini-3.5-flash-lite", "answer": "naopačke"}, {"model": "google_gemma-4-31b-it", "answer": "napako"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0017", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Kupi mi hleb ____.", "cue": "uz + put", "gold": ["usput"], "filled": "Kupi mi hleb usput.", "explanation": "Prilog usput piše se sastavljeno (uz + put, z ispred p prelazi u s).", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "uzput"}, {"model": "deepseek_deepseek-v3.2", "answer": "uzput"}]}, {"id": "srb-pravopis-sastavljeno-rastavljeno-0019", "task": "srb_pravopis", "category": "sastavljeno-rastavljeno", "kind": "cloze", "question": "Problem je jednostavan: ____, nema dovoljno novca.", "cue": "na + ime", "gold": ["naime"], "filled": "Problem je jednostavan: naime, nema dovoljno novca.", "explanation": "Rečca naime piše se sastavljeno.", "dissent": [{"model": "deepseek_deepseek-v3.2", "answer": "nazime"}, {"model": "google_gemma-4-31b-it", "answer": "na imenu"}]}, {"id": "srb-pravopis-slozeni-pridevi-0011", "task": "srb_pravopis", "category": "slozeni-pridevi", "kind": "cloze", "question": "Prevodi ____ književnost.", "cue": "latinski + američki", "gold": ["latinoameričku"], "filled": "Prevodi latinoameričku književnost.", "explanation": "Pridev od Latinska Amerika: latinoamerički, sastavljeno.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "latinsku i američku"}, {"model": "google_gemini-3.5-flash-lite", "answer": "latinskoameričku"}, {"model": "deepseek_deepseek-v3.2", "answer": "latinskoameričku"}, {"model": "google_gemma-4-31b-it", "answer": "latinsku i američku"}]}, {"id": "srb-cloze-brojevi-0010", "task": "srb_grammar_cloze", "category": "brojevi", "kind": "cloze", "question": "U sobi je bilo dvadeset i jedan ____.", "cue": "student", "gold": ["student"], "filled": "U sobi je bilo dvadeset i jedan student.", "explanation": "Brojevi koji se završavaju na 1 (osim 11) traže nominativ jednine.", "dissent": [{"model": "anthropic_claude-sonnet-5.5", "answer": "studenata"}, {"model": "google_gemma-4-31b-it", "answer": "studenta"}]}]</script>
+<script>
+/* LOGIC-START */
+const KINDS = {
+  ok: { label: "ok", key: "1" }, fix: { label: "ispravka", key: "2" }, add: { label: "+ oblik", key: "3" },
+  unsure: { label: "sporno", key: "4" }, drop: { label: "loš item", key: "5" },
+};
+// The exact sheet format `serbeval verify --apply` parses: "[n] id" then "PROVERA: mark".
+function markText(m) {
+  if (!m) return "";
+  if (m.kind === "ok") return "ok";
+  if (m.kind === "unsure") return "?";
+  if (m.kind === "drop") return "-";
+  if (m.kind === "fix") return "x " + m.value;
+  if (m.kind === "add") return "+ " + m.value;
+  return "";
+}
+function serializeMarks(items, marks) {
+  const out = ["# serbeval — provera (izvezeno iz HTML-a)", ""];
+  items.forEach((it, i) => {
+    out.push("[" + (i + 1) + "] " + it.id);
+    out.push("PROVERA: " + markText(marks[it.id]));
+    out.push("");
+  });
+  return out.join("\n");
+}
+function parseMarks(text) {
+  const marks = {};
+  let current = null;
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    const id = line.match(/^\[\d+\]\s+(\S+)/);
+    if (id) { current = id[1]; continue; }
+    const check = line.match(/^PROVERA:\s*(.*)$/);
+    if (check && current) {
+      const mark = check[1].split("#")[0].trim();
+      const head = mark.split(/\s+/)[0].toLowerCase();
+      const rest = mark.slice(head.length).trim();
+      if (head === "ok") marks[current] = { kind: "ok" };
+      else if (head === "?") marks[current] = { kind: "unsure" };
+      else if (head === "-") marks[current] = { kind: "drop" };
+      else if (head === "x" && rest) marks[current] = { kind: "fix", value: rest };
+      else if (head === "+" && rest) marks[current] = { kind: "add", value: rest };
+      current = null;
+    }
+  }
+  return marks;
+}
+/* LOGIC-END */
+
+const ITEMS = JSON.parse(document.getElementById("items").textContent);
+const STORE = "serbeval-verify:" + document.title;
+let marks = {};
+try { marks = JSON.parse(localStorage.getItem(STORE) || "{}"); } catch (e) { marks = {}; }
+let pos = 0;
+let editing = null;
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function save() { try { localStorage.setItem(STORE, JSON.stringify(marks)); } catch (e) { /* private mode: keep in memory */ } }
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 1400); }
+
+function visible() {
+  const cat = $("filter").value;
+  const open = $("onlyOpen").checked;
+  return ITEMS.map((it, i) => i).filter((i) =>
+    (!cat || ITEMS[i].task + " · " + ITEMS[i].category === cat) && (!open || !marks[ITEMS[i].id] || i === pos));
+}
+
+function renderCounts() {
+  const n = ITEMS.length;
+  const c = { ok: 0, fix: 0, add: 0, unsure: 0, drop: 0 };
+  Object.values(marks).forEach((m) => { if (c[m.kind] !== undefined) c[m.kind]++; });
+  const done = Object.keys(marks).filter((id) => ITEMS.some((it) => it.id === id)).length;
+  $("progress").style.width = (100 * done / n) + "%";
+  $("counts").textContent = done + "/" + n + " · ok " + c.ok + " · ispravka " + c.fix + " · +oblik " + c.add +
+    " · sporno " + c.unsure + " · loš " + c.drop;
+}
+
+function sentenceHtml(it) {
+  if (it.kind === "mcq") return esc(it.question);
+  const parts = it.question.split("____");
+  return esc(parts[0]) + "<mark>" + esc(it.gold[0]) + "</mark>" + esc(parts.slice(1).join("____"));
+}
+
+function render() {
+  const it = ITEMS[pos];
+  const m = marks[it.id];
+  let body = '<div class="meta"><span>[' + (pos + 1) + "] " + esc(it.id) + "</span><span>" + esc(it.task) + " · " +
+    esc(it.category) + '</span><span class="status">' + (m ? "označeno: " + esc(markText(m)) : "neoznačeno") + "</span></div>";
+  body += '<div class="sentence">' + sentenceHtml(it) + "</div>";
+  if (it.kind === "cloze") {
+    body += '<div class="original">' + esc(it.question) + '<span class="cue">' + esc(it.cue) + "</span></div>";
+    body += '<div class="gold-box">Tačno: <b>' + it.gold.map(esc).join(" / ") + "</b></div>";
+  } else {
+    body += '<ol class="choices">' + it.choices.map((c, i) => '<li class="' + ("ABCD"[i] === it.gold[0] ? "gold" : "") +
+      '">' + "ABCD"[i] + ") " + esc(c) + "</li>").join("") + "</ol>";
+  }
+  body += '<div class="explain">' + esc(it.explanation) + "</div>";
+  if (it.dissent && it.dissent.length) {
+    body += '<div class="dissent"><b>Modeli su odgovorili drugačije:</b> ' + it.dissent.map((d) =>
+      "<span>" + esc(d.answer) + ' <i>' + esc(d.model) + "</i></span>").join(" · ") + "</div>";
+  }
+  body += '<div class="actions">' + Object.entries(KINDS).map(([k, v]) =>
+    '<button class="a-' + k + (m && m.kind === k ? " on" : "") + '" data-kind="' + k + '">' + v.label +
+    "<kbd>" + v.key + "</kbd></button>").join("") + "</div>";
+  body += '<div class="editor" id="editor"></div>';
+  $("card").innerHTML = body;
+  $("card").querySelectorAll(".actions button").forEach((b) => b.addEventListener("click", () => choose(b.dataset.kind)));
+  renderDots();
+  renderCounts();
+  editing = null;
+}
+
+function renderDots() {
+  $("dots").innerHTML = ITEMS.map((it, i) => {
+    const m = marks[it.id];
+    return '<button title="[' + (i + 1) + "] " + esc(it.id) + '" class="' + (m ? "k-" + m.kind : "") +
+      (i === pos ? " cur" : "") + '" data-i="' + i + '"></button>';
+  }).join("");
+  $("dots").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => go(Number(b.dataset.i))));
+}
+
+function setMark(kind, value) {
+  const id = ITEMS[pos].id;
+  marks[id] = value === undefined ? { kind } : { kind, value };
+  save();
+  render();
+  advance();
+}
+
+function choose(kind) {
+  const it = ITEMS[pos];
+  if (kind === "ok" || kind === "unsure" || kind === "drop") return setMark(kind);
+  const ed = $("editor");
+  ed.classList.add("open");
+  editing = kind;
+  if (it.kind === "mcq") {
+    if (kind === "add") { ed.innerHTML = '<span class="explain">„+ oblik“ važi samo za dopunu; za ponuđene odgovore koristi ispravku.</span>'; return; }
+    ed.innerHTML = '<span>Tačno slovo:</span><span class="letters">' + "ABCD".split("").map((l) =>
+      '<button data-l="' + l + '">' + l + "</button>").join(" ") + "</span>";
+    ed.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMark("fix", b.dataset.l)));
+    return;
+  }
+  const prior = marks[it.id] && marks[it.id].kind === kind ? marks[it.id].value : (kind === "fix" ? it.gold.join(" / ") : "");
+  ed.innerHTML = '<span>' + (kind === "fix" ? "Ispravni oblici (odvoji „ / “):" : "Dodatni tačan oblik:") +
+    '</span><input type="text" id="editValue" value="' + esc(prior) + '"><button class="primary" id="editOk">Potvrdi</button>';
+  const input = $("editValue");
+  input.focus(); input.select();
+  const commit = () => { const v = input.value.trim(); if (v) setMark(kind, v); };
+  $("editOk").addEventListener("click", commit);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") commit(); if (e.key === "Escape") render(); e.stopPropagation(); });
+}
+
+function go(i) { pos = Math.max(0, Math.min(ITEMS.length - 1, i)); render(); }
+function step(d) {
+  const v = visible();
+  const at = v.indexOf(pos);
+  const next = v[at + d];
+  if (next !== undefined) go(next);
+}
+function advance() {
+  const v = visible().filter((i) => !marks[ITEMS[i].id]);
+  const after = v.find((i) => i > pos);
+  if (after !== undefined) go(after);
+  else if (v.length) go(v[0]);
+  else toast("Sve je označeno — preuzmi fajl.");
+}
+
+function exportSheet() {
+  const blob = new Blob([serializeMarks(ITEMS, marks)], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = document.title + ".txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$("filter").innerHTML = '<option value="">Sve kategorije (' + ITEMS.length + ")</option>" +
+  [...new Set(ITEMS.map((it) => it.task + " · " + it.category))].map((c) =>
+    '<option value="' + esc(c) + '">' + esc(c) + " (" + ITEMS.filter((it) => it.task + " · " + it.category === c).length +
+    ")</option>").join("");
+$("filter").addEventListener("change", () => { const v = visible(); if (v.length) go(v[0]); });
+$("onlyOpen").addEventListener("change", render);
+$("prev").addEventListener("click", () => step(-1));
+$("next").addEventListener("click", () => step(1));
+$("nextOpen").addEventListener("click", advance);
+$("exportBtn").addEventListener("click", exportSheet);
+$("importBtn").addEventListener("click", () => $("importFile").click());
+$("importFile").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const loaded = parseMarks(await file.text());
+  Object.assign(marks, loaded);
+  save(); render();
+  toast("Učitano " + Object.keys(loaded).length + " oznaka.");
+});
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.metaKey || e.ctrlKey) return;
+  const kind = Object.keys(KINDS).find((k) => KINDS[k].key === e.key);
+  if (kind) { e.preventDefault(); choose(kind); }
+  else if (e.key === "0") { delete marks[ITEMS[pos].id]; save(); render(); }
+  else if (e.key === "ArrowRight" || e.key === "j") step(1);
+  else if (e.key === "ArrowLeft" || e.key === "k") step(-1);
+});
+const firstOpen = ITEMS.findIndex((it) => !marks[it.id]);
+go(firstOpen === -1 ? 0 : firstOpen);
+</script>
+</body>
+</html>

@@ -255,6 +255,13 @@ def _cmd_correction(args: argparse.Namespace) -> int:
 # The official set's core: the sets that discriminate models best. Everything they hold
 # goes on the sheet; hand-written MCQ/cloze items top it up to -n.
 _VERIFY_CORE = ("srb_probe", "srb_pravopis")
+# The four strongest models on the 2026-10-08 leaderboard (results/openrouter dir names).
+_CONSENSUS_MODELS = (
+    "anthropic_claude-sonnet-5.5",
+    "google_gemini-3.5-flash-lite",
+    "deepseek_deepseek-v3.2",
+    "google_gemma-4-31b-it",
+)
 
 
 def _load_any(path: str) -> "list[EvalItem | ClozeItem]":
@@ -273,6 +280,7 @@ def _cmd_verify(args: argparse.Namespace) -> int:
         apply_verdict,
         build_verification_html,
         build_verification_sheet,
+        disputed_items,
         parse_verification_sheet,
         select_for_verification,
     )
@@ -287,11 +295,20 @@ def _cmd_verify(args: argparse.Namespace) -> int:
             for item in _load_any(str(path))
         ]
         items = select_for_verification(core, _load_pool(str(data)), n=args.n, seed=args.seed)
-        Path(args.out).write_text(build_verification_sheet(items), encoding="utf-8")
+        dissent = None
+        if args.disputed:
+            models = [m.strip() for m in args.models.split(",") if m.strip()]
+            dissent = disputed_items(args.disputed, models=models, min_dissent=args.min_dissent)
+            total = len(items)
+            items = [item for item in items if item.id in dissent]
+            print(f"     {len(items)} of {total} item(s) disputed by >= {args.min_dissent} "
+                  f"of {len(models)} model(s); the rest stand on model consensus")
+        sheet = build_verification_sheet(items, dissent=dissent)
+        Path(args.out).write_text(sheet, encoding="utf-8")
         print(f"OK: {len(items)} item(s) -> {args.out}")
         if args.html:
             title = Path(args.out).stem
-            page = build_verification_html(items, title=title)
+            page = build_verification_html(items, title=title, dissent=dissent)
             Path(args.html).write_text(page, encoding="utf-8")
             print(f"OK: same items as a page -> {args.html} (its download goes to --apply)")
         print("     upiši oznake na PROVERA linije, pa: serbeval verify --apply " + args.out)
@@ -622,6 +639,10 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--seed", type=int, default=0)
     verify.add_argument("--out", default="provera.txt")
     verify.add_argument("--html", default=None, help="also write the sheet as an HTML page")
+    verify.add_argument("--disputed", metavar="RESULTS_DIR", default=None,
+                        help="keep only items --models got wrong (per-model samples dirs)")
+    verify.add_argument("--models", default=",".join(_CONSENSUS_MODELS))
+    verify.add_argument("--min-dissent", type=int, default=2)
     verify.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     verify.set_defaults(func=_cmd_verify)
 
