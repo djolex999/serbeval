@@ -1,32 +1,74 @@
 # serbeval
 
-Serbian-language evaluation benchmark for LLMs, built on
+A Serbian-language benchmark for LLMs, built on
 [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) (pinned to `0.4.12`).
 
-Most multilingual benchmarks barely touch Serbian, and none probe the things models actually get
-wrong: case government, clitic placement, verbal aspect, paukal agreement, and Cyrillic/Latin
-script consistency. serbeval is a small, hand-verifiable benchmark targeting exactly those.
+Most multilingual benchmarks test Serbian, if at all, with **translated** English tasks. serbeval
+tests what translation cannot carry over: case government, verbal aspect, the aorist and
+imperfect, sibilarization, numeral agreement (*dva nova stola*, *dvadeset jedan novi sto*), the
+ijekavian jat reflex, pravopis (*kontakt osoba*, *naučnoistraživački*, *ne znajući*), č/ć, and
+Cyrillic/Latin consistency.
 
-## License
+> **Status: preliminary.** The numbers below come from the full suite. Items checked by a
+> human are a minority; most of the rest are backed by the agreement of four strong models (see
+> [Verification](#verification)). Treat this as a working benchmark, not a final leaderboard.
 
-The **code** is MIT ([LICENSE](LICENSE)). The **data is not**, and is not uniform:
-hand-written items are CC BY 4.0, while everything derived from UD_Serbian-SET or srLex
-is CC BY-SA 4.0 — share-alike, so it cannot be relicensed. Each item carries its own
-`license` field; the split and the required attributions are in [data/LICENSE](data/LICENSE).
+## Leaderboard (preliminary, 2026-10-08)
+
+Twelve models via OpenRouter, zero-shot, 1394 items each. Open-weights models were pinned to
+full precision (bf16/fp16; fp8 where that is the native release), and the provider that served
+each run is logged. Group score = mean accuracy over the group's tasks.
+
+| # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
+|---|---|---|---|---|---|---|---|---|
+| 1 | anthropic_claude-sonnet-5.5 | 97% | 96% | 92% | 92% | 96% | **94%** | 0.00 |
+| 2 | google_gemini-3.5-flash-lite | 99% | 91% | 88% | 85% | 93% | **91%** | 0.00 |
+| 3 | deepseek_deepseek-v3.2 | 92% | 93% | 82% | 76% | 90% | **87%** | 0.00 |
+| 4 | google_gemma-4-31b-it | 92% | 93% | 74% | 78% | 92% | **86%** | 0.04 |
+| 5 | qwen_qwen3-235b-a22b-2507 | 84% | 95% | 74% | 68% | 84% | **81%** | 0.13 |
+| 6 | openai_gpt-5-mini | 90% | 88% | 63% | 67% | 88% | **79%** | 0.00 |
+| 7 | anthropic_claude-haiku-5.5 | 89% | 81% | 58% | 58% | 90% | **75%** | 0.03 |
+| 8 | meta-llama_llama-3.3-70b-instruct | 86% | 81% | 56% | 52% | 74% | **70%** | 0.00 |
+| 9 | google_gemma-3-12b-it | 82% | 80% | 50% | 41% | 72% | **65%** | 0.00 |
+| 10 | qwen_qwen3.5-9b | 86% | 61% | 45% | 37% | 78% | **61%** | 0.00 |
+| 11 | meta-llama_llama-3.1-8b-instruct | 50% | 47% | 22% | 21% | 56% | **39%** | 0.00 |
+| 12 | mistralai_mistral-nemo | 64% | 26% | 13% | 14% | 66% | **36%** | 0.00 |
+
+Full notes: [results/LEADERBOARD.md](results/LEADERBOARD.md). The whole 12-model run cost $1.21.
+
+### What it shows
+
+- **It separates models below the frontier**, from 36% to 94%, roughly in order of size and
+  generation. The pravopis and probe groups spread the widest (13–92%).
+- **It does not separate the frontier.** Claude Opus 5.5 scored ~97–100% on every group in
+  triage runs through a reseller. Those numbers are not reportable, so Opus is not in the table.
+  Harder versions of the same checks did not change that: a 6-phenomenon probe, a
+  source-checked pravopis set, and a cue-free correction format all left Opus at ceiling.
+- **The frontier's remaining "errors" are contested norm, not ignorance.** Pravopis 2010
+  hyphenates *foto-aparat* and *auto-put*, while Klajn and the 1993 Pravopis write them together.
+  Items like that were dropped rather than pinned to one authority.
+- **Recognising is easier than producing.** mistral-nemo scores 64% picking the right form from
+  four choices but 26% writing it (cloze).
+- **Cheap does not mean bad at Serbian.** gemini-3.5-flash-lite (2nd) beats claude-haiku-5.5
+  and gpt-5-mini by 12–16 points, mostly on pravopis.
 
 ## Tasks
 
-| Task | Items | What it tests | Status |
-| --- | --- | --- | --- |
-| `srb_grammar` | `data/srb_grammar/items.jsonl` | Case government, verbal aspect, agreement (incl. paukal), clitic placement, comparison, orthography, standard usage | seed set, `verified: false` |
-| `srb_idioms` | `data/srb_idioms/items.jsonl` | Meaning of Serbian idioms (lexical knowledge that doesn't transfer from English) | seed set, `verified: false` |
-| `srb_cyrillic_agreement` | `data/srb_cyrillic_agreement/items.jsonl` | Same question asked in Cyrillic and Latin — measures per-pair answer agreement plus accuracy | seed set, `verified: false` |
-| `srb_grammar_cloze` | `data/srb_grammar_cloze/items.jsonl` | Same grammar competence as `srb_grammar` but **fill-in-the-blank**: the model must produce the form, not pick it | prototype, 20 items, `verified: false` |
+| Task | Items | What it tests |
+| --- | --- | --- |
+| `srb_grammar` | 50 MCQ | case government, aspect, agreement, clitics, comparison, standard usage |
+| `srb_idioms` | 30 MCQ | meaning of Serbian idioms |
+| `srb_cyrillic_agreement` | 15 pairs | the same question in Cyrillic and Latin; reports per-pair agreement |
+| `srb_grammar_cloze` | 20 + 453 mined + 519 synthesised | produce the inflected form (fill-in-the-blank) |
+| `srb_probe_*` | 6 × ~20 | jat, aorist/imperfect, sibilarization, numeral agreement, together/apart, polusloženice |
+| `srb_pravopis_*` | 4 tasks, 82 | prefixoids, polusloženice, compound adjectives, together/apart |
+| `srb_correction_*` | 3 × 30 | **no cue**: correct the one error in a sentence, or leave it alone if it has none |
 
-MCQ items are 4-way multiple choice (A/B/C/D), evaluated as `generate_until` with regex letter
-extraction — no logprobs required, so any chat API works.
+MCQ items are A/B/C/D, scored as `generate_until` with letter extraction, so no logprobs are
+needed and any chat API works. Gold positions are balanced: a test fails the build if they drift,
+since an always-"A" model once scored 60–80%.
 
-`srb_grammar_cloze` is an experiment in a different direction:
+Cloze items give a cue in brackets and need the exact form:
 
 ```
 Dopuni rečenicu pravilnim oblikom reči u zagradi.
@@ -35,19 +77,40 @@ Uprkos ____, krenuli smo na put.  (loše vreme)
 ```
 → `lošem vremenu`
 
-Cloze removes the three weaknesses MCQ has here at once: no 25% chance floor, no distractors to
-get wrong, and no structural giveaway for a model to pattern-match. `answers` is a list, so
-genuinely contested norms (ijekavian doublets, tolerated variants) list every accepted form
-rather than forcing one reading and dropping the item. Scoring folds case and punctuation but
-**never Serbian diacritics** — `kuca` is not `kuća`.
+Scoring folds case, outer punctuation and script, but **never Serbian diacritics** (`kuca` is
+not `kuća`) or an intra-word hyphen (`kontakt-osoba` is not `kontakt osoba`). `answers` is a list,
+so tolerated variants are all accepted. A model that repeats the whole sentence verbatim is still
+scored on the form it put in the blank.
 
-**Open question this exists to answer:** is cloze actually harder than the MCQ set? That needs a
-live model run; the `dummy` model only proves the pipeline works.
+The correction tasks have no cue. The model sees `Ja to nikada nebih uradio.` or a correct
+sentence, and must answer with the corrected sentence or the same sentence unchanged. Errors are
+derived mechanically from verified items: spacing and hyphenation, and a č/ć swap that is only
+used when it produces a non-word (checked against srLex). The `ispravno` task, made of clean
+sentences, measures false alarms.
 
-**⚠️ Verification status:** every item currently carries `verified: false`. Items were authored
-and adversarially cross-checked by Claude agents, and candidates can additionally pass the
-self-consistency filter (`serbeval selfcheck`), but **no results should be published before a
-human verification pass** by a native speaker.
+Every task reports **`unparsed`** next to accuracy. That keeps a refusal or a format slip from
+looking like a Serbian error. Check it before believing any number.
+
+## Verification
+
+Gold answers come from three places: hand-written items, the srLex lexicon (only forms
+**attested** in the corpus; srLex's generated forms include errors like *mačci* for *mački*), and
+UD_Serbian-SET annotations. On top of that:
+
+- **Blind human baseline:** a native speaker answered 30 items without seeing the gold and
+  scored 29/30. The miss had the right gold.
+- **Source check:** an independent pass checked the pravopis golds against Pravopis 2010, Klajn
+  and Serbian language-advice sources. Items where the authorities disagree were dropped.
+- **Disputed items, human-checked:** on a 250-item core set, the four strongest models agreed with
+  the gold on 214 items. The maintainer checked the 36 where two or more disagreed: 4 golds
+  changed, 3 gained an accepted variant, 2 items were dropped. Every gold error found so far sat
+  where strong models disagreed.
+- **Model consensus is not human verification.** The 214 consensus items are labelled that
+  way. Four models can share a mistake, and the blind baseline is the independent control.
+
+Tooling: `serbeval verify --new --html sheet.html` builds an offline page that shows the gold and
+takes a keyboard mark per item. `--disputed results/openrouter` restricts it to contested items.
+`serbeval verify --apply sheet.txt` writes the marks back to the data.
 
 ## Setup
 
@@ -57,23 +120,37 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
+Run everything from the **repo root**, because the task YAMLs use root-relative paths.
+
 ## Running the eval
 
-Run from the **repo root** (dataset paths in the task YAMLs are root-relative):
+**Any model through OpenRouter** (what the leaderboard uses):
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-
-lm_eval \
-  --model anthropic-chat \
-  --model_args model=claude-haiku-4-5 \
-  --tasks srb_grammar,srb_idioms,srb_cyrillic_agreement \
-  --include_path lm_eval_tasks \
-  --output_path results/ \
-  --log_samples
+export OPENROUTER_API_KEY=...
+scripts/openrouter_eval.sh google/gemma-3-12b-it quantizations=bf16
+scripts/openrouter_eval.sh anthropic/claude-sonnet-5.5 reasoning=minimal
+scripts/leaderboard.py                     # rebuild the table from results/openrouter/
 ```
 
-See [results/README.md](results/README.md) for the model matrix and exact per-model commands.
+The `openrouter-chat` adapter has these defaults:
+- reasoning is off (`reasoning=none`); models that cannot disable it take `reasoning=minimal`;
+- `provider=` and `quantizations=` pin the routing, with no fallback;
+- it reads only `OPENROUTER_API_KEY`.
+
+Run different models **in parallel**, one process each. Requests inside one run stay sequential.
+
+**Anthropic directly:** lm-eval's stock adapter cannot run current Claude models, so use the
+fixed one:
+
+```bash
+scripts/run_eval.py --model anthropic-chat-fixed --model_args model=claude-opus-5-5,thinking=omit,effort=low \
+  --tasks srb_grammar,srb_probe,srb_pravopis,srb_correction --include_path lm_eval_tasks \
+  --output_path results/opus --log_samples
+```
+
+**Local models through Ollama:** `scripts/local_eval.sh qwen3:8b`. These run free on your
+machine, but the weights are quantized.
 
 ## Dataset tooling
 
@@ -84,6 +161,9 @@ serbeval selfcheck --task srb_grammar                # 3x self-consistency filte
 serbeval review --task srb_grammar                   # interactive human verification (y/n/s/q)
 serbeval stats                                       # verification progress per task/category
 serbeval report                                      # markdown table from results/*/results_*.json
+serbeval verify --new --html sheet.html              # gold-verification page (see Verification)
+serbeval probe --lexicon srLex_v1.3.gz               # synthesise the srLex half of the probe set
+serbeval correction                                  # derive srb_correction from verified items
 ```
 
 `generate` writes to `data/<task>/candidates.jsonl`; `selfcheck` keeps only candidates whose three
@@ -245,9 +325,9 @@ therefore *cannot* rank the models. It also warns on any category with n < 10, a
 cyrillic task down by script and difficulty tier. Without `--log_samples` you get the table and a
 note saying why the intervals are missing, rather than numbers implying more precision than exists.
 
-**Read this before quoting any number:** at the current sizes (50 / 30 / 30 items) the 95% CI on a
-task accuracy is roughly ±14 points, and every individual `srb_grammar` category is under n=10.
-The benchmark can currently detect catastrophic failure; it cannot rank comparable models.
+**Read this before quoting any number.** Small tasks have wide intervals: at 20–30 items the
+95% CI on one task is roughly ±15 points. The leaderboard averages groups of tasks, so the
+order of models far apart is solid, but neighbours a few points apart are not.
 
 ## Item schema
 
@@ -268,6 +348,13 @@ The benchmark can currently detect catastrophic failure; it cannot rank comparab
   "license": "CC-BY-4.0"
 }
 ```
+
+## License
+
+The **code** is MIT ([LICENSE](LICENSE)). The **data is not**, and it is not uniform.
+Hand-written items are CC BY 4.0. Everything derived from UD_Serbian-SET or srLex is
+CC BY-SA 4.0, which is share-alike, so it cannot be relicensed. Each item carries its own
+`license` field; the split and the required attributions are in [data/LICENSE](data/LICENSE).
 
 ## Project log
 
