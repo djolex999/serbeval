@@ -9,37 +9,47 @@ imperfect, sibilarization, numeral agreement (*dva nova stola*, *dvadeset jedan 
 ijekavian jat reflex, pravopis (*kontakt osoba*, *naučnoistraživački*, *ne znajući*), č/ć, and
 Cyrillic/Latin consistency.
 
-> **Status: preliminary.** The numbers below come from the full suite. Items checked by a
-> human are a minority; most of the rest are backed by the agreement of four strong models (see
-> [Verification](#verification)). Treat this as a working benchmark, not a final leaderboard.
+> **Status: official set v1.** The numbers below come from the 355-item official set. 63 items
+> are human-verified and the rest are backed by the agreement of four strong models or derived
+> from verified items (see [Verification](#verification)). The larger mined and synthesised
+> pools stay unverified and are not scored here.
 
-## Leaderboard (preliminary, 2026-10-08)
+## Leaderboard — official set v1 (2026-10-12)
 
-Twelve models via OpenRouter, zero-shot, 1394 items each. Open-weights models were pinned to
-full precision (bf16/fp16; fp8 where that is the native release), and the provider that served
-each run is logged. Group score = mean accuracy over the group's tasks.
+Eleven models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
+- 63 human-verified;
+- 214 confirmed by model consensus;
+- 78 correction items derived from those.
+
+Each item's status is in [data/official/MANIFEST.json](data/official/MANIFEST.json).
+Open-weights models were pinned to full precision. Group score = mean task accuracy.
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
 |---|---|---|---|---|---|---|---|---|
-| 1 | anthropic_claude-sonnet-5.5 | 97% | 96% | 92% | 92% | 96% | **94%** | 0.00 |
-| 2 | google_gemini-3.5-flash-lite | 99% | 91% | 88% | 85% | 93% | **91%** | 0.00 |
-| 3 | deepseek_deepseek-v3.2 | 92% | 93% | 82% | 76% | 90% | **87%** | 0.00 |
-| 4 | google_gemma-4-31b-it | 92% | 93% | 74% | 78% | 92% | **86%** | 0.04 |
-| 5 | qwen_qwen3-235b-a22b-2507 | 84% | 95% | 74% | 68% | 84% | **81%** | 0.13 |
-| 6 | openai_gpt-5-mini | 90% | 88% | 63% | 67% | 88% | **79%** | 0.00 |
-| 7 | anthropic_claude-haiku-5.5 | 89% | 81% | 58% | 58% | 90% | **75%** | 0.03 |
-| 8 | meta-llama_llama-3.3-70b-instruct | 86% | 81% | 56% | 52% | 74% | **70%** | 0.00 |
-| 9 | google_gemma-3-12b-it | 82% | 80% | 50% | 41% | 72% | **65%** | 0.00 |
-| 10 | qwen_qwen3.5-9b | 86% | 61% | 45% | 37% | 78% | **61%** | 0.00 |
-| 11 | meta-llama_llama-3.1-8b-instruct | 50% | 47% | 22% | 21% | 56% | **39%** | 0.00 |
-| 12 | mistralai_mistral-nemo | 64% | 26% | 13% | 14% | 66% | **36%** | 0.00 |
+| 1 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
+| 2 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
+| 3 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
+| 4 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
+| 5 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
+| 6 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
+| 7 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
+| 8 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
+| 9 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
+| 10 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
+| 11 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
 
-Full notes: [results/LEADERBOARD.md](results/LEADERBOARD.md). The whole 12-model run cost $1.21.
+Caveats:
+- gemma-3-12b is missing: its only bf16 provider rate-limited it for the whole run.
+- The four consensus models are also ranked here, so a small selection bias is possible.
+  Items they got wrong were human-checked, not dropped.
+
+Details: [results/LEADERBOARD.md](results/LEADERBOARD.md), which also keeps the preliminary
+1394-item run.
 
 ### What it shows
 
-- **It separates models below the frontier**, from 36% to 94%, roughly in order of size and
-  generation. The pravopis and probe groups spread the widest (13–92%).
+- **It separates models below the frontier**, from 39% to 95%, roughly in order of size and
+  generation. The pravopis and probe groups spread the widest (12–95%).
 - **It does not separate the frontier.** Claude Opus 5.5 scored ~97–100% on every group in
   triage runs through a reseller. Those numbers are not reportable, so Opus is not in the table.
   Harder versions of the same checks did not change that: a 6-phenomenon probe, a
@@ -47,10 +57,10 @@ Full notes: [results/LEADERBOARD.md](results/LEADERBOARD.md). The whole 12-model
 - **The frontier's remaining "errors" are contested norm, not ignorance.** Pravopis 2010
   hyphenates *foto-aparat* and *auto-put*, while Klajn and the 1993 Pravopis write them together.
   Items like that were dropped rather than pinned to one authority.
-- **Recognising is easier than producing.** mistral-nemo scores 64% picking the right form from
-  four choices but 26% writing it (cloze).
+- **Recognising is easier than producing.** mistral-nemo scores 68% picking the right form from
+  four choices but 33% writing it (cloze).
 - **Cheap does not mean bad at Serbian.** gemini-3.5-flash-lite (2nd) beats claude-haiku-5.5
-  and gpt-5-mini by 12–16 points, mostly on pravopis.
+  and gpt-5-mini by about 15 points, mostly on pravopis.
 
 ## Tasks
 
