@@ -31,8 +31,10 @@ PY="$(find_python)"
 export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 cd "$ROOT"
 
-TASKS=srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth,srb_probe,srb_pravopis,srb_correction
-OUT="$ROOT/results/openrouter/$(echo "$MODEL" | tr ':/' '__')"
+# TASKS=srb_official RESULTS=results/official runs the official set instead.
+TASKS="${TASKS:-srb_grammar,srb_idioms,srb_cyrillic_agreement,srb_grammar_cloze,srb_grammar_cloze_mined,srb_grammar_cloze_synth,srb_probe,srb_pravopis,srb_correction}"
+OUT="$ROOT/${RESULTS:-results/openrouter}/$(echo "$MODEL" | tr ':/' '__')"
+mkdir -p "$(dirname "$OUT")"
 ARGS="model=$MODEL${EXTRA:+,$EXTRA}"
 LIMIT_ARGS=()
 [ -n "$LIMIT" ] && LIMIT_ARGS=(--limit "$LIMIT")

@@ -6,6 +6,7 @@ parts (one process per task group) reads as one model. A model missing any task 
 out rather than averaged over fewer tasks.
 
     scripts/leaderboard.py [results/openrouter]
+    scripts/leaderboard.py results/official --official
 """
 
 import json
@@ -30,8 +31,6 @@ GROUPS = {
         "srb_correction_razmak_crtica", "srb_correction_c_c", "srb_correction_ispravno",
     ],
 }
-ALL_TASKS = [task for tasks in GROUPS.values() for task in tasks]
-
 
 def metric(result: dict[str, float], name: str) -> float:
     # MCQ tasks report under the regex filter, cloze/correction under "none".
@@ -48,23 +47,31 @@ def merged_results(model_dir: Path) -> dict[str, dict[str, float]]:
 
 
 def main() -> None:
-    root = Path(sys.argv[1] if len(sys.argv) > 1 else "results/openrouter")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    root = Path(args[0] if args else "results/openrouter")
+    # The official set's tasks carry an `_official` suffix; mined/synth cloze are not in it.
+    suffix = "_official" if "--official" in sys.argv else ""
+    groups = {
+        name: [f"{t}{suffix}" for t in tasks if not (suffix and t.endswith(("_mined", "_synth")))]
+        for name, tasks in GROUPS.items()
+    }
+    all_tasks = [task for tasks in groups.values() for task in tasks]
     rows = []
     for model_dir in sorted(p for p in root.iterdir() if p.is_dir()):
         results = merged_results(model_dir)
-        if not all(task in results for task in ALL_TASKS):
+        if not all(task in results for task in all_tasks):
             continue
-        groups = {
+        scores = {
             name: 100 * sum(metric(results[t], "exact_match") for t in tasks) / len(tasks)
-            for name, tasks in GROUPS.items()
+            for name, tasks in groups.items()
         }
-        worst_unparsed = max(metric(results[t], "unparsed") for t in ALL_TASKS)
-        rows.append((sum(groups.values()) / len(groups), model_dir.name, groups, worst_unparsed))
+        worst_unparsed = max(metric(results[t], "unparsed") for t in all_tasks)
+        rows.append((sum(scores.values()) / len(scores), model_dir.name, scores, worst_unparsed))
 
     print("| # | Model | " + " | ".join(GROUPS) + " | Prosek | max unparsed |")
     print("|---|---|" + "---|" * (len(GROUPS) + 2))
-    for rank, (avg, name, groups, unparsed) in enumerate(sorted(rows, reverse=True), 1):
-        cells = " | ".join(f"{value:.0f}%" for value in groups.values())
+    for rank, (avg, name, scores, unparsed) in enumerate(sorted(rows, reverse=True), 1):
+        cells = " | ".join(f"{value:.0f}%" for value in scores.values())
         print(f"| {rank} | {name} | {cells} | **{avg:.0f}%** | {unparsed:.2f} |")
 
 

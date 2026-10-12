@@ -365,6 +365,60 @@ def _cmd_verify(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_official(args: argparse.Namespace) -> int:
+    """Write the official set (data/official/<lm task>.jsonl) and its status manifest."""
+    import json
+    import re
+    from collections import Counter
+    from datetime import date
+    from pathlib import Path
+
+    from serbeval.official import lm_task_name, official_status
+    from serbeval.verify import disputed_items
+
+    data = Path(args.data_dir)
+    out = data / "official"
+    rows: list[dict[str, object]] = []
+    for path in sorted(data.rglob("*.jsonl")):
+        skip = path.name == "discarded.jsonl" or path.name.startswith("candidates")
+        if skip or out in path.parents:
+            continue
+        rows += [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
+                 if line.strip()]
+    core = set(re.findall(r"^\[\d+\]\s+(\S+)", Path(args.core).read_text(encoding="utf-8"), re.M))
+    models = [m.strip() for m in args.models.split(",") if m.strip()]
+    disputed = set(disputed_items(args.disputed, models=models, min_dissent=args.min_dissent))
+    status = official_status(rows, core=core, disputed=disputed)
+
+    by_task: dict[str, list[dict[str, object]]] = {}
+    for row in rows:
+        if str(row["id"]) in status:
+            by_task.setdefault(lm_task_name(row), []).append(row)
+    out.mkdir(parents=True, exist_ok=True)
+    for stale in out.glob("*.jsonl"):
+        stale.unlink()
+    for task, task_rows in sorted(by_task.items()):
+        (out / f"{task}.jsonl").write_text(
+            "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in task_rows), encoding="utf-8"
+        )
+    manifest = {
+        "version": "v1",
+        "built": date.today().isoformat(),
+        "rule": "human-verified, or on the core list with < "
+        f"{args.min_dissent} of {len(models)} strong models disagreeing (consensus), "
+        "or a correction item derived from an official item",
+        "consensus_models": models,
+        "counts": dict(Counter(status.values())),
+        "items": dict(sorted(status.items())),
+    }
+    (out / "MANIFEST.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
+    )
+    print(f"OK: {len(status)} official item(s) in {len(by_task)} task file(s) -> {out}")
+    print(f"     {dict(Counter(status.values()))}")
+    return 0
+
+
 def _cmd_index(args: argparse.Namespace) -> int:
     """Condense a full lexicon into the one column `check` needs."""
     from serbeval.check import forms_from_lexicon, write_form_index
@@ -655,6 +709,14 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--min-dissent", type=int, default=2)
     verify.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
     verify.set_defaults(func=_cmd_verify)
+
+    official = sub.add_parser("official", help="build the official set + status manifest")
+    official.add_argument("--core", default="tasks/provera-250.txt", help="verification core sheet")
+    official.add_argument("--disputed", default="results/openrouter", help="per-model samples dir")
+    official.add_argument("--models", default=",".join(_CONSENSUS_MODELS))
+    official.add_argument("--min-dissent", type=int, default=2)
+    official.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    official.set_defaults(func=_cmd_official)
 
     index = sub.add_parser("index", help="build the form index `check` uses")
     index.add_argument("--lexicon", required=True, help="srLex-format .tsv or .gz")

@@ -264,3 +264,16 @@ def test_correction_tasks_load_with_thirty_items_each() -> None:
         assert len(docs) == 30, name
         assert {doc["task"] for doc in docs} == {"srb_correction"}
     assert "srb_correction" in tm.all_tags
+
+
+@pytest.mark.slow
+def test_official_tasks_load_exactly_the_manifest_items() -> None:
+    # Every official item is reachable through `--tasks srb_official`, and nothing else is.
+    from lm_eval.tasks import TaskManager
+
+    manifest = json.loads((REPO_ROOT / "data" / "official" / "MANIFEST.json").read_text())
+    tm = TaskManager(include_path=str(TASKS_DIR))
+    names = [n for n in tm.all_tasks if n.endswith("_official") and n != "srb_official"]
+    loaded = tm.load(names)["tasks"]
+    ids = {doc["id"] for name in names for doc in loaded[name].test_docs()}
+    assert ids == set(manifest["items"])

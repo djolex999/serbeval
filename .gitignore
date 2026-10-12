@@ -19,3 +19,5 @@ results/triage-*/
 results/local/**/samples_*.jsonl
 # OpenRouter runs: keep the summary JSON and provenance log, not per-sample logs
 results/openrouter/**/samples_*.jsonl
+# official-set runs: keep the summary JSON and logs, not per-sample logs
+results/official/**/samples_*.jsonl
