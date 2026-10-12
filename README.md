@@ -16,7 +16,7 @@ Cyrillic/Latin consistency.
 
 ## Leaderboard — official set v1 (2026-10-12)
 
-Eleven models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
+Thirteen models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
 - 63 human-verified;
 - 214 confirmed by model consensus;
 - 78 correction items derived from those.
@@ -26,32 +26,34 @@ Open-weights models were pinned to full precision. Group score = mean task accur
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
 |---|---|---|---|---|---|---|---|---|
-| 1 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
-| 2 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
-| 3 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
-| 4 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
-| 5 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
-| 6 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
-| 7 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
-| 8 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
-| 9 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
-| 10 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
-| 11 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
+| 1 | google_gemini-3.8-flash | 100% | 100% | 94% | 97% | 98% | **98%** | 0.00 |
+| 2 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
+| 3 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
+| 4 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
+| 5 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
+| 6 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
+| 7 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
+| 8 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
+| 9 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
+| 10 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
+| 11 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
+| 12 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
+| 13 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
 
-Caveats:
-- gemma-3-12b is missing: its only bf16 provider rate-limited it for the whole run.
-- The four consensus models are also ranked here, so a small selection bias is possible.
-  Items they got wrong were human-checked, not dropped.
+Caveat: the four consensus models (sonnet-5.5, gemini-3.5-flash-lite, gemma-4-31b,
+deepseek-v3.2) are also ranked here, so a small selection bias toward them is possible. Items
+they got wrong were human-checked, not dropped. gemini-3.8-flash, the top model, was not one of
+the four.
 
 Details: [results/LEADERBOARD.md](results/LEADERBOARD.md), which also keeps the preliminary
 1394-item run.
 
 ### What it shows
 
-- **It separates models below the frontier**, from 39% to 95%, roughly in order of size and
+- **It separates models below the frontier**, from 39% to 98%, roughly in order of size and
   generation. The pravopis and probe groups spread the widest (12–95%).
-- **It does not separate the frontier.** Claude Opus 5.5 scored ~97–100% on every group in
-  triage runs through a reseller. Those numbers are not reportable, so Opus is not in the table.
+- **It barely separates the frontier.** gemini-3.8-flash scores 98% here, and Claude Opus 5.5
+  scored ~97–100% on every group in triage runs through a reseller. Those numbers are not reportable, so Opus is not in the table.
   Harder versions of the same checks did not change that: a 6-phenomenon probe, a
   source-checked pravopis set, and a cue-free correction format all left Opus at ceiling.
 - **The frontier's remaining "errors" are contested norm, not ignorance.** Pravopis 2010
@@ -59,7 +61,7 @@ Details: [results/LEADERBOARD.md](results/LEADERBOARD.md), which also keeps the 
   Items like that were dropped rather than pinned to one authority.
 - **Recognising is easier than producing.** mistral-nemo scores 68% picking the right form from
   four choices but 33% writing it (cloze).
-- **Cheap does not mean bad at Serbian.** gemini-3.5-flash-lite (2nd) beats claude-haiku-5.5
+- **Cheap does not mean bad at Serbian.** gemini-3.5-flash-lite (3rd) beats claude-haiku-5.5
   and gpt-5-mini by about 15 points, mostly on pravopis.
 
 ## Tasks
