@@ -378,6 +378,21 @@ Hand-written items are CC BY 4.0. Everything derived from UD_Serbian-SET or srLe
 CC BY-SA 4.0, which is share-alike, so it cannot be relicensed. Each item carries its own
 `license` field; the split and the required attributions are in [data/LICENSE](data/LICENSE).
 
+## Author and citation
+
+Djordje Markovic ([@djolex999](https://github.com/djolex999)). The official set is also on
+Hugging Face: [djolex999/serbeval](https://huggingface.co/datasets/djolex999/serbeval).
+
+```bibtex
+@misc{serbeval2026,
+  title  = {serbeval: a Serbian-language benchmark for large language models},
+  author = {Markovic, Djordje},
+  note   = {GitHub: @djolex999},
+  year   = {2026},
+  url    = {https://github.com/djolex999/serbeval}
+}
+```
+
 ## Project log
 
 Design decisions: [DECISIONS.md](DECISIONS.md) · Progress: [devlog.md](devlog.md) ·

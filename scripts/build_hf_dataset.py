@@ -99,6 +99,8 @@ configs:
 
 # serbeval: a Serbian-language LLM benchmark (official set v1)
 
+**Author:** Djordje Markovic ([@djolex999](https://github.com/djolex999))
+
 **Code, task YAMLs, full leaderboard and methodology:** https://github.com/djolex999/serbeval
 
 serbeval tests what translated benchmarks cannot carry over into Serbian: case government,
@@ -150,7 +152,7 @@ All items also carry `id`, `task`, `category`, `explanation`, `script`, `difficu
 
 ```python
 from datasets import load_dataset
-ds = load_dataset("<this repo id>", "srb_probe_aorist_imperfekat", split="test")
+ds = load_dataset("djolex999/serbeval", "srb_probe_aorist_imperfekat", split="test")
 ```
 
 To score models with the exact prompts and scoring rules, use the task YAMLs from the GitHub
@@ -184,7 +186,8 @@ Attribution:
 ```bibtex
 @misc{{serbeval2026,
   title  = {{serbeval: a Serbian-language benchmark for large language models}},
-  author = {{djolex999}},
+  author = {{Markovic, Djordje}},
+  note   = {{GitHub: @djolex999}},
   year   = {{2026}},
   url    = {{https://github.com/djolex999/serbeval}}
 }}
