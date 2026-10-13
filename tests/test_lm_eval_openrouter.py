@@ -170,3 +170,24 @@ def test_openrouter_adapter_runs_end_to_end_against_a_mock(tmp_path: object) -> 
     [results] = list(Path(str(tmp_path)).rglob("results_*.json"))
     task = json.loads(results.read_text())["results"]["srb_cyrillic_agreement"]
     assert task["unparsed,extract_answer"] == 0.0
+
+
+def test_stop_sequences_can_be_turned_off_for_models_that_break_on_them() -> None:
+    # cohere/command-a-plus returns content None whenever a stop sequence is sent (its
+    # reply starts with a blank line), so 229 of 355 answers came back empty.
+    body = build_openrouter_payload(messages=MESSAGES, model="m", max_tokens=24,
+                                    stop=["\n\n"], send_stop=False)
+    assert "stop" not in body
+    kept = build_openrouter_payload(messages=MESSAGES, model="m", max_tokens=24, stop=["\n\n"])
+    assert kept["stop"] == ["\n\n"]
+
+
+def test_stop_off_is_a_model_arg(monkeypatch: pytest.MonkeyPatch) -> None:
+    from serbeval.lm_eval_openrouter import OpenRouterChat
+
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-key")
+    lm = OpenRouterChat(model="cohere/command-a-plus", stop="off")
+    payload = lm._create_payload(MESSAGES, gen_kwargs={"until": ["\n\n"], "max_gen_toks": 24})
+    assert "stop" not in payload
+    with pytest.raises(ValueError, match="stop"):
+        OpenRouterChat(model="m", stop="sometimes")

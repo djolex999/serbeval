@@ -53,6 +53,7 @@ def build_openrouter_payload(
     reasoning: str = "none",
     provider: str | None = None,
     quantizations: str | None = None,
+    send_stop: bool = True,
 ) -> dict[str, Any]:
     if reasoning not in REASONING:
         raise ValueError(f"unknown reasoning {reasoning!r}; expected one of {REASONING}")
@@ -63,7 +64,7 @@ def build_openrouter_payload(
         "temperature": 0,
         "stream": False,
     }
-    if stop:
+    if stop and send_stop:
         body["stop"] = stop[:4]
     if reasoning != "omit":
         body["reasoning"] = {"effort": reasoning}
@@ -107,16 +108,22 @@ class OpenRouterChat(LocalChatCompletion):  # type: ignore[misc]  # lm_eval ship
         reasoning: str = "none",
         provider: str | None = None,
         quantizations: str | None = None,
+        stop: str = "on",
         **kwargs: Any,
     ):
         if reasoning not in REASONING:
             raise ValueError(f"unknown reasoning {reasoning!r}; expected one of {REASONING}")
+        if stop not in ("on", "off"):
+            raise ValueError(f"stop must be 'on' or 'off', got {stop!r}")
         self._resolved_key = openrouter_api_key()
         kwargs.setdefault("tokenized_requests", False)
         super().__init__(base_url=base_url, **kwargs)
         self.reasoning = reasoning
         self.provider = provider
         self.quantizations = quantizations
+        # Some models break on stop sequences (cohere/command-a-plus returns content None
+        # when one is sent); the answer extractor reads the first line either way.
+        self.send_stop = stop == "on"
         self.providers_seen: set[str] = set()
 
     @property
@@ -148,6 +155,7 @@ class OpenRouterChat(LocalChatCompletion):  # type: ignore[misc]  # lm_eval ship
             reasoning=self.reasoning,
             provider=self.provider,
             quantizations=self.quantizations,
+            send_stop=self.send_stop,
         )
 
     def model_call(
