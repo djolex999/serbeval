@@ -4,12 +4,13 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 
 ## Next — official verified set + public leaderboard (agreed 2026-10-08)
 
-- [ ] Select ~250 items for the official set (all probe + pravopis + correction, sample of MCQ/cloze)
+- [x] Select ~250 items for the official set (all probe + pravopis + correction, sample of MCQ/cloze)
 - [x] Maintainer checked the 36 DISPUTED items (2026-10-09): 33 verified, 1 unsure, 2 dropped; other 214 = model consensus
-- [ ] Re-run the 12 OpenRouter models on it IN PARALLEL; `scripts/leaderboard.py`
+- [x] Official set v1 (355) built; 22 models run in parallel; official leaderboard in README
 - [ ] Re-send items that got empty provider responses (qwen3-235b, gemma-4-31b)
 - [ ] README: leaderboard table + chart + methodology (srLex-attested gold, contested norm, unparsed)
-- [ ] Publish: GitHub public, Hugging Face dataset card; optional PR to lm-evaluation-harness
+- [x] Published: GitHub public (2026-10-12), Hugging Face djolex999/serbeval (2026-10-13)
+- [ ] Optional: PR to lm-evaluation-harness
 - [ ] Optional: Opus 5.5 via OpenRouter (~$3-10, mandatory thinking) as the reportable ceiling
 
 ## Done 2026-10-07/08 — difficulty work and first leaderboard
