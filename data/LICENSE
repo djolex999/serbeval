@@ -7,6 +7,11 @@ its own — and treat the table below as the summary.
 | Files | Items | License | Origin |
 | --- | --- | --- | --- |
 | `srb_grammar/items.jsonl`, `srb_idioms/items.jsonl`, `srb_cyrillic_agreement/items.jsonl`, `srb_grammar_cloze/items.jsonl` | 130 | CC BY 4.0 | written for this project |
+| `srb_probe/*.jsonl` (hand-written) | 87 | CC BY 4.0 | written for this project |
+| `srb_probe/*.synth.jsonl` | 32 | CC BY-SA 4.0 | word forms from srLex |
+| `srb_pravopis/*.jsonl` | 82 | CC BY 4.0 | written for this project |
+| `srb_correction/*.jsonl` | 90 | inherits its source item's license | derived from the items above |
+| `official/*.jsonl` | 355 | per item (307 CC BY 4.0, 48 CC BY-SA 4.0) | the official set, selected from the above |
 | `srb_grammar_cloze/candidates.jsonl` | 453 | CC BY-SA 4.0 | derived from UD_Serbian-SET |
 | `srb_grammar_cloze/candidates-synth.jsonl` | 519 | CC BY-SA 4.0 | word forms from srLex |
 | `forms.txt.gz` | 1.45M forms | CC BY-SA 4.0 | derived from srLex |
@@ -35,5 +40,12 @@ Neither source is vendored in this repository beyond the derived files listed ab
 
 ## Verification status
 
-**Every item currently carries `verified: false`.** Nothing here has been checked by a
-native speaker. Do not publish results computed on this data.
+Each item's status is in `official/MANIFEST.json` for the official set:
+- `human`: checked by a native speaker;
+- `consensus`: on the verification core list, and fewer than two of the four strongest
+  models disagreed with its gold;
+- `derived`: a correction item built from an official item.
+
+Model consensus is not human verification. Everything outside the official set is
+unverified, including the mined and synthesised cloze pools. Do not publish results computed
+on those pools.
