@@ -14,7 +14,7 @@ Cyrillic/Latin consistency.
 > from verified items (see [Verification](#verification)). The larger mined and synthesised
 > pools stay unverified and are not scored here.
 
-## Leaderboard — official set v1 (2026-10-12)
+## Leaderboard — official set v1 (2026-10-12/13)
 
 22 models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
 - 63 human-verified;
@@ -22,7 +22,9 @@ Cyrillic/Latin consistency.
 - 78 correction items derived from those.
 
 Each item's status is in [data/official/MANIFEST.json](data/official/MANIFEST.json).
-Open-weights models were pinned to full precision. Group score = mean task accuracy.
+Open-weights models ran at full precision or at their native release precision, on a pinned
+provider (often the model's own lab). The provider and the settings for each model are in
+[results/LEADERBOARD.md](results/LEADERBOARD.md). Group score = mean task accuracy.
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
 |---|---|---|---|---|---|---|---|---|
