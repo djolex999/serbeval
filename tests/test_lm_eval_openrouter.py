@@ -191,3 +191,20 @@ def test_stop_off_is_a_model_arg(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "stop" not in payload
     with pytest.raises(ValueError, match="stop"):
         OpenRouterChat(model="m", stop="sometimes")
+
+
+@pytest.mark.parametrize("effort", ["minimal", "low", "omit"])
+def test_no_stop_sequence_while_the_model_may_think(effort: str) -> None:
+    # deepseek-v4-pro at reasoning=low: after the thinking, the reply opens with "\n\n",
+    # the stop fires before the first word and content comes back None (21 of 68 items).
+    body = build_openrouter_payload(messages=MESSAGES, model="m", max_tokens=24,
+                                    stop=["\n\n"], reasoning=effort)
+    assert "stop" not in body
+
+
+@pytest.mark.parametrize(("effort", "floor"), [("low", 2048), ("medium", 8192), ("high", 16384)])
+def test_deeper_reasoning_gets_a_larger_token_floor(effort: str, floor: int) -> None:
+    # minimax-m3 thought for 8189 tokens on one item at medium; a 2048 floor cut it to "".
+    body = build_openrouter_payload(messages=MESSAGES, model="m", max_tokens=24, stop=[],
+                                    reasoning=effort)
+    assert body["max_tokens"] == floor

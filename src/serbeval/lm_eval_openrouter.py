@@ -32,6 +32,8 @@ __all__ = ["OpenRouterChat", "build_openrouter_payload", "openrouter_api_key", "
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 REASONING = ("none", "minimal", "low", "medium", "high", "xhigh", "omit")
 THINKING_FLOOR = 2048
+# Deeper efforts think longer: minimax-m3 used 8189 tokens on one item at medium.
+_EFFORT_FLOOR = {"medium": 8192, "high": 16384, "xhigh": 32768}
 _FATAL = frozenset({401, 402, 403})
 
 log = logging.getLogger(__name__)
@@ -60,11 +62,17 @@ def build_openrouter_payload(
     body: dict[str, Any] = {
         "model": model,
         "messages": messages,
-        "max_tokens": max_tokens if reasoning == "none" else max(max_tokens, THINKING_FLOOR),
+        "max_tokens": (
+            max_tokens if reasoning == "none"
+            else max(max_tokens, _EFFORT_FLOOR.get(reasoning, THINKING_FLOOR))
+        ),
         "temperature": 0,
         "stream": False,
     }
-    if stop and send_stop:
+    # A thinking model may open its reply with a blank line; a "\n\n" stop then fires
+    # before the first word and content comes back None. The extractors read the first
+    # line anyway, so the stop only matters when reasoning is off.
+    if stop and send_stop and reasoning == "none":
         body["stop"] = stop[:4]
     if reasoning != "omit":
         body["reasoning"] = {"effort": reasoning}
