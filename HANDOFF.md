@@ -3,53 +3,45 @@
 Why every non-obvious choice was made: [DECISIONS.md](DECISIONS.md). Task list: [tasks/todo.md](tasks/todo.md).
 Leaderboard: [results/LEADERBOARD.md](results/LEADERBOARD.md).
 
-## Where we left off (2026-10-08)
+## Where we left off
 
-**serbeval works as a benchmark, though not at the frontier.** A preliminary 12-model
-leaderboard through OpenRouter spreads from 36% to 94%: sonnet-5.5 94, gemini-3.5-flash-lite 91,
-deepseek-v3.2 87, gemma-4-31b 86 … llama-3.1-8b 39, mistral-nemo 36. Pravopis (13–92%) and the
-probe set (14–92%) discriminate best. The cost was $1.21 for everything.
+serbeval is public and has been shared:
+- GitHub `djolex999/serbeval`;
+- Hugging Face dataset `djolex999/serbeval` (official set v1: 355 items, per-item verification
+  status in MANIFEST.json);
+- a 30-model official leaderboard (38–98%, five frontier models at 98%; best open-weights DeepSeek V4 Pro 95%);
+- a LinkedIn post (1k+ impressions);
+- a PR adding the tasks to EleutherAI's lm-evaluation-harness (#4400).
 
-Opus 5.5, by contrast, is at ceiling on every format tried, through Kie triage. Three passes
-showed it:
-- a 6-phenomenon probe (`srb_probe_*`);
-- a source-checked pravopis set (`srb_pravopis_*`, 82 items);
-- a cue-free error-correction set (`srb_correction_*`, 90 items).
+Aleksa Gordić (pretraining @ Nemotron) commented on the post. He suggested running Nemotron
+3 Ultra, plotting open-weights models only, and making the benchmark harder, since Kimi K3
+(91%) is close to saturating it too.
 
-Its few "errors" fell on contested norm (Pravopis 2010 hyphenates foto-/auto-, Klajn writes
-them together) or on item artifacts. Positioning: a benchmark for open, cheap and mid-tier
-models, plus a documented ceiling for the frontier.
-
-The goal (maintainer): own use, public adoption, and portfolio.
+Done since (2026-10-16/17): Nemotron 3 Ultra (76%) and four more open-weights models; an
+open-weights-only chart; a reasoning off/low/high comparison (no model gains more than 2 points,
+Nemotron drops to 65% at high). Two adapter fixes: no stop sequence while reasoning, and a token
+floor that grows with the effort.
 
 ## In flight
 
-- Nothing running. Per-sample logs of the leaderboard run are gitignored and sit in this
-  worktree's `results/openrouter/`; the summary JSON and provider logs are committed.
+- PR EleutherAI/lm-evaluation-harness#4400 is open, mergeable, and waiting on the CLA signature
+  and a maintainer. The branch `add-serbeval` is in the fork `djolex999/lm-evaluation-harness`.
 
-## Blockers before publishing
+## Blockers
 
-- **Human verification.** 30 of ~1400 items are verified. A public leaderboard needs a
-  verified "official" set (~200–300 items, weighted to pravopis + probe), then a re-run.
-- **Keys to revoke.** The Kie key was pasted in a terminal and used in commands, and the
-  OpenRouter key `serbeval` was pasted into chat. Revoke both.
-- Empty provider responses slightly underscore qwen3-235b (up to 13% on srb_idioms) and
-  gemma-4-31b; re-send those items.
+- **CLA** on #4400: only the maintainer can sign it.
+- **OpenRouter key** (2026-10-16) expires 2026-10-17 10:02 UTC; about $3.35 credit left on the account.
 
 ## Next session: start here
 
-1. Build the official set: pick ~250 items (all probe + pravopis + correction, a sample of
-   MCQ/cloze), have the maintainer verify them with `serbeval review` or `serbeval baseline`,
-   drop or fix whatever fails.
-2. Re-run the 12 models on that set, all in PARALLEL, one process per model:
-   `scripts/openrouter_eval.sh <model> [args]`, args per model in DECISIONS.md / LEADERBOARD.md.
-   Then run `scripts/leaderboard.py`.
-3. README with the table, a chart and the methodology. Then publish on GitHub (public) and
-   Hugging Face Datasets, and consider a PR to lm-evaluation-harness.
+1. Send Aleksa the open-weights and reasoning charts (results/leaderboard-open.png,
+   results/reasoning-compare.png).
+2. Decide how to make it harder (see todo). Measure on open models before building anything.
+3. Add Mistral Large 4 to the open-weights chart once its weights ship.
 
-Working rules that bit us:
-- Run different models in parallel; only requests inside one run are sequential.
-- Check `unparsed` before believing any accuracy.
-- Kie numbers are triage only. Leaderboard numbers come from OpenRouter (provider logged,
-  precision pinned) or first-party APIs.
-- In a worktree, prefix commands with `PYTHONPATH=src`.
+Working rules:
+- Run models in parallel; only requests inside one run stay sequential.
+- Check `unparsed` and empty answers before believing a score.
+- Pin the provider and precision for open models.
+- Never put Claude attribution in commits or PRs.
+- Chain the gates with `&&` before any commit or push.

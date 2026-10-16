@@ -1,0 +1,425 @@
+{
+  "results": {
+    "srb_grammar_official": {
+      "name": "srb_grammar_official",
+      "alias": "srb_grammar_official",
+      "sample_len": 20,
+      "exact_match,extract_answer": 0.95,
+      "exact_match_stderr,extract_answer": 0.049999999999999996,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0
+    },
+    "srb_idioms_official": {
+      "name": "srb_idioms_official",
+      "alias": "srb_idioms_official",
+      "sample_len": 19,
+      "exact_match,extract_answer": 0.9473684210526315,
+      "exact_match_stderr,extract_answer": 0.05263157894736842,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0
+    },
+    "srb_cyrillic_agreement_official": {
+      "name": "srb_cyrillic_agreement_official",
+      "alias": "srb_cyrillic_agreement_official",
+      "sample_len": 20,
+      "exact_match,extract_answer": 1.0,
+      "exact_match_stderr,extract_answer": 0.0,
+      "unparsed,extract_answer": 0.0,
+      "unparsed_stderr,extract_answer": 0.0,
+      "pair_agreement,extract_answer": 1.0,
+      "pair_agreement_stderr,extract_answer": "N/A"
+    },
+    "srb_grammar_cloze_official": {
+      "name": "srb_grammar_cloze_official",
+      "alias": "srb_grammar_cloze_official",
+      "sample_len": 18,
+      "exact_match,none": 1.0,
+      "exact_match_stderr,none": 0.0,
+      "unparsed,none": 0.0,
+      "unparsed_stderr,none": 0.0
+    }
+  },
+  "group_subtasks": {},
+  "configs": {
+    "srb_cyrillic_agreement_official": {
+      "task": "srb_cyrillic_agreement_official",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/official/srb_cyrillic_agreement.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_pair(doc: dict, results: list[str]) -> dict:\n    \"\"\"Emit accuracy, an unparsed flag, and a (pair_id, correct) tuple for aggregation.\"\"\"\n    correct = _extracted_correct(doc, results)\n    return {\n        \"exact_match\": correct,\n        \"unparsed\": _unparsed(results),\n        \"pair_agreement\": (doc[\"pair_id\"], correct),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x127b6e480>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x127b6df80>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        },
+        {
+          "metric": "pair_agreement",
+          "aggregation": "def pair_agreement(items: Sequence[tuple[str, float]]) -> float:\n    \"\"\"Fraction of pairs whose two scripts produced the SAME correctness outcome.\n\n    A pair \"agrees\" when the model is right on both scripts or wrong on both — i.e. the\n    answer is script-invariant. Mixed outcomes count as disagreement.\n    \"\"\"\n    by_pair: dict[str, list[float]] = {}\n    for pair_id, correct in items:\n        by_pair.setdefault(pair_id, []).append(correct)\n    complete = [vals for vals in by_pair.values() if len(vals) == 2]\n    if not complete:\n        return 0.0\n    agreed = sum(1 for vals in complete if vals[0] == vals[1])\n    return agreed / len(complete)\n",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "deepseek/deepseek-v4-pro",
+        "provider": "StreamLake",
+        "quantizations": "fp8",
+        "config_source": "lm_eval_tasks/srb_cyrillic_agreement_official.yaml"
+      }
+    },
+    "srb_grammar_cloze_official": {
+      "task": "srb_grammar_cloze_official",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/official/srb_grammar_cloze.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text_cloze(doc: dict) -> str:\n    return (\n        \"Dopuni rečenicu pravilnim oblikom reči u zagradi.\\n\\n\"\n        f\"{doc['question']}  ({doc['cue']})\\n\\n\"\n        \"Odgovori samo traženim oblikom reči, bez objašnjenja.\\n\"\n        \"Odgovor:\"\n    )\n",
+      "doc_to_target": "def doc_to_target_cloze(doc: dict) -> str:\n    return doc[\"answers\"][0]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_cloze(doc: dict, results: list[str]) -> dict:\n    from serbeval.cloze import extract_answer, is_correct\n    from serbeval.schema import ClozeItem\n\n    item = ClozeItem.model_validate(doc)\n    raw = results[0] if results else \"\"\n    return {\n        \"exact_match\": 1.0 if is_correct(raw, item) else 0.0,\n        # An empty extraction is a response we could not read, not a wrong form.\n        \"unparsed\": 0.0 if extract_answer(raw) else 1.0,\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text_cloze at 0x127b6db20>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target_cloze at 0x127b6e520>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 24,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "deepseek/deepseek-v4-pro",
+        "provider": "StreamLake",
+        "quantizations": "fp8",
+        "config_source": "lm_eval_tasks/srb_grammar_cloze_official.yaml"
+      }
+    },
+    "srb_grammar_official": {
+      "task": "srb_grammar_official",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/official/srb_grammar.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_mcq(doc: dict, results: list[str]) -> dict:\n    return {\n        \"exact_match\": _extracted_correct(doc, results),\n        \"unparsed\": _unparsed(results),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x127b6e480>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x127b6df80>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "deepseek/deepseek-v4-pro",
+        "provider": "StreamLake",
+        "quantizations": "fp8",
+        "config_source": "lm_eval_tasks/srb_grammar_official.yaml"
+      }
+    },
+    "srb_idioms_official": {
+      "task": "srb_idioms_official",
+      "dataset_path": "json",
+      "dataset_kwargs": {
+        "data_files": {
+          "test": "data/official/srb_idioms.jsonl"
+        }
+      },
+      "test_split": "test",
+      "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    lines = [doc[\"question\"], \"\"]\n    for letter, choice in zip(LETTERS, doc[\"choices\"], strict=False):\n        lines.append(f\"{letter}) {choice}\")\n    lines.append(\"\")\n    lines.append(\"Odgovori samo slovom tačnog odgovora (A, B, C ili D).\")\n    lines.append(\"Odgovor:\")\n    return \"\\n\".join(lines)\n",
+      "doc_to_target": "def doc_to_target(doc: dict) -> str:\n    return LETTERS[doc[\"answer_index\"]]\n",
+      "unsafe_code": false,
+      "process_results": "def process_results_mcq(doc: dict, results: list[str]) -> dict:\n    return {\n        \"exact_match\": _extracted_correct(doc, results),\n        \"unparsed\": _unparsed(results),\n    }\n",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "fewshot_config": {
+        "sampler": "default",
+        "split": null,
+        "process_docs": null,
+        "fewshot_indices": null,
+        "samples": null,
+        "doc_to_text": "<function doc_to_text at 0x127b6e480>",
+        "doc_to_choice": null,
+        "doc_to_target": "<function doc_to_target at 0x127b6df80>",
+        "gen_prefix": null,
+        "fewshot_delimiter": "\n\n",
+        "target_delimiter": " "
+      },
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true
+        },
+        {
+          "metric": "unparsed",
+          "aggregation": "mean",
+          "higher_is_better": false
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "\n\n"
+        ],
+        "max_gen_toks": 32,
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "extract_answer",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "\\b([ABCD])\\b"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 0.1,
+        "model": "deepseek/deepseek-v4-pro",
+        "provider": "StreamLake",
+        "quantizations": "fp8",
+        "config_source": "lm_eval_tasks/srb_idioms_official.yaml"
+      }
+    }
+  },
+  "versions": {
+    "srb_cyrillic_agreement_official": 0.1,
+    "srb_grammar_cloze_official": 0.1,
+    "srb_grammar_official": 0.1,
+    "srb_idioms_official": 0.1
+  },
+  "n-shot": {
+    "srb_cyrillic_agreement_official": 0,
+    "srb_grammar_cloze_official": 0,
+    "srb_grammar_official": 0,
+    "srb_idioms_official": 0
+  },
+  "higher_is_better": {
+    "srb_cyrillic_agreement_official": {
+      "exact_match": true,
+      "unparsed": false,
+      "pair_agreement": true
+    },
+    "srb_grammar_cloze_official": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_grammar_official": {
+      "exact_match": true,
+      "unparsed": false
+    },
+    "srb_idioms_official": {
+      "exact_match": true,
+      "unparsed": false
+    }
+  },
+  "n-samples": {
+    "srb_grammar_official": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_idioms_official": {
+      "original": 19,
+      "effective": 19
+    },
+    "srb_cyrillic_agreement_official": {
+      "original": 20,
+      "effective": 20
+    },
+    "srb_grammar_cloze_official": {
+      "original": 18,
+      "effective": 18
+    }
+  },
+  "config": {
+    "model": "openrouter-chat",
+    "model_args": {
+      "model": "deepseek/deepseek-v4-pro",
+      "provider": "StreamLake",
+      "quantizations": "fp8"
+    },
+    "batch_size": 1,
+    "batch_sizes": [],
+    "device": "cuda:0",
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": {},
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "8fc57d0",
+  "date": 1792175533.5571468,
+  "pretty_env_info": "N/A (torch not installed)",
+  "transformers_version": "N/A",
+  "lm_eval_version": "0.4.12",
+  "upper_git_hash": null,
+  "task_hashes": {
+    "srb_grammar_official": "906222c83814bc50a691e74a63b6e26056b9df43e327af9a9a1ab61c812a73e0",
+    "srb_idioms_official": "13e5df9f837d0e075ded5cc8ebb7b87b5a40e156addce8b0dc09c22756d89e48",
+    "srb_cyrillic_agreement_official": "96601aa378e1a19448a340884b0e729e047feb8ed55e3a9dc04d9fd3c0a3d50a",
+    "srb_grammar_cloze_official": "0a1a20299771a8d0359dfa5844658bc9bdaab297d460d09e9bd9bc1854781191"
+  },
+  "model_source": "openrouter-chat",
+  "model_name": "deepseek/deepseek-v4-pro",
+  "model_name_sanitized": "deepseek__deepseek-v4-pro",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": true,
+  "chat_template": "",
+  "chat_template_sha": null,
+  "total_evaluation_time_seconds": "189.58205133280717"
+}

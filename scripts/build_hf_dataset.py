@@ -162,12 +162,13 @@ repo:
 lm_eval --tasks srb_official --include_path lm_eval_tasks ...
 ```
 
-## Leaderboard (official set v1, 25 models, zero-shot, 2026-10-12 to 16)
+## Leaderboard (official set v1, 30 models, zero-shot, 2026-10-12 to 17)
 
 {leaderboard_top()}
 
 The frontier is at ceiling (five models at 98%). Below it, the set separates models from
-38% to 98%, and pravopis separates them most. Details and caveats, including a possible small
+38% to 98%, and pravopis separates them most. The best open-weights model is DeepSeek V4 Pro
+(95%); turning reasoning on does not raise any tested model by more than 2 points. Details and caveats, including a possible small
 selection bias toward the four consensus models, are in the GitHub repo.
 
 ## License

@@ -14,9 +14,9 @@ Cyrillic/Latin consistency.
 > from verified items (see [Verification](#verification)). The larger mined and synthesised
 > pools stay unverified and are not scored here.
 
-## Leaderboard — official set v1 (2026-10-12 to 16)
+## Leaderboard — official set v1 (2026-10-12 to 17)
 
-25 models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
+30 models via OpenRouter, zero-shot, on the **official set**. It has 355 items:
 - 63 human-verified;
 - 214 confirmed by model consensus;
 - 78 correction items derived from those.
@@ -35,24 +35,29 @@ provider (often the model's own lab). The provider and the settings for each mod
 | 5 | openai_gpt-5.6-sol | 100% | 100% | 95% | 95% | 98% | **98%** | 0.00 |
 | 6 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
 | 7 | openai_gpt-6-luna | 100% | 100% | 85% | 96% | 93% | **95%** | 0.00 |
-| 8 | x-ai_grok-4.7 | 100% | 89% | 91% | 95% | 98% | **94%** | 0.00 |
-| 9 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
-| 10 | openai_gpt-5.6-luna | 98% | 100% | 80% | 89% | 96% | **93%** | 0.00 |
-| 11 | moonshotai_kimi-k3 | 95% | 100% | 85% | 85% | 92% | **91%** | 0.00 |
-| 12 | z-ai_glm-5.3 | 97% | 94% | 83% | 85% | 93% | **90%** | 0.05 |
-| 13 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 83% | 88% | **90%** | 0.00 |
-| 14 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
-| 15 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
-| 16 | mistralai_mistral-large-4-0 | 97% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
-| 17 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
-| 18 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
-| 19 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
-| 20 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
-| 21 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
-| 22 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
-| 23 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
-| 24 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
-| 25 | cohere_command-a-plus | 73% | 33% | 18% | 28% | 37% | **38%** | 0.15 |
+| 8 | deepseek_deepseek-v4-pro | 97% | 100% | 91% | 91% | 94% | **95%** | 0.00 |
+| 9 | x-ai_grok-4.7 | 100% | 89% | 91% | 95% | 98% | **94%** | 0.00 |
+| 10 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
+| 11 | openai_gpt-5.6-luna | 98% | 100% | 80% | 89% | 96% | **93%** | 0.00 |
+| 12 | moonshotai_kimi-k3 | 95% | 100% | 85% | 85% | 92% | **91%** | 0.00 |
+| 13 | z-ai_glm-5.3 | 97% | 94% | 83% | 85% | 93% | **90%** | 0.05 |
+| 14 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 83% | 88% | **90%** | 0.00 |
+| 15 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
+| 16 | minimax_minimax-m3 | 95% | 100% | 74% | 77% | 89% | **87%** | 0.00 |
+| 17 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
+| 18 | qwen_qwen3.6-27b | 95% | 89% | 76% | 59% | 93% | **82%** | 0.00 |
+| 19 | mistralai_mistral-large-4-0 | 97% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
+| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
+| 21 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
+| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
+| 23 | nvidia_nemotron-3-ultra-550b-a55b | 90% | 94% | 54% | 63% | 81% | **76%** | 0.00 |
+| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
+| 25 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
+| 26 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
+| 27 | nvidia_nemotron-3.5-lightning | 81% | 39% | 12% | 14% | 53% | **40%** | 0.00 |
+| 28 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
+| 29 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
+| 30 | cohere_command-a-plus | 73% | 33% | 18% | 28% | 37% | **38%** | 0.15 |
 
 Caveat: the four consensus models (sonnet-5.5, gemini-3.5-flash-lite, gemma-4-31b,
 deepseek-v3.2) are also ranked here, so a small selection bias toward them is possible. Items
@@ -69,6 +74,12 @@ Details: [results/LEADERBOARD.md](results/LEADERBOARD.md), which also keeps the 
 - **It barely separates the frontier.** Five models score 98%: claude-opus-5.5, gpt-6-sol,
   gemini-3.8-flash, gpt-6.1-sol and gpt-5.6-sol. Harder versions of the same checks did not change that: a 6-phenomenon probe, a
   source-checked pravopis set, and a cue-free correction format all left Opus at ceiling.
+- **Open-weights models are close behind.** DeepSeek V4 Pro reaches 95%, level with Sonnet 5.5;
+  Kimi K3 91%, GLM-5.3 and DeepSeek V4.1 Flash 90%. Chart: `results/leaderboard-open.png`
+  (only models whose weights are on Hugging Face).
+- **Thinking does not buy Serbian.** Rerun at `reasoning=low` and `high`, no open-weights model
+  gains more than 2 points, and Nemotron 3 Ultra drops from 76% to 65% at high by "correcting"
+  sentences that were already right. Chart: `results/reasoning-compare.png`.
 - **The frontier's remaining "errors" are contested norm, not ignorance.** Pravopis 2010
   hyphenates *foto-aparat* and *auto-put*, while Klajn and the 1993 Pravopis write them together.
   Items like that were dropped rather than pinned to one authority.

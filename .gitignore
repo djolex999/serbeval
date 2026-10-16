@@ -21,3 +21,4 @@ results/local/**/samples_*.jsonl
 results/openrouter/**/samples_*.jsonl
 # official-set runs: keep the summary JSON and logs, not per-sample logs
 results/official/**/samples_*.jsonl
+results/official-reasoning*/**/samples_*.jsonl

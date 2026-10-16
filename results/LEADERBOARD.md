@@ -7,7 +7,7 @@
 - 214 model-consensus;
 - 78 correction items derived from those.
 
-The run: 25 models through OpenRouter, zero-shot, all in parallel. Every request got an answer
+The run: 30 models through OpenRouter, zero-shot, all in parallel. Every request got an answer
 (0 provider give-ups).
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
@@ -19,24 +19,29 @@ The run: 25 models through OpenRouter, zero-shot, all in parallel. Every request
 | 5 | openai_gpt-5.6-sol | 100% | 100% | 95% | 95% | 98% | **98%** | 0.00 |
 | 6 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
 | 7 | openai_gpt-6-luna | 100% | 100% | 85% | 96% | 93% | **95%** | 0.00 |
-| 8 | x-ai_grok-4.7 | 100% | 89% | 91% | 95% | 98% | **94%** | 0.00 |
-| 9 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
-| 10 | openai_gpt-5.6-luna | 98% | 100% | 80% | 89% | 96% | **93%** | 0.00 |
-| 11 | moonshotai_kimi-k3 | 95% | 100% | 85% | 85% | 92% | **91%** | 0.00 |
-| 12 | z-ai_glm-5.3 | 97% | 94% | 83% | 85% | 93% | **90%** | 0.05 |
-| 13 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 83% | 88% | **90%** | 0.00 |
-| 14 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
-| 15 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
-| 16 | mistralai_mistral-large-4-0 | 97% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
-| 17 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
-| 18 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
-| 19 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
-| 20 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
-| 21 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
-| 22 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
-| 23 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
-| 24 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
-| 25 | cohere_command-a-plus | 73% | 33% | 18% | 28% | 37% | **38%** | 0.15 |
+| 8 | deepseek_deepseek-v4-pro | 97% | 100% | 91% | 91% | 94% | **95%** | 0.00 |
+| 9 | x-ai_grok-4.7 | 100% | 89% | 91% | 95% | 98% | **94%** | 0.00 |
+| 10 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
+| 11 | openai_gpt-5.6-luna | 98% | 100% | 80% | 89% | 96% | **93%** | 0.00 |
+| 12 | moonshotai_kimi-k3 | 95% | 100% | 85% | 85% | 92% | **91%** | 0.00 |
+| 13 | z-ai_glm-5.3 | 97% | 94% | 83% | 85% | 93% | **90%** | 0.05 |
+| 14 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 83% | 88% | **90%** | 0.00 |
+| 15 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
+| 16 | minimax_minimax-m3 | 95% | 100% | 74% | 77% | 89% | **87%** | 0.00 |
+| 17 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
+| 18 | qwen_qwen3.6-27b | 95% | 89% | 76% | 59% | 93% | **82%** | 0.00 |
+| 19 | mistralai_mistral-large-4-0 | 97% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
+| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
+| 21 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
+| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
+| 23 | nvidia_nemotron-3-ultra-550b-a55b | 90% | 94% | 54% | 63% | 81% | **76%** | 0.00 |
+| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
+| 25 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
+| 26 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
+| 27 | nvidia_nemotron-3.5-lightning | 81% | 39% | 12% | 14% | 53% | **40%** | 0.00 |
+| 28 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
+| 29 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
+| 30 | cohere_command-a-plus | 73% | 33% | 18% | 28% | 37% | **38%** | 0.15 |
 
 How it was run:
 - Reasoning is off where a model allows it. gemini-3.5-flash-lite, gpt-5-mini and
@@ -49,6 +54,10 @@ How it was run:
   official Cloze group has only 18 items, so read it loosely.
 
 **Read before citing:**
+- **Five open-weights models ran on 2026-10-16**, after a suggestion to cover more open
+  models: nemotron-3-ultra-550b-a55b (DeepInfra, fp4, its NVFP4 release), nemotron-3.5-lightning
+  (DeepInfra, bf16), deepseek-v4-pro (StreamLake, fp8), qwen3.6-27b (Alibaba) and minimax-m3
+  (MiniMax). Reasoning off; 0 empty answers, 0 unparsed. Total cost $0.04.
 - **The GPT-6 family ran on 2026-10-16**: gpt-6.1-sol (`reasoning=minimal`, mandatory, 0
   reasoning tokens in a spot check), gpt-6-sol and gpt-6-luna (reasoning off). It had been missed
   when the "newest per family" models were picked.
@@ -74,6 +83,45 @@ Reproduce:
 TASKS=srb_official RESULTS=results/official scripts/openrouter_eval.sh <model> [args]
 scripts/leaderboard.py results/official --official
 ```
+
+## Reasoning on vs off (2026-10-16/17)
+
+Open-weights models rerun with thinking on, same provider and precision: `reasoning=low`
+(`results/official-reasoning/`) and `reasoning=high` (`results/official-reasoning-high/`, token
+floor 16384). Chart: `results/reasoning-compare.png`. The board above stays at reasoning off
+for every model that allows it.
+
+| Model | off | low | high | high: Pravopis / Ispravljanje |
+|---|---|---|---|---|
+| deepseek-v4-pro | 95% | 94% | **94%** | 91% / 98% |
+| minimax-m3 | 87% | (excluded) | **87%** | 82% / 88% |
+| qwen3.6-27b | 82% | not run | **83%** | 73% / 89% |
+| nemotron-3-ultra-550b-a55b | 76% | 78% | **65%** | 46% / 57% |
+
+High-run integrity: 355/355 answers per model, at most 2 empty, no provider give-ups.
+Cost $1.5 for the four models.
+
+- **Thinking does not buy Serbian.** No model gains more than 2 points at any effort.
+- **Nemotron 3 Ultra gets worse at high** (76 → 65): it "corrects" sentences that were already
+  right and introduces errors (*ućionici*, *spomenpark*, *niskim* for *ni s kim*).
+
+Reasoning=low detail:
+
+| Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek off → low |
+|---|---|---|---|---|---|---|
+| deepseek-v4-pro | 98% | 94% | 93% | 92% | 95% | 95% → **94%** |
+| nemotron-3-ultra-550b-a55b | 95% | 83% | 68% | 74% | 69% | 76% → **78%** |
+| minimax-m3 (see note) | 95% | 83% | 80% | 81% | 88% | 87% → *86%* |
+
+- Thinking barely moves the average. For Nemotron it trades: pravopis rises 54 → 68, but
+  correction falls 81 → 69.
+- **minimax-m3 is not comparable**: 17 of 355 answers came back empty, some because the
+  thinking used the whole 2048-token budget (`finish_reason: length`).
+- qwen3.6-27b was not run at low (budget); it ran at high.
+- Before this run the adapter sent the `\n\n` stop sequence with reasoning on; replies that
+  open with a blank line after the thinking came back empty (21 of 68 in a DeepSeek smoke
+  test, 0 of 21 when replayed without it). The adapter no longer sends stop sequences when
+  reasoning is on.
 
 ## Preliminary full-suite run (2026-10-08)
 
