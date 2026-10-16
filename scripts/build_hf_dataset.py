@@ -162,11 +162,11 @@ repo:
 lm_eval --tasks srb_official --include_path lm_eval_tasks ...
 ```
 
-## Leaderboard (official set v1, 22 models, zero-shot, 2026-10-12/13)
+## Leaderboard (official set v1, 25 models, zero-shot, 2026-10-12 to 16)
 
 {leaderboard_top()}
 
-The frontier is at ceiling (three models at 98%). Below it, the set separates models from
+The frontier is at ceiling (five models at 98%). Below it, the set separates models from
 38% to 98%, and pravopis separates them most. Details and caveats, including a possible small
 selection bias toward the four consensus models, are in the GitHub repo.
 
