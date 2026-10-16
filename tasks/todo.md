@@ -10,7 +10,7 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 - [ ] Re-send items that got empty provider responses (qwen3-235b, gemma-4-31b)
 - [ ] README: leaderboard table + chart + methodology (srLex-attested gold, contested norm, unparsed)
 - [x] Published: GitHub public (2026-10-12), Hugging Face djolex999/serbeval (2026-10-13)
-- [ ] Optional: PR to lm-evaluation-harness
+- [x] PR to lm-evaluation-harness: EleutherAI/lm-evaluation-harness#4400 (2026-10-16); waiting on CLA signature + maintainer review
 - [ ] Optional: Opus 5.5 via OpenRouter (~$3-10, mandatory thinking) as the reportable ceiling
 
 ## Done 2026-10-07/08 — difficulty work and first leaderboard
