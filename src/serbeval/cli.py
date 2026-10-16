@@ -395,6 +395,12 @@ def _cmd_official(args: argparse.Namespace) -> int:
         if str(row["id"]) in status:
             by_task.setdefault(lm_task_name(row), []).append(row)
     out.mkdir(parents=True, exist_ok=True)
+    # Version and errata are maintainer decisions recorded in the manifest, not derived
+    # from the data: a rebuild keeps them.
+    previous_path = out / "MANIFEST.json"
+    previous = (
+        json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else {}
+    )
     for stale in out.glob("*.jsonl"):
         stale.unlink()
     for task, task_rows in sorted(by_task.items()):
@@ -402,7 +408,7 @@ def _cmd_official(args: argparse.Namespace) -> int:
             "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in task_rows), encoding="utf-8"
         )
     manifest = {
-        "version": "v1",
+        "version": previous.get("version", "v1"),
         "built": date.today().isoformat(),
         "rule": "human-verified, or on the core list with < "
         f"{args.min_dissent} of {len(models)} strong models disagreeing (consensus), "
@@ -411,6 +417,8 @@ def _cmd_official(args: argparse.Namespace) -> int:
         "counts": dict(Counter(status.values())),
         "items": dict(sorted(status.items())),
     }
+    if "errata" in previous:
+        manifest["errata"] = previous["errata"]
     (out / "MANIFEST.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
     )
