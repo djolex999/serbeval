@@ -5,7 +5,7 @@
       "alias": "srb_probe_jat_official",
       "sample_len": 19,
       "exact_match,none": 0.6842105263157895,
-      "exact_match_stderr,none": 0.10956136839295434,
+      "exact_match_stderr,none": 0.10956136839295436,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -48,9 +48,9 @@
     "srb_probe_poluslozenice_official": {
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
-      "sample_len": 20,
-      "exact_match,none": 0.6,
-      "exact_match_stderr,none": 0.11239029738980327,
+      "sample_len": 19,
+      "exact_match,none": 0.631578947368421,
+      "exact_match_stderr,none": 0.11369720523522563,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     }
@@ -477,7 +477,7 @@
     },
     "srb_probe_poluslozenice_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     }
   },
   "config": {
@@ -519,5 +519,9 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "136.73001791595016"
+  "total_evaluation_time_seconds": "136.73001791595016",
+  "serbeval_rescored": {
+    "srb_probe_jat_official": "v1.1",
+    "srb_probe_poluslozenice_official": "v1.1"
+  }
 }

@@ -1,5 +1,5 @@
 {
- "version": "v1",
+ "version": "v1.1",
  "built": "2026-10-12",
  "rule": "human-verified, or on the core list with < 2 of 4 strong models disagreeing (consensus), or a correction item derived from an official item",
  "consensus_models": [
@@ -9,9 +9,9 @@
   "google_gemma-4-31b-it"
  ],
  "counts": {
-  "human": 63,
+  "human": 61,
   "consensus": 214,
-  "derived": 78
+  "derived": 77
  },
  "items": {
   "srb-cloze-brojevi-0007": "human",
@@ -87,7 +87,6 @@
   "srb-correction-razmak-crtica-0005": "derived",
   "srb-correction-razmak-crtica-0006": "derived",
   "srb-correction-razmak-crtica-0007": "derived",
-  "srb-correction-razmak-crtica-0008": "derived",
   "srb-correction-razmak-crtica-0009": "derived",
   "srb-correction-razmak-crtica-0010": "derived",
   "srb-correction-razmak-crtica-0011": "derived",
@@ -148,7 +147,6 @@
   "srb-grammar-standard-0001": "human",
   "srb-grammar-standard-0002": "consensus",
   "srb-grammar-standard-0005": "human",
-  "srb-grammar-standard-0006": "human",
   "srb-grammar-standard-0007": "consensus",
   "srb-idioms-idiomi-a-0001": "human",
   "srb-idioms-idiomi-a-0003": "human",
@@ -322,7 +320,6 @@
   "srb-probe-poluslozenice-0010": "consensus",
   "srb-probe-poluslozenice-0011": "consensus",
   "srb-probe-poluslozenice-0012": "consensus",
-  "srb-probe-poluslozenice-0013": "human",
   "srb-probe-poluslozenice-0014": "consensus",
   "srb-probe-poluslozenice-0015": "consensus",
   "srb-probe-poluslozenice-0016": "consensus",
@@ -369,5 +366,26 @@
   "srb-probe-sibilarizacija-syn-0018": "consensus",
   "srb-probe-sibilarizacija-syn-0019": "consensus",
   "srb-probe-sibilarizacija-syn-0020": "consensus"
+ },
+ "errata": {
+  "date": "2026-10-17",
+  "rule": "where Pravopis 2010 and Klajn disagree, both spellings are accepted; otherwise Pravopis 2010",
+  "changed": [
+   "srb-correction-razmak-crtica-0021",
+   "srb-pravopis-poluslozenice-0002",
+   "srb-pravopis-poluslozenice-0012",
+   "srb-pravopis-poluslozenice-0018",
+   "srb-probe-jat-0013",
+   "srb-probe-poluslozenice-0002",
+   "srb-probe-poluslozenice-0003",
+   "srb-probe-poluslozenice-0010",
+   "srb-probe-poluslozenice-0011"
+  ],
+  "dropped": {
+   "srb-probe-poluslozenice-0013": "v1.1 errata: cue „dva + tri“ read as arithmetic (pet)",
+   "srb-grammar-standard-0006": "v1.1 errata: kontakt- accepts both spellings, two options correct",
+   "srb-correction-razmak-crtica-0008": "v1.1 errata: kontakt- accepts both spellings, no error left"
+  },
+  "notes": "tasks/v1.1-izmene.md"
  }
 }

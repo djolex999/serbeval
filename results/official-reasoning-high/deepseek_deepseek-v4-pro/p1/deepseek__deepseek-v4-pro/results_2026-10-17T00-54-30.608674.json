@@ -4,8 +4,8 @@
       "name": "srb_probe_jat_official",
       "alias": "srb_probe_jat_official",
       "sample_len": 19,
-      "exact_match,none": 0.8947368421052632,
-      "exact_match_stderr,none": 0.07233518641434492,
+      "exact_match,none": 0.9473684210526315,
+      "exact_match_stderr,none": 0.05263157894736842,
       "unparsed,none": 0.05263157894736842,
       "unparsed_stderr,none": 0.05263157894736842
     },
@@ -48,11 +48,11 @@
     "srb_probe_poluslozenice_official": {
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
-      "sample_len": 20,
-      "exact_match,none": 0.75,
-      "exact_match_stderr,none": 0.09933992677987828,
-      "unparsed,none": 0.05,
-      "unparsed_stderr,none": 0.049999999999999996
+      "sample_len": 19,
+      "exact_match,none": 0.9473684210526315,
+      "exact_match_stderr,none": 0.05263157894736842,
+      "unparsed,none": 0.05263157894736842,
+      "unparsed_stderr,none": 0.05263157894736842
     }
   },
   "group_subtasks": {},
@@ -495,7 +495,7 @@
     },
     "srb_probe_poluslozenice_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     }
   },
   "config": {
@@ -540,5 +540,9 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "1414.2581905419938"
+  "total_evaluation_time_seconds": "1414.2581905419938",
+  "serbeval_rescored": {
+    "srb_probe_jat_official": "v1.1",
+    "srb_probe_poluslozenice_official": "v1.1"
+  }
 }

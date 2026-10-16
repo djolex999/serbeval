@@ -1,47 +1,51 @@
 # serbeval leaderboard
 
-## Official set v1 (2026-10-12)
+## Official set v1.1 (runs 2026-10-12 to 17; v1.1 re-score 2026-10-17)
 
-**355 items**, each with a verification status (`data/official/MANIFEST.json`):
-- 63 human-verified (33 disputed items checked by the maintainer + 30 blind-baseline items);
+**352 items**, each with a verification status (`data/official/MANIFEST.json`):
+- 61 human-verified (disputed items checked by the maintainer + blind-baseline items);
 - 214 model-consensus;
-- 78 correction items derived from those.
+- 77 correction items derived from those.
+
+v1.1 errata: 9 golds changed, 3 items dropped ([tasks/v1.1-izmene.md](../tasks/v1.1-izmene.md)).
+Every model was re-scored from its saved answers with `scripts/rescore_official.py`; no request
+was re-sent. Under v1 the top five were all at 98%.
 
 The run: 30 models through OpenRouter, zero-shot, all in parallel. Every request got an answer
 (0 provider give-ups).
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
 |---|---|---|---|---|---|---|---|---|
-| 1 | anthropic_claude-opus-5.5 | 100% | 100% | 96% | 97% | 99% | **98%** | 0.00 |
-| 2 | openai_gpt-6-sol | 98% | 100% | 97% | 96% | 98% | **98%** | 0.00 |
-| 3 | google_gemini-3.8-flash | 100% | 100% | 94% | 97% | 98% | **98%** | 0.00 |
-| 4 | openai_gpt-6.1-sol | 100% | 100% | 94% | 96% | 99% | **98%** | 0.00 |
-| 5 | openai_gpt-5.6-sol | 100% | 100% | 95% | 95% | 98% | **98%** | 0.00 |
-| 6 | anthropic_claude-sonnet-5.5 | 97% | 94% | 95% | 92% | 97% | **95%** | 0.00 |
-| 7 | openai_gpt-6-luna | 100% | 100% | 85% | 96% | 93% | **95%** | 0.00 |
-| 8 | deepseek_deepseek-v4-pro | 97% | 100% | 91% | 91% | 94% | **95%** | 0.00 |
-| 9 | x-ai_grok-4.7 | 100% | 89% | 91% | 95% | 98% | **94%** | 0.00 |
-| 10 | google_gemini-3.5-flash-lite | 100% | 100% | 91% | 87% | 94% | **94%** | 0.00 |
-| 11 | openai_gpt-5.6-luna | 98% | 100% | 80% | 89% | 96% | **93%** | 0.00 |
-| 12 | moonshotai_kimi-k3 | 95% | 100% | 85% | 85% | 92% | **91%** | 0.00 |
-| 13 | z-ai_glm-5.3 | 97% | 94% | 83% | 85% | 93% | **90%** | 0.05 |
-| 14 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 83% | 88% | **90%** | 0.00 |
-| 15 | google_gemma-4-31b-it | 97% | 100% | 77% | 78% | 92% | **89%** | 0.00 |
-| 16 | minimax_minimax-m3 | 95% | 100% | 74% | 77% | 89% | **87%** | 0.00 |
-| 17 | deepseek_deepseek-v3.2 | 97% | 89% | 87% | 76% | 86% | **87%** | 0.00 |
-| 18 | qwen_qwen3.6-27b | 95% | 89% | 76% | 59% | 93% | **82%** | 0.00 |
-| 19 | mistralai_mistral-large-4-0 | 97% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
-| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 71% | 67% | 80% | **81%** | 0.05 |
-| 21 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
-| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 57% | 62% | 88% | **78%** | 0.00 |
-| 23 | nvidia_nemotron-3-ultra-550b-a55b | 90% | 94% | 54% | 63% | 81% | **76%** | 0.00 |
-| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
-| 25 | google_gemma-3-12b-it | 78% | 89% | 49% | 43% | 75% | **67%** | 0.00 |
-| 26 | qwen_qwen3.5-9b | 85% | 83% | 45% | 36% | 76% | **65%** | 0.00 |
+| 1 | anthropic_claude-opus-5.5 | 100% | 100% | 99% | 99% | 100% | **100%** | 0.00 |
+| 2 | openai_gpt-6.1-sol | 100% | 100% | 98% | 99% | 100% | **99%** | 0.00 |
+| 3 | google_gemini-3.8-flash | 100% | 100% | 98% | 98% | 99% | **99%** | 0.00 |
+| 4 | openai_gpt-6-sol | 100% | 100% | 97% | 97% | 100% | **99%** | 0.00 |
+| 5 | openai_gpt-5.6-sol | 100% | 100% | 96% | 98% | 99% | **99%** | 0.00 |
+| 6 | deepseek_deepseek-v4-pro | 98% | 100% | 93% | 93% | 94% | **96%** | 0.00 |
+| 7 | openai_gpt-6-luna | 100% | 100% | 87% | 97% | 94% | **96%** | 0.00 |
+| 8 | google_gemini-3.5-flash-lite | 100% | 100% | 92% | 88% | 97% | **95%** | 0.00 |
+| 9 | x-ai_grok-4.7 | 100% | 89% | 89% | 96% | 100% | **95%** | 0.00 |
+| 10 | anthropic_claude-sonnet-5.5 | 96% | 94% | 93% | 93% | 95% | **95%** | 0.00 |
+| 11 | openai_gpt-5.6-luna | 100% | 100% | 84% | 91% | 95% | **94%** | 0.00 |
+| 12 | moonshotai_kimi-k3 | 96% | 100% | 87% | 85% | 91% | **92%** | 0.00 |
+| 13 | z-ai_glm-5.3 | 98% | 94% | 84% | 86% | 94% | **91%** | 0.05 |
+| 14 | deepseek_deepseek-v4.1-flash | 100% | 100% | 82% | 85% | 88% | **91%** | 0.00 |
+| 15 | google_gemma-4-31b-it | 98% | 100% | 76% | 80% | 92% | **89%** | 0.00 |
+| 16 | deepseek_deepseek-v3.2 | 98% | 89% | 89% | 76% | 88% | **88%** | 0.00 |
+| 17 | minimax_minimax-m3 | 96% | 100% | 74% | 79% | 88% | **87%** | 0.00 |
+| 18 | qwen_qwen3.6-27b | 96% | 89% | 74% | 61% | 93% | **83%** | 0.00 |
+| 19 | mistralai_mistral-large-4-0 | 98% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
+| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 74% | 68% | 82% | **82%** | 0.05 |
+| 21 | openai_gpt-5-mini | 90% | 89% | 67% | 63% | 88% | **79%** | 0.00 |
+| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 60% | 62% | 89% | **79%** | 0.00 |
+| 23 | nvidia_nemotron-3-ultra-550b-a55b | 91% | 94% | 54% | 64% | 80% | **77%** | 0.00 |
+| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 58% | 53% | 77% | **74%** | 0.05 |
+| 25 | google_gemma-3-12b-it | 79% | 89% | 50% | 44% | 77% | **68%** | 0.00 |
+| 26 | qwen_qwen3.5-9b | 86% | 83% | 46% | 37% | 75% | **66%** | 0.00 |
 | 27 | nvidia_nemotron-3.5-lightning | 81% | 39% | 12% | 14% | 53% | **40%** | 0.00 |
-| 28 | mistralai_mistral-nemo | 68% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
-| 29 | meta-llama_llama-3.1-8b-instruct | 47% | 50% | 22% | 20% | 53% | **39%** | 0.00 |
-| 30 | cohere_command-a-plus | 73% | 33% | 18% | 28% | 37% | **38%** | 0.15 |
+| 28 | meta-llama_llama-3.1-8b-instruct | 48% | 50% | 23% | 21% | 55% | **39%** | 0.00 |
+| 29 | mistralai_mistral-nemo | 69% | 33% | 12% | 15% | 67% | **39%** | 0.00 |
+| 30 | cohere_command-a-plus | 74% | 33% | 19% | 28% | 37% | **38%** | 0.15 |
 
 How it was run:
 - Reasoning is off where a model allows it. gemini-3.5-flash-lite, gpt-5-mini and
@@ -93,16 +97,18 @@ for every model that allows it.
 
 | Model | off | low | high | high: Pravopis / Ispravljanje |
 |---|---|---|---|---|
-| deepseek-v4-pro | 95% | 94% | **94%** | 91% / 98% |
-| minimax-m3 | 87% | (excluded) | **87%** | 82% / 88% |
-| qwen3.6-27b | 82% | not run | **83%** | 73% / 89% |
-| nemotron-3-ultra-550b-a55b | 76% | 78% | **65%** | 46% / 57% |
+| deepseek-v4-pro | 96% | 96% | **96%** | 91% / 99% |
+| minimax-m3 | 87% | (excluded) | **87%** | 81% / 88% |
+| qwen3.6-27b | 83% | not run | **84%** | 73% / 87% |
+| nemotron-3-ultra-550b-a55b | 77% | 78% | **66%** | 46% / 58% |
+
+(v1.1 numbers; under v1: 95/94/94, 87/–/87, 82/–/83, 76/78/65.)
 
 High-run integrity: 355/355 answers per model, at most 2 empty, no provider give-ups.
 Cost $1.5 for the four models.
 
 - **Thinking does not buy Serbian.** No model gains more than 2 points at any effort.
-- **Nemotron 3 Ultra gets worse at high** (76 → 65): it "corrects" sentences that were already
+- **Nemotron 3 Ultra gets worse at high** (77 → 66): it "corrects" sentences that were already
   right and introduces errors (*ućionici*, *spomenpark*, *niskim* for *ni s kim*).
 
 Reasoning=low detail:

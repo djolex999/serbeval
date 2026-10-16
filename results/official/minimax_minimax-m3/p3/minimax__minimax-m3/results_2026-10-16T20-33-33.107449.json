@@ -3,9 +3,9 @@
     "srb_grammar_official": {
       "name": "srb_grammar_official",
       "alias": "srb_grammar_official",
-      "sample_len": 20,
-      "exact_match,extract_answer": 0.9,
-      "exact_match_stderr,extract_answer": 0.06882472016116853,
+      "sample_len": 19,
+      "exact_match,extract_answer": 0.9473684210526315,
+      "exact_match_stderr,extract_answer": 0.05263157894736842,
       "unparsed,extract_answer": 0.0,
       "unparsed_stderr,extract_answer": 0.0
     },
@@ -363,7 +363,7 @@
   "n-samples": {
     "srb_grammar_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     },
     "srb_idioms_official": {
       "original": 19,
@@ -416,5 +416,8 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "100.53327270783484"
+  "total_evaluation_time_seconds": "100.53327270783484",
+  "serbeval_rescored": {
+    "srb_grammar_official": "v1.1"
+  }
 }

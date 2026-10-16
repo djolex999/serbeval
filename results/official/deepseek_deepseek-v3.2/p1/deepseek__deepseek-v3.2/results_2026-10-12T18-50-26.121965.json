@@ -48,9 +48,9 @@
     "srb_probe_poluslozenice_official": {
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
-      "sample_len": 20,
-      "exact_match,none": 0.8,
-      "exact_match_stderr,none": 0.0917662935482247,
+      "sample_len": 19,
+      "exact_match,none": 0.8421052631578947,
+      "exact_match_stderr,none": 0.085947008518708,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     }
@@ -483,7 +483,7 @@
     },
     "srb_probe_poluslozenice_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     }
   },
   "config": {
@@ -526,5 +526,9 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "216.08023112500086"
+  "total_evaluation_time_seconds": "216.08023112500086",
+  "serbeval_rescored": {
+    "srb_probe_jat_official": "v1.1",
+    "srb_probe_poluslozenice_official": "v1.1"
+  }
 }

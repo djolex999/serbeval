@@ -7,7 +7,8 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 - [x] Nemotron 3 Ultra + 4 more open-weights models on the board (30 total); Nemotron 3 Ultra 76%
 - [x] Reasoning off/low/high comparison (results/reasoning-compare.png): no model gains >2 pts; Nemotron drops to 65% at high
 - [x] Open-weights-only chart (results/leaderboard-open.png); licenses from HF tags. Add Mistral Large 4 once its weights ship (announced late Oct)
-- [ ] "Make it harder": open models saturate too (Kimi K3 91%). Candidate levers: no-cue multi-error passages, rare lemmas, adversarial filtering against open models
+- [x] v1.1 errata applied (9 golds, 3 drops, 352 items), all runs re-scored; Opus 100%
+- [ ] v2: pilot format A (multi-error passages, 30 items, per-edit scoring) — plan in tasks/v2-plan.md
 - [x] Replied to Aleksa on LinkedIn
 - [ ] Follow-up for Aleksa: share the open-weights + reasoning charts
 
@@ -26,7 +27,6 @@ Rationale for every decision: [DECISIONS.md](../DECISIONS.md). Current state: [H
 
 - [ ] Re-send items that got empty provider responses in the preliminary run (qwen3-235b, gemma-4-31b)
 - [ ] Miner: skip blanks adjacent to brackets/digits (cloze-ud-0027 confused GPT)
-- [ ] Project CLAUDE.md is stale (says "no HF pushes, local only"); update via /sync confirmation
 
 ## Done 2026-10-08 → 16 — official set, publication, PR
 

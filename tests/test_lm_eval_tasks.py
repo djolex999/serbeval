@@ -175,7 +175,8 @@ PROBE_TASKS = {
     "srb_probe_broj_pridev_imenica": 20,
     # 19: „ni od koga“ was dropped in the 2026-10-09 verification (unnatural sentence).
     "srb_probe_sastavljeno_rastavljeno": 19,
-    "srb_probe_poluslozenice": 20,
+    # 19: „dva + tri“ dropped in the v1.1 errata (cue read as arithmetic).
+    "srb_probe_poluslozenice": 19,
 }
 
 
@@ -257,11 +258,14 @@ CORRECTION_TASKS = (
 def test_correction_tasks_load_with_thirty_items_each() -> None:
     from lm_eval.tasks import TaskManager
 
+    # razmak_crtica has 29: „kontakt telefon“ dropped in the v1.1 errata (both spellings
+    # accepted, so the sentence no longer contains an error).
+    expected = {"srb_correction_razmak_crtica": 29}
     tm = TaskManager(include_path=str(TASKS_DIR))
     loaded = tm.load(list(CORRECTION_TASKS))["tasks"]
     for name in CORRECTION_TASKS:
         docs = list(loaded[name].test_docs())
-        assert len(docs) == 30, name
+        assert len(docs) == expected.get(name, 30), name
         assert {doc["task"] for doc in docs} == {"srb_correction"}
     assert "srb_correction" in tm.all_tags
 

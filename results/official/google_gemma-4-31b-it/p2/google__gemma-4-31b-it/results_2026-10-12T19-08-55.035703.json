@@ -13,8 +13,8 @@
       "name": "srb_pravopis_poluslozenice_official",
       "alias": "srb_pravopis_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.7368421052631579,
-      "exact_match_stderr,none": 0.10379087338771255,
+      "exact_match,none": 0.6842105263157895,
+      "exact_match_stderr,none": 0.10956136839295436,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -39,9 +39,9 @@
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 30,
-      "exact_match,none": 0.8333333333333334,
-      "exact_match_stderr,none": 0.06920456654478331,
+      "sample_len": 29,
+      "exact_match,none": 0.8275862068965517,
+      "exact_match_stderr,none": 0.07138609234576078,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -554,7 +554,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 30
+      "effective": 29
     },
     "srb_correction_c_c_official": {
       "original": 21,
@@ -606,5 +606,9 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "1325.0953774160007"
+  "total_evaluation_time_seconds": "1325.0953774160007",
+  "serbeval_rescored": {
+    "srb_correction_razmak_crtica_official": "v1.1",
+    "srb_pravopis_poluslozenice_official": "v1.1"
+  }
 }

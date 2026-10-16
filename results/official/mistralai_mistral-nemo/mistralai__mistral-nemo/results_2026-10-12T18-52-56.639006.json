@@ -21,9 +21,9 @@
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 30,
-      "exact_match,none": 0.5,
-      "exact_match_stderr,none": 0.09284766908852593,
+      "sample_len": 29,
+      "exact_match,none": 0.4827586206896552,
+      "exact_match_stderr,none": 0.09443492370778726,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -50,9 +50,9 @@
     "srb_grammar_official": {
       "name": "srb_grammar_official",
       "alias": "srb_grammar_official",
-      "sample_len": 20,
-      "exact_match,extract_answer": 0.6,
-      "exact_match_stderr,extract_answer": 0.11239029738980327,
+      "sample_len": 19,
+      "exact_match,extract_answer": 0.631578947368421,
+      "exact_match_stderr,extract_answer": 0.11369720523522563,
       "unparsed,extract_answer": 0.0,
       "unparsed_stderr,extract_answer": 0.0
     },
@@ -124,16 +124,16 @@
       "alias": "srb_probe_jat_official",
       "sample_len": 19,
       "exact_match,none": 0.3684210526315789,
-      "exact_match_stderr,none": 0.1136972052352256,
+      "exact_match_stderr,none": 0.11369720523522561,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
     "srb_probe_poluslozenice_official": {
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
-      "sample_len": 20,
-      "exact_match,none": 0.1,
-      "exact_match_stderr,none": 0.06882472016116853,
+      "sample_len": 19,
+      "exact_match,none": 0.10526315789473684,
+      "exact_match_stderr,none": 0.07233518641434492,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -1346,7 +1346,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 30
+      "effective": 29
     },
     "srb_cyrillic_agreement_official": {
       "original": 20,
@@ -1358,7 +1358,7 @@
     },
     "srb_grammar_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     },
     "srb_idioms_official": {
       "original": 19,
@@ -1394,7 +1394,7 @@
     },
     "srb_probe_poluslozenice_official": {
       "original": 20,
-      "effective": 20
+      "effective": 19
     },
     "srb_probe_sastavljeno_rastavljeno_official": {
       "original": 19,
@@ -1456,5 +1456,12 @@
   "fewshot_as_multiturn": true,
   "chat_template": "",
   "chat_template_sha": null,
-  "total_evaluation_time_seconds": "366.3876147499541"
+  "total_evaluation_time_seconds": "366.3876147499541",
+  "serbeval_rescored": {
+    "srb_correction_razmak_crtica_official": "v1.1",
+    "srb_grammar_official": "v1.1",
+    "srb_pravopis_poluslozenice_official": "v1.1",
+    "srb_probe_jat_official": "v1.1",
+    "srb_probe_poluslozenice_official": "v1.1"
+  }
 }
