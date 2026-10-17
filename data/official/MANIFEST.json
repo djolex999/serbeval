@@ -1,5 +1,5 @@
 {
- "version": "v1.1",
+ "version": "v1.2",
  "built": "2026-10-12",
  "rule": "human-verified, or on the core list with < 2 of 4 strong models disagreeing (consensus), or a correction item derived from an official item",
  "consensus_models": [
@@ -11,7 +11,7 @@
  "counts": {
   "human": 61,
   "consensus": 214,
-  "derived": 77
+  "derived": 76
  },
  "items": {
   "srb-cloze-brojevi-0007": "human",
@@ -107,7 +107,6 @@
   "srb-correction-razmak-crtica-0026": "derived",
   "srb-correction-razmak-crtica-0027": "derived",
   "srb-correction-razmak-crtica-0028": "derived",
-  "srb-correction-razmak-crtica-0029": "derived",
   "srb-correction-razmak-crtica-0030": "derived",
   "srb-cyrillic-agreement-geografija-0006-cyr": "consensus",
   "srb-cyrillic-agreement-geografija-0006-lat": "human",
@@ -367,25 +366,53 @@
   "srb-probe-sibilarizacija-syn-0019": "consensus",
   "srb-probe-sibilarizacija-syn-0020": "consensus"
  },
- "errata": {
-  "date": "2026-10-17",
-  "rule": "where Pravopis 2010 and Klajn disagree, both spellings are accepted; otherwise Pravopis 2010",
-  "changed": [
-   "srb-correction-razmak-crtica-0021",
-   "srb-pravopis-poluslozenice-0002",
-   "srb-pravopis-poluslozenice-0012",
-   "srb-pravopis-poluslozenice-0018",
-   "srb-probe-jat-0013",
-   "srb-probe-poluslozenice-0002",
-   "srb-probe-poluslozenice-0003",
-   "srb-probe-poluslozenice-0010",
-   "srb-probe-poluslozenice-0011"
-  ],
-  "dropped": {
-   "srb-probe-poluslozenice-0013": "v1.1 errata: cue „dva + tri“ read as arithmetic (pet)",
-   "srb-grammar-standard-0006": "v1.1 errata: kontakt- accepts both spellings, two options correct",
-   "srb-correction-razmak-crtica-0008": "v1.1 errata: kontakt- accepts both spellings, no error left"
+ "errata": [
+  {
+   "date": "2026-10-17",
+   "rule": "where Pravopis 2010 and Klajn disagree, both spellings are accepted; otherwise Pravopis 2010",
+   "changed": [
+    "srb-correction-razmak-crtica-0021",
+    "srb-pravopis-poluslozenice-0002",
+    "srb-pravopis-poluslozenice-0012",
+    "srb-pravopis-poluslozenice-0018",
+    "srb-probe-jat-0013",
+    "srb-probe-poluslozenice-0002",
+    "srb-probe-poluslozenice-0003",
+    "srb-probe-poluslozenice-0010",
+    "srb-probe-poluslozenice-0011"
+   ],
+   "dropped": {
+    "srb-probe-poluslozenice-0013": "v1.1 errata: cue „dva + tri“ read as arithmetic (pet)",
+    "srb-grammar-standard-0006": "v1.1 errata: kontakt- accepts both spellings, two options correct",
+    "srb-correction-razmak-crtica-0008": "v1.1 errata: kontakt- accepts both spellings, no error left"
+   },
+   "notes": "tasks/v1.1-izmene.md"
   },
-  "notes": "tasks/v1.1-izmene.md"
- }
+  {
+   "date": "2026-10-17",
+   "version": "v1.2",
+   "rule": "golds checked against the text of Pravopis 2010 (tačka and page in each explanation); both spellings only where Pravopis 2010 and Klajn disagree",
+   "changed": [
+    "srb-correction-razmak-crtica-0021",
+    "srb-pravopis-poluslozenice-0002",
+    "srb-pravopis-poluslozenice-0012",
+    "srb-pravopis-poluslozenice-0018",
+    "srb-pravopis-poluslozenice-0020",
+    "srb-pravopis-sastavljeno-rastavljeno-0021",
+    "srb-pravopis-slozeni-pridevi-0007",
+    "srb-probe-jat-0013",
+    "srb-probe-poluslozenice-0002",
+    "srb-probe-poluslozenice-0003",
+    "srb-probe-poluslozenice-0004",
+    "srb-probe-poluslozenice-0010",
+    "srb-probe-poluslozenice-0011",
+    "srb-probe-poluslozenice-0016",
+    "srb-probe-sastavljeno-rastavljeno-0013"
+   ],
+   "notes": "reports/Provera srpske pravopisne norme.md, tasks/v1.2-izmene.md, rečnik check of all 120 orthography items",
+   "dropped": {
+    "srb-correction-razmak-crtica-0029": "v1.2: source „crnobeli film“ is accepted by Pravopis 2010 (rečnik str. 497), so it holds no error"
+   }
+  }
+ ]
 }

@@ -528,7 +528,8 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "216.08023112500086",
   "serbeval_rescored": {
-    "srb_probe_jat_official": "v1.1",
-    "srb_probe_poluslozenice_official": "v1.1"
+    "srb_probe_jat_official": "v1.2",
+    "srb_probe_poluslozenice_official": "v1.2",
+    "srb_probe_sastavljeno_rastavljeno_official": "v1.2"
   }
 }

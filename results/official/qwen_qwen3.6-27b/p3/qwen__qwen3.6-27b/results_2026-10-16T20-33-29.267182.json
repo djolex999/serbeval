@@ -418,6 +418,6 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "96.68556333309971",
   "serbeval_rescored": {
-    "srb_grammar_official": "v1.1"
+    "srb_grammar_official": "v1.2"
   }
 }

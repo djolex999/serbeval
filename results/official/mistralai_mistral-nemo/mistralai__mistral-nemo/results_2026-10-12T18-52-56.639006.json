@@ -21,9 +21,9 @@
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 29,
-      "exact_match,none": 0.4827586206896552,
-      "exact_match_stderr,none": 0.09443492370778726,
+      "sample_len": 28,
+      "exact_match,none": 0.5,
+      "exact_match_stderr,none": 0.09622504486493763,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -88,7 +88,7 @@
       "alias": "srb_pravopis_sastavljeno_rastavljeno_official",
       "sample_len": 24,
       "exact_match,none": 0.08333333333333333,
-      "exact_match_stderr,none": 0.05763033956734372,
+      "exact_match_stderr,none": 0.057630339567343716,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -97,7 +97,7 @@
       "alias": "srb_pravopis_slozeni_pridevi_official",
       "sample_len": 22,
       "exact_match,none": 0.045454545454545456,
-      "exact_match_stderr,none": 0.045454545454545456,
+      "exact_match_stderr,none": 0.04545454545454546,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -132,8 +132,8 @@
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.10526315789473684,
-      "exact_match_stderr,none": 0.07233518641434492,
+      "exact_match,none": 0.15789473684210525,
+      "exact_match_stderr,none": 0.085947008518708,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -1346,7 +1346,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 29
+      "effective": 28
     },
     "srb_cyrillic_agreement_official": {
       "original": 20,
@@ -1458,10 +1458,13 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "366.3876147499541",
   "serbeval_rescored": {
-    "srb_correction_razmak_crtica_official": "v1.1",
-    "srb_grammar_official": "v1.1",
-    "srb_pravopis_poluslozenice_official": "v1.1",
-    "srb_probe_jat_official": "v1.1",
-    "srb_probe_poluslozenice_official": "v1.1"
+    "srb_correction_razmak_crtica_official": "v1.2",
+    "srb_grammar_official": "v1.2",
+    "srb_pravopis_poluslozenice_official": "v1.2",
+    "srb_probe_jat_official": "v1.2",
+    "srb_probe_poluslozenice_official": "v1.2",
+    "srb_pravopis_sastavljeno_rastavljeno_official": "v1.2",
+    "srb_pravopis_slozeni_pridevi_official": "v1.2",
+    "srb_probe_sastavljeno_rastavljeno_official": "v1.2"
   }
 }

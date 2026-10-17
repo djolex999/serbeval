@@ -258,9 +258,9 @@ CORRECTION_TASKS = (
 def test_correction_tasks_load_with_thirty_items_each() -> None:
     from lm_eval.tasks import TaskManager
 
-    # razmak_crtica has 29: „kontakt telefon“ dropped in the v1.1 errata (both spellings
-    # accepted, so the sentence no longer contains an error).
-    expected = {"srb_correction_razmak_crtica": 29}
+    # razmak_crtica has 28: „kontakt telefon“ (v1.1) and „crnobeli film“ (v1.2) were dropped
+    # because their source sentences turned out to hold no error.
+    expected = {"srb_correction_razmak_crtica": 28}
     tm = TaskManager(include_path=str(TASKS_DIR))
     loaded = tm.load(list(CORRECTION_TASKS))["tasks"]
     for name in CORRECTION_TASKS:

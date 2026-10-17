@@ -13,8 +13,8 @@
       "name": "srb_pravopis_poluslozenice_official",
       "alias": "srb_pravopis_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.6842105263157895,
-      "exact_match_stderr,none": 0.10956136839295436,
+      "exact_match,none": 0.5789473684210527,
+      "exact_match_stderr,none": 0.11637279966159297,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -23,7 +23,7 @@
       "alias": "srb_pravopis_slozeni_pridevi_official",
       "sample_len": 22,
       "exact_match,none": 0.8181818181818182,
-      "exact_match_stderr,none": 0.08416546361568648,
+      "exact_match_stderr,none": 0.0841654636156865,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -32,16 +32,16 @@
       "alias": "srb_pravopis_sastavljeno_rastavljeno_official",
       "sample_len": 24,
       "exact_match,none": 0.875,
-      "exact_match_stderr,none": 0.06895966054592131,
+      "exact_match_stderr,none": 0.0689596605459213,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 29,
-      "exact_match,none": 0.8620689655172413,
-      "exact_match_stderr,none": 0.06516628844986676,
+      "sample_len": 28,
+      "exact_match,none": 0.8928571428571429,
+      "exact_match_stderr,none": 0.05952380952380952,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -547,7 +547,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 29
+      "effective": 28
     },
     "srb_correction_c_c_official": {
       "original": 21,
@@ -600,7 +600,9 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "215.06530600006226",
   "serbeval_rescored": {
-    "srb_correction_razmak_crtica_official": "v1.1",
-    "srb_pravopis_poluslozenice_official": "v1.1"
+    "srb_correction_razmak_crtica_official": "v1.2",
+    "srb_pravopis_poluslozenice_official": "v1.2",
+    "srb_pravopis_sastavljeno_rastavljeno_official": "v1.2",
+    "srb_pravopis_slozeni_pridevi_official": "v1.2"
   }
 }

@@ -4,8 +4,8 @@
       "name": "srb_probe_jat_official",
       "alias": "srb_probe_jat_official",
       "sample_len": 19,
-      "exact_match,none": 1.0,
-      "exact_match_stderr,none": 0.0,
+      "exact_match,none": 0.9473684210526315,
+      "exact_match_stderr,none": 0.05263157894736842,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -49,8 +49,8 @@
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 1.0,
-      "exact_match_stderr,none": 0.0,
+      "exact_match,none": 0.8947368421052632,
+      "exact_match_stderr,none": 0.07233518641434492,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     }
@@ -528,7 +528,8 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "278.62801158288494",
   "serbeval_rescored": {
-    "srb_probe_jat_official": "v1.1",
-    "srb_probe_poluslozenice_official": "v1.1"
+    "srb_probe_jat_official": "v1.2",
+    "srb_probe_poluslozenice_official": "v1.2",
+    "srb_probe_sastavljeno_rastavljeno_official": "v1.2"
   }
 }

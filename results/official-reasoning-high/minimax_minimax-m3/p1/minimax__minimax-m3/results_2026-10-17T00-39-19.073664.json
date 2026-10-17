@@ -49,8 +49,8 @@
       "name": "srb_probe_poluslozenice_official",
       "alias": "srb_probe_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.8947368421052632,
-      "exact_match_stderr,none": 0.07233518641434492,
+      "exact_match,none": 0.7368421052631579,
+      "exact_match_stderr,none": 0.10379087338771256,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     }
@@ -535,7 +535,8 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "502.7643761660438",
   "serbeval_rescored": {
-    "srb_probe_jat_official": "v1.1",
-    "srb_probe_poluslozenice_official": "v1.1"
+    "srb_probe_jat_official": "v1.2",
+    "srb_probe_poluslozenice_official": "v1.2",
+    "srb_probe_sastavljeno_rastavljeno_official": "v1.2"
   }
 }

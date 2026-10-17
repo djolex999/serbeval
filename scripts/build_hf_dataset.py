@@ -97,7 +97,7 @@ configs:
 {configs}
 ---
 
-# serbeval: a Serbian-language LLM benchmark (official set v1.1)
+# serbeval: a Serbian-language LLM benchmark (official set v1.2)
 
 **Author:** Djordje Markovic ([@djolex999](https://github.com/djolex999))
 
@@ -109,9 +109,11 @@ reflex, pravopis (together/apart, hyphenated compounds, prefixoids), č/ć, and 
 consistency. It runs on
 [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) 0.4.12.
 
-This dataset is the **official set v1.1**: {sum(sizes.values())} items in {len(tasks)} tasks.
-v1.1 (2026-10-17) fixed 9 gold answers and dropped 3 items; where Pravopis 2010 and Klajn
-disagree, both spellings are accepted. The list is under `errata` in `MANIFEST.json`.
+This dataset is the **official set v1.2**: {sum(sizes.values())} items in {len(tasks)} tasks.
+v1.1 and v1.2 (2026-10-17) fixed gold answers and dropped 3 items; v1.2 checked every changed
+gold against the text of Pravopis 2010 (tačka and page in the explanation). Both spellings are
+accepted only where Pravopis 2010 and Klajn disagree. The history is under `errata` in
+`MANIFEST.json`.
 
 ## Verification
 
@@ -164,13 +166,13 @@ repo:
 lm_eval --tasks srb_official --include_path lm_eval_tasks ...
 ```
 
-## Leaderboard (official set v1.1, 30 models, zero-shot, runs 2026-10-12 to 17)
+## Leaderboard (official set v1.2, 30 models, zero-shot, runs 2026-10-12 to 17)
 
 {leaderboard_top()}
 
-The frontier is at ceiling (Opus 5.5 100%, four more at 99% after the v1.1 errata). Below it,
-the set separates models from 38% to 96%, and pravopis separates them most. The best
-open-weights model is DeepSeek V4 Pro (96%); turning reasoning on does not raise any tested model by more than 2 points. Details and caveats, including a possible small
+The frontier is near ceiling (GPT-6 Sol 99%, three more at 98%); its misses are mostly
+usage-over-norm spellings. Below it, the set separates models from 38% to 95%, and pravopis
+separates them most. The best open-weights model is DeepSeek V4 Pro (95%); turning reasoning on does not raise any tested model by more than 2 points. Details and caveats, including a possible small
 selection bias toward the four consensus models, are in the GitHub repo.
 
 ## License

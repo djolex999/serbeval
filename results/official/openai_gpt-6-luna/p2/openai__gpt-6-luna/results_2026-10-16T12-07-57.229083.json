@@ -13,8 +13,8 @@
       "name": "srb_pravopis_poluslozenice_official",
       "alias": "srb_pravopis_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.631578947368421,
-      "exact_match_stderr,none": 0.11369720523522563,
+      "exact_match,none": 0.47368421052631576,
+      "exact_match_stderr,none": 0.11768778828946262,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -32,16 +32,16 @@
       "alias": "srb_pravopis_sastavljeno_rastavljeno_official",
       "sample_len": 24,
       "exact_match,none": 0.875,
-      "exact_match_stderr,none": 0.06895966054592131,
+      "exact_match_stderr,none": 0.0689596605459213,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 29,
-      "exact_match,none": 0.8275862068965517,
-      "exact_match_stderr,none": 0.07138609234576078,
+      "sample_len": 28,
+      "exact_match,none": 0.8214285714285714,
+      "exact_match_stderr,none": 0.07370704611510599,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -547,7 +547,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 29
+      "effective": 28
     },
     "srb_correction_c_c_official": {
       "original": 21,
@@ -600,7 +600,9 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "255.71461662487127",
   "serbeval_rescored": {
-    "srb_correction_razmak_crtica_official": "v1.1",
-    "srb_pravopis_poluslozenice_official": "v1.1"
+    "srb_correction_razmak_crtica_official": "v1.2",
+    "srb_pravopis_poluslozenice_official": "v1.2",
+    "srb_pravopis_sastavljeno_rastavljeno_official": "v1.2",
+    "srb_pravopis_slozeni_pridevi_official": "v1.2"
   }
 }

@@ -125,7 +125,7 @@ def compare(off_root: Path, out: Path) -> None:
         ax.spines[side].set_visible(False)
     fig.text(0.06, 0.93, "Does thinking help with Serbian?", fontsize=12.5,
              fontweight="bold", color=TEXT, ha="left")
-    fig.text(0.06, 0.885, "serbeval official set v1.1 (352 tasks), same provider and precision",
+    fig.text(0.06, 0.885, "serbeval official set v1.2 (351 tasks), same provider and precision",
              fontsize=8.2, color=TEXT_2, ha="left")
     for x, (color, label) in zip((0.06, 0.30, 0.42), series, strict=True):
         fig.patches.append(FancyBboxPatch((x, 0.825), 0.02, 0.022, boxstyle="square,pad=0",
@@ -180,7 +180,7 @@ def main() -> None:
              fontweight="bold", color=TEXT, ha="left")
     fig.text(0.06, 0.912, "serbeval: grammar, verb forms, ijekavian, orthography, č/ć",
              fontsize=8.2, color=TEXT_2, ha="left")
-    fig.text(0.06, 0.888, f"{n} {'open-weight ' if open_only else ''}models · 352 checked tasks · average accuracy, zero-shot",
+    fig.text(0.06, 0.888, f"{n} {'open-weight ' if open_only else ''}models · 351 checked tasks · average accuracy, zero-shot",
              fontsize=8.2, color=TEXT_2, ha="left")
     fig.text(0.06, 0.045, "github.com/djolex999/serbeval", fontsize=7.6, color=TEXT_2, ha="left")
     fig.text(0.94, 0.045, "October 2026", fontsize=7.6, color=MUTED, ha="right")

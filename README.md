@@ -9,23 +9,27 @@ imperfect, sibilarization, numeral agreement (*dva nova stola*, *dvadeset jedan 
 ijekavian jat reflex, pravopis (*kontakt osoba*, *naučnoistraživački*, *ne znajući*), č/ć, and
 Cyrillic/Latin consistency.
 
-> **Status: official set v1.1.** The numbers below come from the 352-item official set. 61 items
+> **Status: official set v1.2.** The numbers below come from the 351-item official set. 61 items
 > are human-verified and the rest are backed by the agreement of four strong models or derived
 > from verified items (see [Verification](#verification)). The larger mined and synthesised
 > pools stay unverified and are not scored here.
 
-## Leaderboard — official set v1.1 (runs 2026-10-12 to 17, re-scored 2026-10-17)
+## Leaderboard — official set v1.2 (runs 2026-10-12 to 17, re-scored 2026-10-17)
 
-30 models via OpenRouter, zero-shot, on the **official set**. It has 352 items:
+30 models via OpenRouter, zero-shot, on the **official set**. It has 351 items:
 - 61 human-verified;
 - 214 confirmed by model consensus;
-- 77 correction items derived from those.
+- 76 correction items derived from those.
 
-**v1.1 errata (2026-10-17).** Most of the frontier's last v1 misses were the set's fault: golds
-that contradicted their own explanation or another item (kontakt-, ekspres-), and contested
-spellings pinned to one authority (foto-/auto-/radio-, greške/grješke). Rule now: where
-Pravopis 2010 and Klajn disagree, both spellings count; otherwise Pravopis 2010. Nine golds
-changed, three items dropped, all 30 models re-scored from their saved answers (no new runs).
+**Errata v1.1 and v1.2 (2026-10-17).** v1 had golds that contradicted their own explanation or
+another item, and contested spellings pinned to one side. v1.1 fixed them by rule; v1.2 then
+checked every changed gold against the text of Pravopis 2010 (tačka and page now in each
+explanation) and then every one of the 120 orthography golds against its rečnik, which reversed
+part of v1.1: *ekspres pošiljka*, *kontakt osoba* apart, *hteo – ne
+hteo* with a spaced dash, ijekavian *greška* (not *grješka*), *radio-stanica* hyphenated. Both
+spellings are accepted only where Pravopis 2010 and Klajn disagree (*foto-aparat*/*fotoaparat*,
+*auto-put*/*autoput*). All 30 models were re-scored from their saved answers (no new runs).
+Sources: [reports/Provera srpske pravopisne norme.md](reports/Provera%20srpske%20pravopisne%20norme.md).
 List: [tasks/v1.1-izmene.md](tasks/v1.1-izmene.md); `MANIFEST.json` records it under `errata`.
 
 Each item's status is in [data/official/MANIFEST.json](data/official/MANIFEST.json).
@@ -35,35 +39,35 @@ provider (often the model's own lab). The provider and the settings for each mod
 
 | # | Model | MCQ | Cloze | Pravopis | Probni | Ispravljanje | Prosek | max unparsed |
 |---|---|---|---|---|---|---|---|---|
-| 1 | anthropic_claude-opus-5.5 | 100% | 100% | 99% | 99% | 100% | **100%** | 0.00 |
-| 2 | openai_gpt-6.1-sol | 100% | 100% | 98% | 99% | 100% | **99%** | 0.00 |
-| 3 | google_gemini-3.8-flash | 100% | 100% | 98% | 98% | 99% | **99%** | 0.00 |
-| 4 | openai_gpt-6-sol | 100% | 100% | 97% | 97% | 100% | **99%** | 0.00 |
-| 5 | openai_gpt-5.6-sol | 100% | 100% | 96% | 98% | 99% | **99%** | 0.00 |
-| 6 | deepseek_deepseek-v4-pro | 98% | 100% | 93% | 93% | 94% | **96%** | 0.00 |
-| 7 | openai_gpt-6-luna | 100% | 100% | 87% | 97% | 94% | **96%** | 0.00 |
-| 8 | google_gemini-3.5-flash-lite | 100% | 100% | 92% | 88% | 97% | **95%** | 0.00 |
-| 9 | x-ai_grok-4.7 | 100% | 89% | 89% | 96% | 100% | **95%** | 0.00 |
-| 10 | anthropic_claude-sonnet-5.5 | 96% | 94% | 93% | 93% | 95% | **95%** | 0.00 |
-| 11 | openai_gpt-5.6-luna | 100% | 100% | 84% | 91% | 95% | **94%** | 0.00 |
-| 12 | moonshotai_kimi-k3 | 96% | 100% | 87% | 85% | 91% | **92%** | 0.00 |
-| 13 | z-ai_glm-5.3 | 98% | 94% | 84% | 86% | 94% | **91%** | 0.05 |
-| 14 | deepseek_deepseek-v4.1-flash | 100% | 100% | 82% | 85% | 88% | **91%** | 0.00 |
-| 15 | google_gemma-4-31b-it | 98% | 100% | 76% | 80% | 92% | **89%** | 0.00 |
-| 16 | deepseek_deepseek-v3.2 | 98% | 89% | 89% | 76% | 88% | **88%** | 0.00 |
-| 17 | minimax_minimax-m3 | 96% | 100% | 74% | 79% | 88% | **87%** | 0.00 |
-| 18 | qwen_qwen3.6-27b | 96% | 89% | 74% | 61% | 93% | **83%** | 0.00 |
-| 19 | mistralai_mistral-large-4-0 | 98% | 89% | 70% | 69% | 85% | **82%** | 0.00 |
-| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 74% | 68% | 82% | **82%** | 0.05 |
-| 21 | openai_gpt-5-mini | 90% | 89% | 67% | 63% | 88% | **79%** | 0.00 |
-| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 60% | 62% | 89% | **79%** | 0.00 |
-| 23 | nvidia_nemotron-3-ultra-550b-a55b | 91% | 94% | 54% | 64% | 80% | **77%** | 0.00 |
-| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 58% | 53% | 77% | **74%** | 0.05 |
-| 25 | google_gemma-3-12b-it | 79% | 89% | 50% | 44% | 77% | **68%** | 0.00 |
-| 26 | qwen_qwen3.5-9b | 86% | 83% | 46% | 37% | 75% | **66%** | 0.00 |
-| 27 | nvidia_nemotron-3.5-lightning | 81% | 39% | 12% | 14% | 53% | **40%** | 0.00 |
-| 28 | meta-llama_llama-3.1-8b-instruct | 48% | 50% | 23% | 21% | 55% | **39%** | 0.00 |
-| 29 | mistralai_mistral-nemo | 69% | 33% | 12% | 15% | 67% | **39%** | 0.00 |
+| 1 | openai_gpt-6-sol | 100% | 100% | 99% | 96% | 99% | **99%** | 0.00 |
+| 2 | google_gemini-3.8-flash | 100% | 100% | 95% | 97% | 98% | **98%** | 0.00 |
+| 3 | anthropic_claude-opus-5.5 | 100% | 100% | 95% | 96% | 99% | **98%** | 0.00 |
+| 4 | openai_gpt-6.1-sol | 100% | 100% | 94% | 97% | 99% | **98%** | 0.00 |
+| 5 | openai_gpt-5.6-sol | 100% | 100% | 92% | 97% | 98% | **97%** | 0.00 |
+| 6 | deepseek_deepseek-v4-pro | 98% | 100% | 89% | 90% | 95% | **95%** | 0.00 |
+| 7 | openai_gpt-6-luna | 100% | 100% | 83% | 96% | 94% | **94%** | 0.00 |
+| 8 | anthropic_claude-sonnet-5.5 | 96% | 94% | 92% | 92% | 96% | **94%** | 0.00 |
+| 9 | x-ai_grok-4.7 | 100% | 89% | 89% | 95% | 99% | **94%** | 0.00 |
+| 10 | google_gemini-3.5-flash-lite | 100% | 100% | 88% | 87% | 95% | **94%** | 0.00 |
+| 11 | openai_gpt-5.6-luna | 100% | 100% | 82% | 89% | 96% | **93%** | 0.00 |
+| 12 | moonshotai_kimi-k3 | 96% | 100% | 86% | 85% | 92% | **92%** | 0.00 |
+| 13 | deepseek_deepseek-v4.1-flash | 100% | 100% | 79% | 85% | 89% | **90%** | 0.00 |
+| 14 | z-ai_glm-5.3 | 98% | 94% | 82% | 85% | 93% | **90%** | 0.05 |
+| 15 | google_gemma-4-31b-it | 98% | 100% | 76% | 79% | 93% | **89%** | 0.00 |
+| 16 | deepseek_deepseek-v3.2 | 98% | 89% | 88% | 76% | 87% | **88%** | 0.00 |
+| 17 | minimax_minimax-m3 | 96% | 100% | 73% | 77% | 89% | **87%** | 0.00 |
+| 18 | qwen_qwen3.6-27b | 96% | 89% | 76% | 60% | 94% | **83%** | 0.00 |
+| 19 | mistralai_mistral-large-4-0 | 98% | 89% | 69% | 70% | 86% | **82%** | 0.00 |
+| 20 | qwen_qwen3-235b-a22b-2507 | 88% | 100% | 72% | 67% | 80% | **81%** | 0.05 |
+| 21 | openai_gpt-5-mini | 90% | 89% | 66% | 62% | 87% | **79%** | 0.00 |
+| 22 | anthropic_claude-haiku-5.5 | 93% | 89% | 59% | 62% | 89% | **78%** | 0.00 |
+| 23 | nvidia_nemotron-3-ultra-550b-a55b | 91% | 94% | 54% | 63% | 82% | **77%** | 0.00 |
+| 24 | meta-llama_llama-3.3-70b-instruct | 88% | 94% | 57% | 52% | 75% | **73%** | 0.05 |
+| 25 | google_gemma-3-12b-it | 79% | 89% | 49% | 44% | 75% | **67%** | 0.00 |
+| 26 | qwen_qwen3.5-9b | 86% | 83% | 47% | 37% | 76% | **66%** | 0.00 |
+| 27 | nvidia_nemotron-3.5-lightning | 81% | 39% | 12% | 14% | 54% | **40%** | 0.00 |
+| 28 | mistralai_mistral-nemo | 69% | 33% | 12% | 15% | 68% | **39%** | 0.00 |
+| 29 | meta-llama_llama-3.1-8b-instruct | 48% | 50% | 23% | 21% | 54% | **39%** | 0.00 |
 | 30 | cohere_command-a-plus | 74% | 33% | 19% | 28% | 37% | **38%** | 0.15 |
 
 Caveat: the four consensus models (sonnet-5.5, gemini-3.5-flash-lite, gemma-4-31b,
@@ -76,26 +80,27 @@ Details: [results/LEADERBOARD.md](results/LEADERBOARD.md), which also keeps the 
 
 ### What it shows
 
-- **It separates models below the frontier**, from 38% to 96%, roughly in order of size and
+- **It separates models below the frontier**, from 38% to 95%, roughly in order of size and
   generation. The pravopis and probe groups spread the widest.
-- **It no longer separates the frontier.** After the errata, claude-opus-5.5 scores 100% and
-  gpt-6.1-sol, gemini-3.8-flash, gpt-6-sol and gpt-5.6-sol 99%. Harder versions of the same
+- **It barely separates the frontier.** gpt-6-sol scores 99%; gemini-3.8-flash, claude-opus-5.5
+  and gpt-6.1-sol 98%, gpt-5.6-sol 97%. Their remaining misses are mostly the same usage-over-norm
+  spellings (*ekspres-pošiljka*, *kontakt-osoba*, *hteo-ne hteo*, *grješka*, *nabrzinu*). Harder versions of the same
   checks did not change that either: a 6-phenomenon probe, a source-checked pravopis set and a
   cue-free correction format all left Opus at ceiling. A harder v2 is planned
   ([tasks/v2-plan.md](tasks/v2-plan.md)).
-- **Open-weights models are close behind.** DeepSeek V4 Pro reaches 96%, above Sonnet 5.5;
-  Kimi K3 92%, GLM-5.3 and DeepSeek V4.1 Flash 91%. Chart: `results/leaderboard-open.png`
+- **Open-weights models are close behind.** DeepSeek V4 Pro reaches 95%, above Sonnet 5.5 (94%);
+  Kimi K3 92%, DeepSeek V4.1 Flash and GLM-5.3 90%. Chart: `results/leaderboard-open.png`
   (only models whose weights are on Hugging Face).
 - **Thinking does not buy Serbian.** Rerun at `reasoning=low` and `high`, no open-weights model
   gains more than 2 points, and Nemotron 3 Ultra drops from 77% to 66% at high by "correcting"
   sentences that were already right. Chart: `results/reasoning-compare.png`.
 - **The frontier's remaining "errors" were mostly contested norm, not ignorance.** Pravopis 2010
   hyphenates *foto-aparat* and *auto-put*, while Klajn and the 1993 Pravopis write them together.
-  v1.1 accepts both wherever the authorities disagree.
+  Since v1.1 both count wherever the authorities disagree.
 - **Recognising is easier than producing.** mistral-nemo scores 68% picking the right form from
   four choices but 33% writing it (cloze).
-- **Cheap does not mean bad at Serbian.** gpt-6-luna (96%), gemini-3.5-flash-lite (95%) and
-  gpt-5.6-luna (94%) beat claude-haiku-5.5 and gpt-5-mini by about 15 points, mostly on pravopis.
+- **Cheap does not mean bad at Serbian.** gpt-6-luna (94%), gemini-3.5-flash-lite (94%) and
+  gpt-5.6-luna (93%) beat claude-haiku-5.5 and gpt-5-mini by about 15 points, mostly on pravopis.
 
 ## Tasks
 

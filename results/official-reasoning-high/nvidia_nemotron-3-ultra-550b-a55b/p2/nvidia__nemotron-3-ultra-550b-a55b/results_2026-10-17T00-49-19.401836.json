@@ -13,8 +13,8 @@
       "name": "srb_pravopis_poluslozenice_official",
       "alias": "srb_pravopis_poluslozenice_official",
       "sample_len": 19,
-      "exact_match,none": 0.3157894736842105,
-      "exact_match_stderr,none": 0.10956136839295436,
+      "exact_match,none": 0.2631578947368421,
+      "exact_match_stderr,none": 0.10379087338771258,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -22,8 +22,8 @@
       "name": "srb_pravopis_slozeni_pridevi_official",
       "alias": "srb_pravopis_slozeni_pridevi_official",
       "sample_len": 22,
-      "exact_match,none": 0.3181818181818182,
-      "exact_match_stderr,none": 0.10163945352271771,
+      "exact_match,none": 0.36363636363636365,
+      "exact_match_stderr,none": 0.1049727762162956,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -32,16 +32,16 @@
       "alias": "srb_pravopis_sastavljeno_rastavljeno_official",
       "sample_len": 24,
       "exact_match,none": 0.4583333333333333,
-      "exact_match_stderr,none": 0.10389457216622949,
+      "exact_match_stderr,none": 0.10389457216622948,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
     "srb_correction_razmak_crtica_official": {
       "name": "srb_correction_razmak_crtica_official",
       "alias": "srb_correction_razmak_crtica_official",
-      "sample_len": 29,
-      "exact_match,none": 0.5517241379310345,
-      "exact_match_stderr,none": 0.09398415777506854,
+      "sample_len": 28,
+      "exact_match,none": 0.5714285714285714,
+      "exact_match_stderr,none": 0.09523809523809525,
       "unparsed,none": 0.0,
       "unparsed_stderr,none": 0.0
     },
@@ -568,7 +568,7 @@
     },
     "srb_correction_razmak_crtica_official": {
       "original": 30,
-      "effective": 29
+      "effective": 28
     },
     "srb_correction_c_c_official": {
       "original": 21,
@@ -624,7 +624,9 @@
   "chat_template_sha": null,
   "total_evaluation_time_seconds": "1103.1131987078115",
   "serbeval_rescored": {
-    "srb_correction_razmak_crtica_official": "v1.1",
-    "srb_pravopis_poluslozenice_official": "v1.1"
+    "srb_correction_razmak_crtica_official": "v1.2",
+    "srb_pravopis_poluslozenice_official": "v1.2",
+    "srb_pravopis_sastavljeno_rastavljeno_official": "v1.2",
+    "srb_pravopis_slozeni_pridevi_official": "v1.2"
   }
 }
