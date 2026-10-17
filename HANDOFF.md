@@ -1,47 +1,41 @@
 # HANDOFF
 
 Why every non-obvious choice was made: [DECISIONS.md](DECISIONS.md). Task list: [tasks/todo.md](tasks/todo.md).
-Leaderboard: [results/LEADERBOARD.md](results/LEADERBOARD.md).
+Leaderboard: [results/LEADERBOARD.md](results/LEADERBOARD.md). v2 plan: [tasks/v2-plan.md](tasks/v2-plan.md).
 
 ## Where we left off
 
-serbeval is public and has been shared:
-- GitHub `djolex999/serbeval`;
-- Hugging Face dataset `djolex999/serbeval` (official set v1: 355 items, per-item verification
-  status in MANIFEST.json);
-- a 30-model official leaderboard (38–98%, five frontier models at 98%; best open-weights DeepSeek V4 Pro 95%);
-- a LinkedIn post (1k+ impressions);
-- a PR adding the tasks to EleutherAI's lm-evaluation-harness (#4400).
-
-Aleksa Gordić (pretraining @ Nemotron) commented on the post. He suggested running Nemotron
-3 Ultra, plotting open-weights models only, and making the benchmark harder, since Kimi K3
-(91%) is close to saturating it too.
-
-Done since (2026-10-16/17): Nemotron 3 Ultra (76%) and four more open-weights models; an
-open-weights-only chart; a reasoning off/low/high comparison (no model gains more than 2 points,
-Nemotron drops to 65% at high). Two adapter fixes: no stop sequence while reasoning, and a token
-floor that grows with the effort.
+Following Aleksa Gordić's LinkedIn feedback, the board now has 30 models (DeepSeek V4 Pro is the
+best open-weights model, Nemotron 3 Ultra 77%), an open-weights-only chart and a reasoning
+off/low/high comparison (thinking adds ≤2 points; Nemotron drops to 66% at high). The official set
+went v1 → v1.1 → **v1.2 (351 items)**: every orthography gold was checked against the text of
+Pravopis 2010 (OCR'd scan, kept local) and cites tačka/page; all runs were re-scored from saved
+answers. Published on GitHub main (bd81733) and HF. The v2 pilot (format A, multi-error passages)
+passed its bar: frontier 82–91% on error passages vs 97–99% on v1.2.
 
 ## In flight
 
-- PR EleutherAI/lm-evaluation-harness#4400 is open, mergeable, and waiting on the CLA signature
-  and a maintainer. The branch `add-serbeval` is in the fork `djolex999/lm-evaluation-harness`.
+- v2: nothing drafted yet beyond the 30 pilot passages (`data/v2_pilot/`, scorer `serbeval.passage`
+  with free sites, runner `scripts/pilot_passage.py`).
+- PR EleutherAI/lm-evaluation-harness#4400: waiting on CLA + maintainer; it reads the HF data, now v1.2.
 
 ## Blockers
 
-- **CLA** on #4400: only the maintainer can sign it.
-- **OpenRouter key** (2026-10-16) expires 2026-10-17 10:02 UTC; about $3.35 credit left on the account.
+- **CLA** on #4400: maintainer only.
+- **OpenRouter key** (2026-10-16) expires 2026-10-17 12:02 CEST; ~$3.2 credit on the account. A v2
+  board needs a new key.
+- **Maintainer time**: v2 needs ~150 passages verified (~5 h) and half of them written by him.
+- Pravopis OCR text lives only in the session scratchpad (`scratchpad/dl/p2010.txt`); a new session
+  must re-download it (source noted in research_notes/) or work from the report.
 
 ## Next session: start here
 
-1. Send Aleksa the open-weights and reasoning charts (results/leaderboard-open.png,
-   results/reasoning-compare.png).
-2. Decide how to make it harder (see todo). Measure on open models before building anything.
-3. Add Mistral Large 4 to the open-weights chart once its weights ship.
+1. Draft the first 50 format-A passages per `tasks/v2-plan.md` and the todo inventory; each gold
+   cites Pravopis 2010; run the scorer self-check (gold exact, source 0 hits) on all of them.
+2. Build the HTML verification sheet for them (reuse `serbeval verify` page).
+3. After verification, pilot-size run on 4 models before the full 30-model board.
 
 Working rules:
-- Run models in parallel; only requests inside one run stay sequential.
-- Check `unparsed` and empty answers before believing a score.
-- Pin the provider and precision for open models.
-- Never put Claude attribution in commits or PRs.
-- Chain the gates with `&&` before any commit or push.
+- Run models in parallel; pin provider/precision for open models; check `unparsed`/empties first.
+- Norm decisions need a cited source (Pravopis 2010 tačka/page); never decide spelling from memory.
+- Chain gates with `&&` before any commit or push; no Claude attribution.

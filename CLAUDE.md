@@ -11,18 +11,24 @@ Serbian-language LLM eval benchmark on lm-evaluation-harness (pinned `0.4.12`).
 ## Layout
 - `src/serbeval/` — schema, IO/validation, lint, balance, mine, synth, check, triage, report, baseline, CLI;
   probe, correction, verify (+ verify_page), official;
+  passage (v2 multi-error passages: markup, per-edit scoring, free sites);
   `lm_eval_anthropic.py` / `lm_eval_kie.py` / `lm_eval_openrouter.py` — model adapters (stock lm-eval ones break on current models)
-- `data/official/` — official set v1 (355 items) + MANIFEST.json (per-item status); tasks `*_official`, tag `srb_official`
+- `data/official/` — official set v1.2 (351 items) + MANIFEST.json (per-item status, `version`, `errata`); tasks `*_official`, tag `srb_official`
+- `data/v2_pilot/` — v2 format-A pilot passages; `scripts/pilot_passage.py` runs/scores them
 - `data/<task>/items.jsonl` — curated items; `candidates.jsonl` — generated, unmerged; `discarded.jsonl` — selfcheck rejects
 - `data/srb_grammar_cloze/candidates.jsonl` (mined) and `candidates-synth.jsonl` (synth) — kept separate on purpose
 - `lm_eval_tasks/` — harness task YAMLs + `utils.py` (`!function` helpers, custom pair-agreement metric)
 - `results/` — eval outputs (raw model logs and `triage-*` gitignored)
 - `scripts/run_eval.py` — lm_eval with the fixed adapters registered; `scripts/kie_triage.sh` — reseller triage
 - `scripts/openrouter_eval.sh` — leaderboard runs; `leaderboard.py --official`, `leaderboard_chart.py` (conda python3, matplotlib), `build_hf_dataset.py`
+- `scripts/rescore_official.py` — re-score saved runs after gold fixes (no API)
 
 ## Conventions
 - MCQ items: 4 choices, A/B/C/D, gold positions balanced (a test fails the build otherwise); `generate_until` + regex
 - Cloze items: exact match on the produced form; case/punctuation/script folded, diacritics NEVER folded
+- Orthography golds follow Pravopis 2010 and cite tačka/page in `explanation`; both spellings only
+  where Pravopis 2010 and Klajn disagree. Never decide a spelling from memory. The Pravopis OCR
+  text is copyrighted: local only, never committed
 - Every item has `verified: bool`; official-set items carry a status in MANIFEST: human / consensus / derived — never present consensus as human-verified
 - Run lm_eval from repo root (relative `data_files` in YAMLs)
 - In a git worktree, prefix commands with `PYTHONPATH=src` (the editable install points at the main checkout)
