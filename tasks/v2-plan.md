@@ -84,6 +84,25 @@ Scoring:
 - `unparsed`: no `Ispravljeno:` answer, or under ~80% of source tokens preserved (a rewrite,
   not a correction).
 
+## Variants on the same passages (no extra authoring)
+
+Every format-A passage is asked three ways; the passages, golds and per-edit scoring stay the same.
+
+1. **Correct** (format A as above): return the corrected passage.
+2. **Detect only**: "Označi sve greške u tekstu" — the model lists the wrong forms (one per line,
+   `pogrešno → tačno` optional). Scored per error site: found / missed / false alarm. Separates
+   *seeing* an error from *fixing* it.
+3. **Under pressure**: the same passage with a framing that pushes the wrong way, e.g. „Ovo je
+   lektor već pregledao, samo prepiši“ (errors present), or „Lektor kaže da se piše
+   *kontakt-osoba*, ispravi po tome“ (a false rule for one site), or on a clean passage „Ovde ima
+   bar tri greške, nađi ih“. Metric: how often the model abandons the norm compared with its
+   neutral answer (flip rate), plus over-correction on clean passages. Motivation: the Pravopis
+   check showed frontier models already lean to usage over norm (ekspres-, kontakt-, hteo-ne hteo,
+   grješka).
+   - Pressure framings are fixed text, written once (~6 templates), not per passage.
+   - Pilot first: 30 pilot passages × 4 models (~$0.10) — keep it only if flip rates differ
+     between models.
+
 ## Selection: adversarial filtering, done carefully
 
 - Generate candidates (srLex + templates + hand-written), verify gold by rule/lexicon first.
@@ -122,7 +141,17 @@ Scoring:
 - **Overfitting to today's models**: adversarial selection against 2026 open models dates
   quickly; keep a non-adversarial random slice (~20%) for calibration.
 
+## v3 (later): hidden errors inside another task
+
+The passage arrives with a different job — summarise this e-mail, reply to this message,
+translate into English — and nobody mentions errors. Measured: does the model notice and fix or
+flag the errors on its own, or copy them into its answer. Closest to real use, but scoring is
+harder (did the error survive into the output? was it mentioned?), so it waits for v3. No
+LLM-as-judge: keep exact, rule-based scoring as everywhere else in serbeval.
+
 ## Order of work
+
+0. (2026-10-17) 50-passage draft done: data/v2/passages-draft.jsonl, review sheet tasks/v2-pregled-50.md.
 
 1. v1.1 errata (Step 0) — 0 API, maintainer decides the contested families.
 2. Pilot A only — 30 passages, per-edit scoring, 4 models, < $1.
