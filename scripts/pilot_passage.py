@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 """v2 pilot, format A: multi-error passage correction on a few models via OpenRouter.
 
-    OPENROUTER_API_KEY=... PYTHONPATH=src python scripts/pilot_passage.py run
-    PYTHONPATH=src python scripts/pilot_passage.py report
+    OPENROUTER_API_KEY=... PYTHONPATH=src python scripts/pilot_passage.py run [v2]
+    PYTHONPATH=src python scripts/pilot_passage.py report [v2]
+
+With `v2`, the passages are the verified v2 evaluation set (data/v2/evaluation.json over
+data/v2/passages-*.jsonl) and answers go to results/v2/.
 
 `run` sends every passage in data/v2_pilot/passages.jsonl to each model (one thread per
 model, requests within a model one at a time) and appends raw answers to
@@ -47,8 +50,41 @@ PROMPT = (
 )
 
 
+# Open-weights models, routed exactly as in their official-set runs (results/official).
+OPEN_MODELS = {
+    "moonshotai/kimi-k3": {"provider": "Moonshot AI"},
+    "z-ai/glm-5.3": {"reasoning": "minimal", "quantizations": "fp8"},
+    "deepseek/deepseek-v4.1-flash": {"provider": "DeepSeek"},
+    "deepseek/deepseek-v3.2": {"quantizations": "fp8"},
+    "qwen/qwen3.6-27b": {"provider": "Alibaba"},
+    # DeepInfra returned broken English word lists for this model on 2026-10-22; pin Parasail.
+    "qwen/qwen3-235b-a22b-2507": {"provider": "Parasail", "quantizations": "fp8"},
+    "qwen/qwen3.5-9b": {"quantizations": "bf16"},
+    "minimax/minimax-m3": {"provider": "Minimax"},
+    "nvidia/nemotron-3-ultra-550b-a55b": {"provider": "DeepInfra", "quantizations": "fp4"},
+    "nvidia/nemotron-3.5-lightning": {"provider": "DeepInfra", "quantizations": "bf16"},
+    "meta-llama/llama-3.3-70b-instruct": {"quantizations": "bf16|fp16"},
+    "meta-llama/llama-3.1-8b-instruct": {"quantizations": "bf16|fp16"},
+    "google/gemma-3-12b-it": {"quantizations": "bf16"},
+    "mistralai/mistral-nemo": {"quantizations": "bf16|fp16"},
+    "cohere/command-a-plus": {"reasoning": "low"},
+}
+if "open" in sys.argv[2:]:
+    MODELS = OPEN_MODELS
+elif "all" in sys.argv[2:]:
+    MODELS = {**MODELS, **OPEN_MODELS}
+V2 = "v2" in sys.argv[2:]
+if V2:
+    OUT = ROOT / "results" / "v2"
+
+
 def _items() -> list[dict[str, str]]:
-    return [json.loads(line) for line in ITEMS.read_text(encoding="utf-8").splitlines() if line]
+    if not V2:
+        return [json.loads(line) for line in ITEMS.read_text(encoding="utf-8").splitlines() if line]
+    keep = set(json.loads((ROOT / "data" / "v2" / "evaluation.json").read_text())["included_ids"])
+    rows = [json.loads(line) for path in sorted((ROOT / "data" / "v2").glob("passages-*.jsonl"))
+            for line in path.read_text(encoding="utf-8").splitlines() if line]
+    return [r for r in rows if r["id"] in keep]
 
 
 def _path(model: str) -> Path:
