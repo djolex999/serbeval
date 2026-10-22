@@ -34,6 +34,39 @@ those spots, not general Serbian ability.
 | Llama 3.1 8B | 39% | 37% | **13%** |
 | Nemotron 3.5 Lightning | 40% | 25% | **13%** |
 
+## Where models fail
+
+Miss rate per error type (`PYTHONPATH=src python scripts/v2_error_categories.py`; Command A+
+left out). Frontier models miss almost only the first seven rows — the spots where common
+usage diverges from Pravopis 2010 — and get č/ć, *ne* + verb, *iako* and compound adjectives
+right. Weaker models also miss the basics, which is what spreads the board from 13% to 74%.
+
+| Error type | Sites | Missed: frontier (Opus 5.5, GPT-6 Sol) | Missed: all 18 models |
+|---|---|---|---|
+| *ekspres* apart (ekspres lonac) | 3 | 100% | 100% |
+| *doviđenja* (not do viđenja) | 4 | 50% | 93% |
+| *hteo – ne hteo* (dash, not hyphen) | 3 | 83% | 91% |
+| *džez* apart (džez muzika) | 3 | 100% | 91% |
+| *kontakt* apart (kontakt osoba) | 7 | 100% | 90% |
+| *na brzinu* (not nabrzinu) | 6 | 83% | 85% |
+| *vikend-* hyphen (vikend-kuća) | 4 | 38% | 81% |
+| *ni* / *bilo* + word apart (ni s kim, bilo gde) | 5 | 0% | 58% |
+| *iako* (not i ako) | 7 | 0% | 56% |
+| *spomen-* hyphen (spomen-ploča) | 13 | 8% | 48% |
+| adverbs together (napamet, uzalud) | 29 | 0% | 46% |
+| compound adjectives / prefixoids together (naučnofantastični) | 37 | 7% | 39% |
+| *general-* hyphen (general-major) | 3 | 0% | 37% |
+| other hyphenated compounds (srpsko-engleski) | 18 | 0% | 37% |
+| other (real errors in the original texts) | 3 | 0% | 33% |
+| *ne* + verb apart (ne mogu) | 24 | 0% | 22% |
+| č / ć | 22 | 0% | 18% |
+| phrases apart (bez obzira, na primer) | 27 | 0% | 13% |
+
+Note: *ekspres*, *kontakt* and *džez* (13 sites) are missed by 90–100% of all models. They do
+not separate models; they lower everyone alike, and measure one thing — knowing that Pravopis
+2010 writes these apart although usage overwhelmingly hyphenates them. Without them the
+percentages rise but the model ranking barely changes.
+
 ## Full v2 table
 
 | Model | Passage exact | Error passages exact | Clean left intact | Errors fixed (recall) | Precision | False alarms | Unparsed |
