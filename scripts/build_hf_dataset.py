@@ -50,6 +50,45 @@ def leaderboard_top() -> str:
     return "\n".join(table)
 
 
+V2 = ROOT / "data" / "v2"
+V2_CONFIG = "srb_v2_passages"
+
+
+def build_v2(out: Path) -> tuple[int, int, int, str, int]:
+    """Write the verified v2 evaluation set; return (passages, required sites, clean, table)."""
+    sys.path.insert(0, str(ROOT / "src"))
+    from serbeval.passage import parse_markup
+
+    keep = set(json.loads((V2 / "evaluation.json").read_text(encoding="utf-8"))["included_ids"])
+    rows, sites_total, clean = [], 0, 0
+    for path in sorted(V2.glob("passages-*.jsonl")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            r = json.loads(line)
+            if r["id"] not in keep:
+                continue
+            assert r["verified"], r["id"]
+            p = parse_markup(r["markup"])
+            sites = [{"wrong": s.wrong, "right": list(s.alternatives), "free": s.free} for s in p.sites]
+            required = sum(not s["free"] for s in sites)
+            sites_total += required
+            clean += required == 0
+            official = "-gov-" in r["id"]
+            rows.append({
+                "id": r["id"], "script": r["script"], "text": p.source, "gold": p.gold,
+                "markup": r["markup"], "errors": required, "sites": sites,
+                "pravopis_2010": [{"form": k, "citation": v}
+                                  for k, v in r.get("pravopis_2010", {}).items()],
+                "origin": "official text" if official else "handwritten",
+                "provenance": r.get("source", "") if official else "handwritten for serbeval",
+                "body": r.get("body", ""), "license": r["license"], "verified": True,
+            })
+    (out / "data" / f"{V2_CONFIG}.jsonl").write_text(
+        "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
+    board = (ROOT / "results" / "v2" / "LEADERBOARD.md").read_text(encoding="utf-8").splitlines()
+    table = "\n".join(line for line in board if line.startswith("|"))
+    return len(rows), sites_total, clean, table, sum(r["origin"] == "handwritten" for r in rows)
+
+
 def main() -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -70,9 +109,10 @@ def main() -> None:
             if line:
                 licenses[json.loads(line)["license"]] += 1
 
+    v2_n, v2_sites, v2_clean, v2_table, v2_hand = build_v2(OUT)
     configs = "\n".join(
         f"- config_name: {t}\n  data_files:\n  - split: test\n    path: data/{t}.jsonl"
-        for t in tasks
+        for t in [*tasks, V2_CONFIG]
     )
     rows = "\n".join(f"| `{t}` | {sizes[t]} | {DESCRIPTIONS.get(t, '')} |" for t in tasks)
     counts = manifest["counts"]
@@ -109,7 +149,8 @@ reflex, pravopis (together/apart, hyphenated compounds, prefixoids), č/ć, and 
 consistency. It runs on
 [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) 0.4.12.
 
-This dataset is the **official set v1.2**: {sum(sizes.values())} items in {len(tasks)} tasks.
+This dataset is the **official set v1.2**: {sum(sizes.values())} items in {len(tasks)} tasks, plus the
+harder **v2** passage-correction config `{V2_CONFIG}` ({v2_n} passages; see below).
 v1.1 and v1.2 (2026-10-17) fixed gold answers and dropped 3 items; v1.2 checked every changed
 gold against the text of Pravopis 2010 (tačka and page in the explanation). Both spellings are
 accepted only where Pravopis 2010 and Klajn disagree. The history is under `errata` in
@@ -175,11 +216,42 @@ usage-over-norm spellings. Below it, the set separates models from 38% to 95%, a
 separates them most. The best open-weights model is DeepSeek V4 Pro (95%); turning reasoning on does not raise any tested model by more than 2 points. Details and caveats, including a possible small
 selection bias toward the four consensus models, are in the GitHub repo.
 
+## v2: passage correction (`{V2_CONFIG}`, harder)
+
+v1 saturated at the frontier, so v2 asks for whole passages: {v2_n} human-verified passages
+(5–7 sentences, Latin and Cyrillic), {v2_sites} errors in total, {v2_clean} passages with no error at
+all. The model gets `text` with no hint of how many errors there are or what kind, and must
+return the corrected passage. The errors sit where usage and the norm part ways: polusloženice
+and compounds (*ekspres lonac*, *kontakt osoba*, *spomen-ploča*), together/apart (*na brzinu*,
+*bilo gde*, *usput*), compound adjectives, *hteo – ne hteo*, č/ć. Every gold form cites
+Pravopis 2010 (tačka/page) in `pravopis_2010` (list of `form`, `citation`). {v2_hand} passages
+were drafted for serbeval with an LLM and checked by a native speaker; {v2_n - v2_hand} are official
+texts of Serbian public bodies (not copyrighted, ZASP art. 6), many with the institution's own
+real errors.
+
+Fields: `text` (model input), `gold` (corrected passage), `sites` (each error: `wrong`,
+accepted `right` forms, and `free` when both forms are acceptable — no credit, no penalty),
+`markup` (`{{right|wrong}}` inline), `origin`, `provenance`, `license`.
+
+Scoring (GitHub: `serbeval.passage`): headline is the share of passages corrected exactly
+(case, punctuation and script folded; diacritics and intra-word hyphens never); per-edit recall
+and precision are diagnostics, and precision catches over-correction.
+
+### v2 results (first run, 2026-10-22, zero-shot)
+
+{v2_table}
+
+Frontier models drop from 98–99% on v1.2 to 72–74% here; their misses are mostly usage over
+norm (*kontakt-osoba*, *ekspres-lonac*, *nabrzinu*, *do viđenja*). Command A+'s API returned
+empty answers, so its row is not reliable.
+
 ## License
 
 Items carry their own `license` field: {licenses.get('CC-BY-4.0', 0)} are CC BY 4.0
 (hand-written for this project) and {licenses.get('CC-BY-SA-4.0', 0)} are CC BY-SA 4.0
-(word forms from srLex). The dataset as a whole is distributed under **CC BY-SA 4.0**.
+(word forms from srLex). In `{V2_CONFIG}`, handwritten passages are CC BY 4.0 and official
+texts are not copyrighted works (Serbian Copyright Act, art. 6). The dataset as a whole is
+distributed under **CC BY-SA 4.0**.
 
 Attribution:
 - **srLex 1.3**: Ljubešić, Nikola. CLARIN.SI. CC BY-SA 4.0.
@@ -199,7 +271,7 @@ Attribution:
 ```
 """
     (OUT / "README.md").write_text(card, encoding="utf-8")
-    print(f"OK: {sum(sizes.values())} items, {len(tasks)} configs -> {OUT}")
+    print(f"OK: {sum(sizes.values())} items, {len(tasks)} configs + v2 ({v2_n} passages) -> {OUT}")
 
 
 if __name__ == "__main__":
