@@ -58,6 +58,51 @@ def test_clean_passage_left_alone_scores_exact() -> None:
     assert s.exact and s.false_pos == 0
 
 
+@pytest.mark.parametrize("output", [
+    "Ja baš ne bih ovo uradio danas i sutra.",
+    "Ja ne bih baš ovo uradio danas i sutra.",
+])
+def test_inserting_at_a_site_boundary_is_an_overcorrection(output: str) -> None:
+    passage = parse_markup("Ja {ne bih|nebih} ovo uradio danas i sutra.")
+    score = score_passage(output, passage)
+    assert (score.exact, score.true_pos, score.false_pos, score.false_neg) == (False, 1, 1, 0)
+
+
+def test_a_replacement_spanning_a_site_and_correct_text_counts_both_errors() -> None:
+    passage = parse_markup(
+        "Ovo je naš {kontakt telefon|kontakt-telefon} za sve dodatne informacije danas."
+    )
+    score = score_passage(
+        "Ovo je njihov broj telefona za sve dodatne informacije danas.", passage
+    )
+    assert (score.true_pos, score.false_pos, score.false_neg) == (0, 1, 1)
+
+
+def test_an_insertion_inside_a_site_is_a_wrong_fix() -> None:
+    passage = parse_markup("Ja {ne bih|nebih} ovo uradio danas i sutra.")
+    score = score_passage("Ja ne baš bih ovo uradio danas i sutra.", passage)
+    assert (score.true_pos, score.false_pos, score.false_neg) == (0, 0, 1)
+
+
+@pytest.mark.parametrize("output, expected_hits", [
+    ("Služba intervenisaće će danas, a ja nebih izlazio.", 0),
+    ("Služba intervenisaće danas, a ja nebih izlazio.", 1),
+    ("Služba intervenisaće će danas, a ja ne bih izlazio.", 1),
+    ("Služba intervenisaće danas, a ja ne bih izlazio.", 2),
+])
+def test_a_retained_source_auxiliary_is_a_missed_site_not_an_overcorrection(
+    output: str, expected_hits: int
+) -> None:
+    passage = parse_markup(
+        "Služba {intervenisaće|intervenisaće će} danas, a ja {ne bih|nebih} izlazio."
+    )
+    score = score_passage(output, passage)
+    assert (score.true_pos, score.false_pos, score.false_neg) == (
+        expected_hits, 0, 2 - expected_hits
+    )
+    assert not score.unparsed
+
+
 def test_a_rewrite_is_unparsed() -> None:
     s = score_passage("Nikad to ne bih uradio; nisam se javio nikome.", parse_markup(MARKUP))
     assert s.unparsed

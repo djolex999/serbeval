@@ -111,8 +111,62 @@ def _gold_variants(passage: Passage) -> list[tuple[list[str], list[tuple[int, in
     return variants
 
 
+def _conforming_hits(out: list[str], passage: Passage) -> int | None:
+    """Count corrected sites between unchanged literals without enumerating combinations.
+
+    A wrong form may retain every gold token and add boundary tokens, as in
+    ``{intervenisaće|intervenisaće će}``. Gold-only alignment cannot reliably
+    attribute those retained source tokens to a missed correction.
+    """
+    states = {0: 0}
+    for part in passage.parts:
+        if isinstance(part, Site):
+            choices = [(_tokens(form), int(not part.free)) for form in part.alternatives]
+            if not part.free:
+                choices.append((_tokens(part.wrong), 0))
+        else:
+            choices = [(_tokens(part), 0)]
+        following: dict[int, int] = {}
+        for start, hits in states.items():
+            for tokens, credit in choices:
+                end = start + len(tokens)
+                if out[start:end] == tokens:
+                    following[end] = max(following.get(end, -1), hits + credit)
+        if not following:
+            return None
+        states = following
+    return states.get(len(out))
+
+
+_Op = tuple[str, int, int, int, int]
+
+
+def _touches(op: _Op, span: tuple[int, int]) -> bool:
+    _, i1, i2, _, _ = op
+    a, b = span
+    # A boundary insertion adds text outside the marked replacement.
+    return i1 < b and i2 > a if i1 < i2 else a < i1 < b
+
+
+def _changes_outside_sites(op: _Op, spans: list[tuple[int, int]]) -> bool:
+    _, i1, i2, _, _ = op
+    if i1 == i2:
+        return not any(_touches(op, span) for span in spans)
+    return any(not any(a <= index < b for a, b in spans) for index in range(i1, i2))
+
+
 def score_passage(output: str, passage: Passage) -> PassageScore:
     out = _tokens(output)
+    conforming_hits = _conforming_hits(out, passage)
+    if conforming_hits is not None:
+        required = sum(not site.free for site in passage.sites)
+        return PassageScore(
+            exact=bool(out) and conforming_hits == required,
+            true_pos=conforming_hits,
+            false_pos=0,
+            false_neg=required - conforming_hits,
+            unparsed=not out,
+        )
     unparsed = not out or max(
         _kept(_tokens(passage.source), out), _kept(_tokens(passage.gold), out)
     ) < _MIN_KEPT
@@ -121,15 +175,9 @@ def score_passage(output: str, passage: Passage) -> PassageScore:
     for gold, spans in _gold_variants(passage):
         ops = [op for op in difflib.SequenceMatcher(None, gold, out, autojunk=False).get_opcodes()
                if op[0] != "equal"]
-
-        def touches(op: tuple[str, int, int, int, int], span: tuple[int, int]) -> bool:
-            _, i1, i2, _, _ = op
-            a, b = span
-            return i1 < b and i2 > a if i1 < i2 else a <= i1 <= b
-
         errors = [span for span, site in zip(spans, passage.sites, strict=True) if not site.free]
-        hit = [not any(touches(op, span) for op in ops) for span in errors]
-        false_pos = sum(1 for op in ops if not any(touches(op, span) for span in spans))
+        hit = [not any(_touches(op, span) for op in ops) for span in errors]
+        false_pos = sum(_changes_outside_sites(op, spans) for op in ops)
         score = PassageScore(
             exact=not ops and not unparsed,
             true_pos=sum(hit),
