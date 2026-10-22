@@ -57,5 +57,6 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 [tool.ruff.lint.per-file-ignores]
 # One-shot data-builder scripts contain long inline data tables.
 "scripts/*.py" = ["E501"]
-# The verification page's HTML/CSS/JS template is data inside a string.
+# The verification pages' HTML/CSS/JS templates are data inside a string.
 "src/serbeval/verify_page.py" = ["E501"]
+"src/serbeval/passage_review.py" = ["E501"]
