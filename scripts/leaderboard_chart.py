@@ -138,7 +138,79 @@ def compare(off_root: Path, out: Path) -> None:
     print(f"OK: {out} ({n} models)")
 
 
+V2_UNRELIABLE = {"cohere_command-a-plus"}  # its API returned empty answers on the v2 run
+
+
+def v2_scores(root: Path) -> list[tuple[str, str, float]]:
+    """(model dir name, display name, % exact passages) on the verified v2 evaluation set."""
+    import json
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+    from serbeval.passage import extract_passage, parse_markup, score_passage
+
+    data = Path(__file__).resolve().parent.parent / "data" / "v2"
+    keep = set(json.loads((data / "evaluation.json").read_text())["included_ids"])
+    items = {r["id"]: r for path in data.glob("passages-*.jsonl")
+             for r in map(json.loads, path.read_text(encoding="utf-8").splitlines()) if r["id"] in keep}
+    rows = []
+    for path in sorted(root.glob("*.jsonl")):
+        if path.stem in V2_UNRELIABLE:
+            continue
+        answers = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+        answers = [a for a in answers if a["id"] in items]
+        if len(answers) != len(items):
+            continue
+        exact = sum(score_passage(extract_passage(a["raw"]), parse_markup(items[a["id"]]["markup"])).exact
+                    for a in answers)
+        rows.append((path.stem, NAMES.get(path.stem, path.stem), 100 * exact / len(items)))
+    return sorted(rows, key=lambda r: r[2], reverse=True)
+
+
+def v2_chart(out: Path) -> None:
+    rows = v2_scores(Path("results/v2"))
+    v1 = dict(scores(Path("results/official")))
+    closed = "#52514e"
+    fig = plt.figure(figsize=(5.4, 6.75), dpi=200, facecolor=SURFACE)
+    ax = fig.add_axes((0.30, 0.115, 0.62, 0.68), facecolor=SURFACE)
+    n = len(rows)
+    for i, (key, name, value) in enumerate(rows):
+        y = n - 1 - i
+        if name in v1:
+            ax.barh(y, v1[name], height=0.62, color=GRID, zorder=1)
+        ax.barh(y, value, height=0.62, color=BAR if key in OPEN_WEIGHTS else closed, zorder=2)
+        ax.text(value + 1.2, y, f"{value:.0f}%", va="center", ha="left", fontsize=7.2, color=TEXT, zorder=3)
+        ax.text(-2, y, name, va="center", ha="right", fontsize=7.6, color=TEXT)
+    ax.set_xlim(0, 108)
+    ax.set_ylim(-0.7, n - 0.3)
+    ax.set_yticks([])
+    ax.set_xticks([0, 25, 50, 75, 100])
+    ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=6.6, color=MUTED)
+    ax.tick_params(axis="x", length=0, pad=4)
+    ax.grid(axis="x", color=GRID, linewidth=0.6, zorder=0)
+    for side in ("top", "right", "left", "bottom"):
+        ax.spines[side].set_visible(False)
+    fig.text(0.06, 0.945, "serbeval v2: a harder Serbian test", fontsize=13.5, fontweight="bold",
+             color=TEXT, ha="left")
+    fig.text(0.06, 0.912, "Correct a whole passage: 76 verified passages, 218 errors, no hints",
+             fontsize=8.2, color=TEXT_2, ha="left")
+    fig.text(0.06, 0.888, "% of passages fixed exactly, zero-shot · grey = same model on v1.2",
+             fontsize=8.2, color=TEXT_2, ha="left")
+    for x, color, label in ((0.06, closed, "closed"), (0.22, BAR, "open-weight"), (0.44, GRID, "v1.2 score")):
+        fig.patches.append(FancyBboxPatch((x, 0.842), 0.02, 0.022, boxstyle="square,pad=0",
+                                          transform=fig.transFigure, facecolor=color, edgecolor="none"))
+        fig.text(x + 0.03, 0.853, label, fontsize=7.8, color=TEXT_2, va="center")
+    fig.text(0.06, 0.07, "Command A+ omitted: its API returned empty answers.", fontsize=6.8,
+             color=MUTED, ha="left")
+    fig.text(0.06, 0.045, "github.com/djolex999/serbeval", fontsize=7.6, color=TEXT_2, ha="left")
+    fig.text(0.94, 0.045, "October 2026", fontsize=7.6, color=MUTED, ha="right")
+    fig.savefig(out, dpi=200, facecolor=SURFACE)
+    print(f"OK: {out} ({n} models)")
+
+
 def main() -> None:
+    if "--v2" in sys.argv:
+        v2_chart(Path("results/v2/leaderboard-v2.png"))
+        return
     if "--reasoning" in sys.argv:
         compare(Path("results/official"), Path("results/reasoning-compare.png"))
         return

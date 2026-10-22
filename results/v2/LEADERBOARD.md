@@ -1,5 +1,7 @@
 # serbeval v2 — first run (2026-10-22)
 
+Chart: `results/v2/leaderboard-v2.png` (`python3 scripts/leaderboard_chart.py --v2`).
+
 76 verified passages (data/v2/evaluation.json), 218 required error sites, 18 clean passages; format A (correct the whole passage, no cue). Routing as in the official v1 runs; one request per passage, reasoning off where the model allows it. Scorer: serbeval.passage (per-edit; case, punctuation and script folded). Reproduce: `PYTHONPATH=src python scripts/pilot_passage.py report v2 all`.
 
 | Model | Passage exact | Error passages exact | Clean left intact | Recall | Precision | False alarms | Unparsed |
