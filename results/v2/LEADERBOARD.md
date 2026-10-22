@@ -65,7 +65,8 @@ right. Weaker models also miss the basics, which is what spreads the board from 
 Note: *ekspres*, *kontakt* and *džez* (13 sites) are missed by 90–100% of all models. They do
 not separate models; they lower everyone alike, and measure one thing — knowing that Pravopis
 2010 writes these apart although usage overwhelmingly hyphenates them. Without them the
-percentages rise but the model ranking barely changes.
+percentages rise (per-error recall: Opus 89% → 94%, GPT-6 Sol 86% → 92%) but the ranking barely
+changes: Spearman ρ = 0.996 over 18 models; only two adjacent pairs swap.
 
 ## Full v2 table
 
