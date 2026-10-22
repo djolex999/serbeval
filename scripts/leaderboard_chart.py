@@ -141,8 +141,8 @@ def compare(off_root: Path, out: Path) -> None:
 V2_UNRELIABLE = {"cohere_command-a-plus"}  # its API returned empty answers on the v2 run
 
 
-def v2_scores(root: Path) -> list[tuple[str, str, float]]:
-    """(model dir name, display name, % exact passages) on the verified v2 evaluation set."""
+def v2_scores(root: Path) -> list[tuple[str, str, float, float]]:
+    """(model dir, display name, % passages exact, % errors fixed) on the verified v2 set."""
     import json
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
@@ -160,9 +160,12 @@ def v2_scores(root: Path) -> list[tuple[str, str, float]]:
         answers = [a for a in answers if a["id"] in items]
         if len(answers) != len(items):
             continue
-        exact = sum(score_passage(extract_passage(a["raw"]), parse_markup(items[a["id"]]["markup"])).exact
-                    for a in answers)
-        rows.append((path.stem, NAMES.get(path.stem, path.stem), 100 * exact / len(items)))
+        scored = [score_passage(extract_passage(a["raw"]), parse_markup(items[a["id"]]["markup"]))
+                  for a in answers]
+        exact = sum(s.exact for s in scored)
+        fixed = sum(s.true_pos for s in scored)
+        recall = 100 * fixed / max(1, fixed + sum(s.false_neg for s in scored))
+        rows.append((path.stem, NAMES.get(path.stem, path.stem), 100 * exact / len(items), recall))
     return sorted(rows, key=lambda r: r[2], reverse=True)
 
 
@@ -173,11 +176,13 @@ def v2_chart(out: Path) -> None:
     fig = plt.figure(figsize=(5.4, 6.75), dpi=200, facecolor=SURFACE)
     ax = fig.add_axes((0.30, 0.115, 0.62, 0.68), facecolor=SURFACE)
     n = len(rows)
-    for i, (key, name, value) in enumerate(rows):
+    for i, (key, name, value, recall) in enumerate(rows):
         y = n - 1 - i
         if name in v1:
             ax.barh(y, v1[name], height=0.62, color=GRID, zorder=1)
         ax.barh(y, value, height=0.62, color=BAR if key in OPEN_WEIGHTS else closed, zorder=2)
+        ax.plot([recall, recall], [y - 0.36, y + 0.36], color=TEXT, linewidth=1.6, zorder=4,
+                solid_capstyle="butt")
         ax.text(value + 1.2, y, f"{value:.0f}%", va="center", ha="left", fontsize=7.2, color=TEXT, zorder=3)
         ax.text(-2, y, name, va="center", ha="right", fontsize=7.6, color=TEXT)
     ax.set_xlim(0, 108)
@@ -193,8 +198,8 @@ def v2_chart(out: Path) -> None:
              color=TEXT, ha="left")
     fig.text(0.06, 0.912, "Correct a whole passage: 76 verified passages, 218 errors, no hints",
              fontsize=8.2, color=TEXT_2, ha="left")
-    fig.text(0.06, 0.888, "% of passages fixed exactly, zero-shot · grey = same model on v1.2",
-             fontsize=8.2, color=TEXT_2, ha="left")
+    fig.text(0.06, 0.888, "bar = % of passages fixed exactly · | = % of single errors fixed · grey = v1.2",
+             fontsize=8.0, color=TEXT_2, ha="left")
     for x, color, label in ((0.06, closed, "closed"), (0.22, BAR, "open-weight"), (0.44, GRID, "v1.2 score")):
         fig.patches.append(FancyBboxPatch((x, 0.842), 0.02, 0.022, boxstyle="square,pad=0",
                                           transform=fig.transFigure, facecolor=color, edgecolor="none"))

@@ -127,7 +127,7 @@ def run() -> None:
 
 def report() -> None:
     items = {i["id"]: i for i in _items()}
-    print("| Model | Passage exact | Error passages exact | Clean left intact | Recall | "
+    print("| Model | Passage exact | Error passages exact | Clean left intact | Errors fixed (recall) | "
           "Precision | False alarms | Unparsed |")
     print("|---|---|---|---|---|---|---|---|")
     for model in MODELS:

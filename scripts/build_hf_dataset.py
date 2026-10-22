@@ -85,7 +85,13 @@ def build_v2(out: Path) -> tuple[int, int, int, str, int]:
     (out / "data" / f"{V2_CONFIG}.jsonl").write_text(
         "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
     board = (ROOT / "results" / "v2" / "LEADERBOARD.md").read_text(encoding="utf-8").splitlines()
-    table = "\n".join(line for line in board if line.startswith("|"))
+    blocks: list[list[str]] = []
+    for prev, line in zip(["", *board], board, strict=False):
+        if line.startswith("|"):
+            if not prev.startswith("|"):
+                blocks.append([])
+            blocks[-1].append(line)
+    table = "\n\n".join("\n".join(b) for b in blocks)
     return len(rows), sites_total, clean, table, sum(r["origin"] == "handwritten" for r in rows)
 
 
@@ -241,8 +247,11 @@ and precision are diagnostics, and precision catches over-correction.
 
 {v2_table}
 
-Frontier models drop from 98–99% on v1.2 to 72–74% here; their misses are mostly usage over
-norm (*kontakt-osoba*, *ekspres-lonac*, *nabrzinu*, *do viđenja*). Command A+'s API returned
+The first table compares like with like: per error, frontier models fix ~86–89% on v2 against
+~98–99% item accuracy on v1.2, i.e. roughly 5–10× more mistakes. "Passages fully correct" falls
+further (72–74%) because it is all-or-nothing over ~4 errors per passage. The errors sit where
+usage diverges from the norm (*kontakt-osoba*, *ekspres-lonac*, *nabrzinu*, *do viđenja*), so v2
+measures norm adherence in those spots, not general Serbian ability. Command A+'s API returned
 empty answers, so its row is not reliable.
 
 ## License
