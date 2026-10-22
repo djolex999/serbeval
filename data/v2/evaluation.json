@@ -1,0 +1,595 @@
+{
+ "version": "v2-draft",
+ "human_verified": false,
+ "base": "d54f29b + serbeval-predaja review (2026-10-22)",
+ "rule": "uncontested norm only (v2 plan, principle 4); see tasks/predaja-provera.md",
+ "included_ids": [
+  "srb-v2-gov-0001",
+  "srb-v2-gov-0002",
+  "srb-v2-gov-0003",
+  "srb-v2-gov-0004",
+  "srb-v2-gov-0005",
+  "srb-v2-gov-0007",
+  "srb-v2-gov-0009",
+  "srb-v2-gov-0010",
+  "srb-v2-gov-0011",
+  "srb-v2-gov-0013",
+  "srb-v2-gov-0014",
+  "srb-v2-gov-0015",
+  "srb-v2-gov-0016",
+  "srb-v2-gov-0017",
+  "srb-v2-gov-0018",
+  "srb-v2-gov-0020",
+  "srb-v2-gov-0023",
+  "srb-v2-gov-0024",
+  "srb-v2-gov-0025",
+  "srb-v2-gov-0026",
+  "srb-v2-gov-0027",
+  "srb-v2-gov-0028",
+  "srb-v2-gov-0030",
+  "srb-v2-gov-0031",
+  "srb-v2-gov-0032",
+  "srb-v2-gov-0033",
+  "srb-v2-gov-0034",
+  "srb-v2-gov-0035",
+  "srb-v2-gov-0036",
+  "srb-v2-gov-0039",
+  "srb-v2-gov-0040",
+  "srb-v2-passage-0001",
+  "srb-v2-passage-0002",
+  "srb-v2-passage-0003",
+  "srb-v2-passage-0004",
+  "srb-v2-passage-0005",
+  "srb-v2-passage-0006",
+  "srb-v2-passage-0007",
+  "srb-v2-passage-0008",
+  "srb-v2-passage-0009",
+  "srb-v2-passage-0010",
+  "srb-v2-passage-0012",
+  "srb-v2-passage-0013",
+  "srb-v2-passage-0014",
+  "srb-v2-passage-0015",
+  "srb-v2-passage-0016",
+  "srb-v2-passage-0017",
+  "srb-v2-passage-0018",
+  "srb-v2-passage-0019",
+  "srb-v2-passage-0020",
+  "srb-v2-passage-0021",
+  "srb-v2-passage-0022",
+  "srb-v2-passage-0023",
+  "srb-v2-passage-0024",
+  "srb-v2-passage-0025",
+  "srb-v2-passage-0026",
+  "srb-v2-passage-0027",
+  "srb-v2-passage-0028",
+  "srb-v2-passage-0029",
+  "srb-v2-passage-0030",
+  "srb-v2-passage-0031",
+  "srb-v2-passage-0032",
+  "srb-v2-passage-0033",
+  "srb-v2-passage-0034",
+  "srb-v2-passage-0037",
+  "srb-v2-passage-0038",
+  "srb-v2-passage-0039",
+  "srb-v2-passage-0040",
+  "srb-v2-passage-0042",
+  "srb-v2-passage-0043",
+  "srb-v2-passage-0044",
+  "srb-v2-passage-0045",
+  "srb-v2-passage-0046",
+  "srb-v2-passage-0047",
+  "srb-v2-passage-0048",
+  "srb-v2-passage-0049"
+ ],
+ "excluded": [
+  {
+   "id": "srb-v2-passage-0011",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "edition_conflict",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Joined and hyphenated outputs are supported by different identified editions; these are compatibility alternatives, not certified unrestricted P2010 doublets. Apply v2 uncontested-norm exclusion contract."
+   ],
+   "proposals": [
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 1,
+     "audit_right": [
+      "foto-aparat",
+      "fotoaparat"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    },
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 3,
+     "audit_right": [
+      "auto-putu",
+      "autoputu"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-passage-0035",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "edition_conflict",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Joined and hyphenated outputs are supported by different identified editions; these are compatibility alternatives, not certified unrestricted P2010 doublets. Apply v2 uncontested-norm exclusion contract."
+   ],
+   "proposals": [
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 3,
+     "audit_right": [
+      "ауто-путу",
+      "аутопуту"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-passage-0036",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "edition_conflict",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Joined and hyphenated outputs are supported by different identified editions; these are compatibility alternatives, not certified unrestricted P2010 doublets. Apply v2 uncontested-norm exclusion contract."
+   ],
+   "proposals": [
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 1,
+     "audit_right": [
+      "фото-апарат",
+      "фотоапарат"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-passage-0041",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "edition_conflict",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Joined and hyphenated outputs are supported by different identified editions; these are compatibility alternatives, not certified unrestricted P2010 doublets. Apply v2 uncontested-norm exclusion contract."
+   ],
+   "proposals": [
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 1,
+     "audit_right": [
+      "Auto-put",
+      "Autoput"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-passage-0050",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "edition_conflict",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Joined and hyphenated outputs are supported by different identified editions; these are compatibility alternatives, not certified unrestricted P2010 doublets. Apply v2 uncontested-norm exclusion contract."
+   ],
+   "proposals": [
+    {
+     "kind": "versioned_compatibility_only",
+     "site_1based": 1,
+     "audit_right": [
+      "фото-апарат",
+      "фотоапарат"
+     ],
+     "evidence": [
+      "P2010 t.84 pp.78–79",
+      "Klajn4 p.12 auto- / p.50 foto-"
+     ],
+     "strict_disposition": "exclude item"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0006",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "The clause beginning Ne postoji atmosfera has a broken antecedent/predicate structure; duplicate je and orjentisana are locally repairable but do not complete the utterance."
+   ],
+   "proposals": [
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "orjentisana",
+     "right": [
+      "orijentisana"
+     ],
+     "source_span": [
+      450,
+      461
+     ],
+     "evidence": "P2010 dictionary оријент- family; lexical spelling.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "Upravo je ministar Dmitrović je spomenuo",
+     "right": [
+      "Upravo je ministar Dmitrović spomenuo"
+     ],
+     "source_span": [
+      200,
+      240
+     ],
+     "evidence": "Single perfect predicate; duplicate auxiliary.",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0008",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "First sentence contains unfinished/dislocated phrases (including toga nema u vakcini da može); second sentence switches singular Ko god ... dobije to plural dobiju. The intended complete propositions are not uniquely recoverable."
+   ],
+   "proposals": [
+    {
+     "kind": "restrict_alternatives",
+     "site_1based": 1,
+     "audit_right": [
+      "ni jedan"
+     ],
+     "free": true,
+     "adds_error": false,
+     "evidence": [
+      "P2010 t.111 p.89 explicit ni jedan jedini example",
+      "P2010 dictionary p.389 ниједан"
+     ],
+     "confidence": "high"
+    },
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "i dobiju dokaze",
+     "right": [
+      "i dobije dokaze"
+     ],
+     "source_span": [
+      385,
+      400
+     ],
+     "evidence": "Relative subject Ko god is singular.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "i da dobiju sve činjenice",
+     "right": [
+      "i da dobije sve činjenice"
+     ],
+     "source_span": [
+      401,
+      426
+     ],
+     "evidence": "Relative subject Ko god is singular.",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0012",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "P2010 t.111 examples of intensified separation are non-exhaustive; neutral joined spelling and emphatic separated spelling are both grammatically imaginable here. No inspected transcript cue uniquely establishes prosody or intent. Do not infer that missing jedini automatically forbids separation.",
+    "Final coordination i naravno i posao i podrška institucija da se ne ogluše is not a uniquely completed grammatical construction; preceding koja može da kaže, da možemo da kažemo is a speech restart."
+   ],
+   "proposals": [
+    {
+     "kind": "contextual_alternatives_audit_only",
+     "site_1based": 2,
+     "audit_right": [
+      "nijedna",
+      "ni jedna"
+     ],
+     "evidence": [
+      "P2010 t.111 p.89"
+     ],
+     "strict_disposition": "exclude item"
+    },
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0019",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "P2010 t.111 examples of intensified separation are non-exhaustive; neutral joined spelling and emphatic separated spelling are both grammatically imaginable here. No inspected transcript cue uniquely establishes prosody or intent. Do not infer that missing jedini automatically forbids separation.",
+    "primera slučaja bolesti is corrupt; unique local spelling repairs do not give a uniquely determined full gold. Firefighter/rescuer compound treatment is not certified by an exact inspected dictionary entry."
+   ],
+   "proposals": [
+    {
+     "kind": "contextual_alternatives_audit_only",
+     "site_1based": 2,
+     "audit_right": [
+      "nijedan",
+      "ni jedan"
+     ],
+     "evidence": [
+      "P2010 t.111 p.89"
+     ],
+     "strict_disposition": "exclude item"
+    },
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "budi strpljivi",
+     "right": [
+      "budu strpljivi"
+     ],
+     "source_span": [
+      127,
+      141
+     ],
+     "evidence": "Third-person plural present after da; referent meštane.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "razčišćavanje",
+     "right": [
+      "raščišćavanje"
+     ],
+     "source_span": [
+      218,
+      231
+     ],
+     "evidence": "P2010 t.21,25,32a; раščistiti/raščišćavati spelling family.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "predsendika",
+     "right": [
+      "predsednika"
+     ],
+     "source_span": [
+      297,
+      308
+     ],
+     "evidence": "Letter transposition; dictionary председник.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "intervenisaće će",
+     "right": [
+      "intervenisaće"
+     ],
+     "source_span": [
+      516,
+      532
+     ],
+     "evidence": "P2010 t.123: future auxiliary already incorporated.",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0021",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "no_additional_confirmed_context_defect",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Conservative unedited-source strict profile excludes this known unmeasured surface defect. This is a metric/surface mismatch, not an uncertain lexical correction."
+   ],
+   "proposals": [
+    {
+     "kind": "editorial_gold_correction_unmeasured",
+     "wrong": "106. godina",
+     "right": "106 godina",
+     "reason": "Ordinal dot is incompatible with the cardinal plural construction; P2010 t.144д, p.99, assigns the dot to an Arabic ordinal number. Current scorer folds the dot, so do not count this as a measured required-error site."
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "zamenika komandanta",
+     "right": [
+      "zamenik komandanta"
+     ],
+     "source_span": [
+      250,
+      269
+     ],
+     "evidence": "Nominative coordinated subject of predstavljao je.",
+     "confidence": "high"
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "posvećnu",
+     "right": [
+      "posvećenu"
+     ],
+     "source_span": [
+      511,
+      519
+     ],
+     "evidence": "Missing vowel in participle.",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0022",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "no_additional_confirmed_context_defect",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Conservative unedited-source strict profile excludes this known unmeasured surface defect. This is a metric/surface mismatch, not an uncertain lexical correction."
+   ],
+   "proposals": [
+    {
+     "kind": "editorial_gold_correction_unmeasured",
+     "wrong": "Želim Vam svima",
+     "right": "Želim vam svima",
+     "reason": "Plural audience requires lowercase vam, P2010 t.78, printed p.73. Current scorer folds case; do not claim a measured required-error site."
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0029",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "на наплати прављена измишљених спискова is corrupt. Replacing прављена with прављењем guesses the intended attachment and is not justified as unique gold."
+   ],
+   "proposals": [
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0037",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "no_additional_confirmed_context_defect",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "Conservative unedited-source strict profile excludes this known unmeasured surface defect. This is a metric/surface mismatch, not an uncertain lexical correction."
+   ],
+   "proposals": [
+    {
+     "kind": "editorial_gold_correction_unmeasured",
+     "wrong": "октобар-децембар",
+     "right": "октобар–децембар",
+     "reason": "Range uses a dash rather than an intra-word hyphen; P2010 t.160, pp.126–127, distinguishes the connecting dash and includes numeric ranges; application to written month names is an editorial inference, not an exact inspected month-range example. It is a typography issue, not an additional lexical/grammar recall site."
+    },
+    {
+     "kind": "add_missing_correction",
+     "wrong": "С обзиром да",
+     "right": [
+      "С обзиром на то да"
+     ],
+     "source_span": [
+      294,
+      306
+     ],
+     "evidence": "Klajn, 4th revised and supplemented ed., entry s obzirom na, printed p.163, PDF index159; visually checked exact construction.",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "srb-v2-gov-0038",
+   "reviewed_context": true,
+   "source_mutation_proposed": false,
+   "candidate_status": "exclude_strict_subset",
+   "original_status": "corrupt_or_incomplete_syntax",
+   "confidence": "high for listed decisions; this pass is not human verification",
+   "reasons": [
+    "P2010 t.111 examples of intensified separation are non-exhaustive; neutral joined spelling and emphatic separated spelling are both grammatically imaginable here. No inspected transcript cue uniquely establishes prosody or intent. Do not infer that missing jedini automatically forbids separation.",
+    "да је свака законска измена lacks its complement/predicate and is abandoned for односно да су закони коначни и непромењиви; repairing the full sentence requires interpreting the speaker’s restart."
+   ],
+   "proposals": [
+    {
+     "kind": "contextual_alternatives_audit_only",
+     "site_1based": 2,
+     "audit_right": [
+      "ниједном",
+      "ни једном"
+     ],
+     "evidence": [
+      "P2010 t.111 p.89"
+     ],
+     "strict_disposition": "exclude item"
+    },
+    {
+     "kind": "quarantine_full_original",
+     "reason": "No speculative source or gold reconstruction."
+    }
+   ]
+  }
+ ],
+ "reinstated_vs_package": [
+  "srb-v2-gov-0004",
+  "srb-v2-gov-0009",
+  "srb-v2-gov-0023",
+  "srb-v2-gov-0028",
+  "srb-v2-gov-0040"
+ ],
+ "changed_vs_package": [
+  "srb-v2-gov-0011",
+  "srb-v2-gov-0034"
+ ]
+}
