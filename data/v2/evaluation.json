@@ -1,6 +1,6 @@
 {
  "version": "v2-draft",
- "human_verified": false,
+ "human_verified": true,
  "base": "d54f29b + serbeval-predaja review (2026-10-22)",
  "rule": "uncontested norm only (v2 plan, principle 4); see tasks/predaja-provera.md",
  "included_ids": [
@@ -591,5 +591,11 @@
  "changed_vs_package": [
   "srb-v2-gov-0011",
   "srb-v2-gov-0034"
- ]
+ ],
+ "verification": {
+  "by": "maintainer (native speaker), with Codex assistance",
+  "date": "2026-10-22",
+  "scope": "the 76 included passages; the 14 excluded stay unverified",
+  "source": "serbeval-predaja review package; checked in tasks/predaja-provera.md"
+ }
 }
