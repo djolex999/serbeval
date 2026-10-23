@@ -421,6 +421,12 @@ Hugging Face: [djolex999/serbeval](https://huggingface.co/datasets/djolex999/ser
 }
 ```
 
+## Support
+
+serbeval is free and open. Every new model run costs API credits, and every
+new task needs hand verification. If the benchmark is useful to you,
+[a coffee on Ko-fi](https://ko-fi.com/djmarkovic) funds the next leaderboard run.
+
 ## Project log
 
 Design decisions: [DECISIONS.md](DECISIONS.md) · Progress: [devlog.md](devlog.md) ·
