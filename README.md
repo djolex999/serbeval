@@ -9,6 +9,46 @@ imperfect, sibilarization, numeral agreement (*dva nova stola*, *dvadeset jedan 
 ijekavian jat reflex, pravopis (*kontakt osoba*, *naučnoistraživački*, *ne znajući*), č/ć, and
 Cyrillic/Latin consistency.
 
+## New: v2 — a harder test (2026-10-22)
+
+v1 saturated at the top (98–99%), so v2 asks models to **correct whole passages** with no hints:
+they don't know where the errors are or how many there are. 76 human-verified passages, 218
+errors, every correct form backed by Pravopis 2010; 31 of the passages are real texts from
+Serbian government and municipal websites, many with the institutions' own mistakes.
+
+![serbeval v2 leaderboard](results/v2/leaderboard-v2.png)
+
+Two numbers per model: **errors fixed** (like-for-like with v1.2) and **passages fully correct**
+(all-or-nothing over ~4 errors per passage, so it falls faster).
+
+| Model | v1.2 (items correct) | v2: errors fixed | v2: passages fully correct |
+|---|---|---|---|
+| Claude Opus 5.5 | 98% | 89% | **74%** |
+| GPT-6 Sol | 99% | 86% | **72%** |
+| DeepSeek V4 Pro | 95% | 75% | **61%** |
+| DeepSeek V4.1 Flash | 90% | 72% | **55%** |
+| DeepSeek V3.2 | 88% | 75% | **50%** |
+| GLM-5.3 | 90% | 69% | **50%** |
+| Kimi K3 | 92% | 70% | **49%** |
+| Qwen3.6 27B | 83% | 58% | **41%** |
+| Qwen3 235B | 81% | 59% | **38%** |
+| Gemma 3 12B | 67% | 46% | **34%** |
+| Llama 3.3 70B | 73% | 56% | **30%** |
+| Nemotron 3 Ultra | 77% | 53% | **30%** |
+| Gemma 4 31B | 89% | 63% | **29%** |
+| MiniMax M3 | 87% | 40% | **28%** |
+| Qwen3.5 9B | 66% | 54% | **28%** |
+| Mistral Nemo | 39% | 38% | **21%** |
+| Llama 3.1 8B | 39% | 37% | **13%** |
+| Nemotron 3.5 Lightning | 40% | 25% | **13%** |
+
+Most of what even the best models get wrong are spellings almost everyone uses but the official
+norm doesn't allow (*kontakt-osoba* instead of *kontakt osoba*, *nabrzinu*, *do viđenja*). So v2
+shows how well models follow the official rules, not how well they speak Serbian. Command A+ is
+left out (its API returned empty answers). Full table, error types and caveats:
+[results/v2/LEADERBOARD.md](results/v2/LEADERBOARD.md). Data: Hugging Face config
+`srb_v2_passages`.
+
 > **Status: official set v1.2.** The numbers below come from the 351-item official set. 61 items
 > are human-verified and the rest are backed by the agreement of four strong models or derived
 > from verified items (see [Verification](#verification)). The larger mined and synthesised
